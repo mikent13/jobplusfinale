@@ -1,0 +1,301 @@
+body{
+      overflow:hidden;
+}
+
+    .navbar-brand-centered {
+        position: absolute;
+        left: 50%;
+        display: block;
+        width: 160px;
+        text-align: center;
+        background-color: transparent;
+    }
+    .navbar>.container .navbar-brand-centered, 
+    .navbar>.container-fluid .navbar-brand-centered {
+        margin-left: -80px;
+    }
+
+
+.navbar-default {
+    background-color: #d35400;
+    border-color: #e7e7e7;
+}
+
+.navbar-default .navbar-nav > li > a {
+    color: #fff;
+}
+
+.navbar-default .navbar-brand {
+    color: #fff;
+}
+
+.navbar {
+    border: 1px solid transparent;
+    margin-bottom: 0px;
+    min-height: 50px;
+    position: relative;
+    border-radius: 0px;
+}
+
+.navbar-default .navbar-nav .open .dropdown-menu > li > a {
+    color: #d35400;
+}
+
+.bs-example{
+    margin: 20px;
+}
+
+
+.afilter{
+     text-align: center;
+      margin-top: 0px;
+      margin-bottom: 0px;
+}
+.afilter:hover{
+    color: #d35400;
+
+}
+
+a:focus, a:hover{
+text-decoration: none;
+}
+
+.category{
+    background-color:  #d35400;
+    border-radius: 50%;
+    width: 200px;
+    height: 40px;
+}
+
+.cat-mg{
+    border-radius: 50%;
+    margin-left: 5px;
+}
+
+.form-select {
+    width: 200px;
+}
+
+.form-location {
+    width: 200px;
+}
+
+.form-location #location {
+    width: 100%;
+    height: 45px;
+    margin: 8px 0;
+    border: 0;
+    border: 1px solid rgb(230,74,25);
+    border-top: 2px solid rgb(230,74,25);
+    background-size: 20px;
+    background-position:  right 10px center;
+    font-family: 'Arial';
+    padding-left: 24px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -webkit-border-radius: 4px;
+       -moz-border-radius: 4px;
+            border-radius: 4px;
+}
+
+.form-select select {
+    width: 100%;
+    height: 40px;
+    margin: 8px 0;
+    border: 0;
+    border: 1px solid rgb(230,74,25);
+    border-top: 2px solid rgb(230,74,25);
+    background: #fff url('https://cdn3.iconfinder.com/data/icons/google-material-design-icons/48/ic_keyboard_arrow_down_48px-128.png') no-repeat;
+    background-size: 20px;
+    background-position:  right 10px center;
+    font-family: 'Arial';
+    padding-left: 24px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -webkit-border-radius: 4px;
+       -moz-border-radius: 4px;
+            border-radius: 4px;
+}
+
+.search{
+    margin-bottom: 10px;
+}
+.search-result{
+    margin-top: 10px;
+}
+
+.job-pic{
+    height: 40px;
+    margin-right: 10px;
+}
+
+.meta-loc{
+    margin-bottom: 0px;
+}
+
+.bookmark{
+   margin-top: -15px;
+   margin-right: 5px;
+}
+.result{
+    width: 100%;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border-bottom: 1px solid #dadada;
+    padding-bottom: 5px;
+}
+
+.result:hover{
+    color:  #d35400;
+
+}
+
+.result-pic{
+    width: 70px;
+    height: 70px;
+    border-color: 1px solid #fff;
+    margin-right: 10px;
+}
+.map-pic{
+    width: 100%;
+    height: 150px;
+}
+
+#gmap{
+    height: 150px;
+    width: 100%;
+
+}
+
+.result-title{
+    margin-top: 0px;
+    margin-bottom: 0px;
+    color: rgb(38,50,56);
+}
+.map{
+    padding: 0px;
+    z-index: -1;
+
+}
+
+.meta-post{
+    color: rgb(96,125,139);
+}
+
+
+.action-btn{
+    display: inline-block;
+   width: 120px;
+    text-align: center;
+    padding-top: 5px;
+    padding-bottom: 0px;
+    margin-top: 30px;
+    border-radius: 5px;
+    float: right;
+}
+
+.action-btn > p{
+   font-weight: bold;
+}
+
+.apply{
+    background-color: #ea782d;
+    color: #fff;
+}
+
+.apply > p{
+    margin-top: 0px;
+}
+.bmark > p{
+      margin-top: 0px; 
+}
+.divider1{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #dadada;
+    width: auto;
+}
+.divider2{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-bottom: 2px solid #dadada;
+    width: auto;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+}
+.meta-data{
+    text-align: left;
+    vertical-align: center;
+}
+
+.meta-data > .main{
+    font-weight: bold;
+    margin-top: -8px;
+}
+
+.blocks{
+    border: 1px solid #dadada;
+    margin-top: 20px;
+
+}
+.blocks > .block-title{
+    margin-top: 0px;
+    float: left;
+    background-color: #fff;
+}
+
+.blocks > p{
+    float: left;
+}
+
+.box {
+
+    border-radius: 3px;
+    border: 1px solid rgba(0, 0, 0, 0.16);
+    padding: 10px 20px;
+    display: block;
+    float: left;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.search-box{
+     border-radius: 3px;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+    padding: 10px 20px;
+    display: block;
+    float: left;
+    width: 100%;
+    margin-left: -13px;
+}
+.box-title > h4{
+   float: left;
+   margin-top: -20px;
+   background-color: #fff;
+   text-transform: uppercase;
+}
+
+.box > p{
+    margin-top: 15px;
+    text-align: justify;
+}
+
+.box > ul{
+    margin-top: 15px;
+    text-align: left;
+    margin-left: -25px;
+}
+
+.outer-search-box{
+    padding-right: 0px;
+   
+}
+
+.content{
+    padding-left: 0px; 
+    padding-right: 0px;
+}
+
+.advanced-filter{
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+}
