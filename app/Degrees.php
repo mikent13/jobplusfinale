@@ -10,6 +10,6 @@ class Degrees extends Model
 
       public function education()
     {
-        return $this->belongsTo('Education');   
+        return $this->belongsTo('App\Education');   
     }
 }

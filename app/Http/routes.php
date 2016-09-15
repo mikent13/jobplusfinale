@@ -32,6 +32,11 @@ Route::get('/employer',[
 	'as' => 'employer'
 	])->middleware('auth');
 
+	Route::get('employer/test/{id}', [
+	'uses' => 'EmployerController@test',
+	'as' => 'test'
+	])->middleware('auth');
+
 
 //Applicant
 Route::get('/applicant', [
@@ -57,6 +62,26 @@ Route::get('/jobsearch', [
 Route::get('/applicant/{$jobid}/{$id}',[
 	'uses' => 'ApplicantController@getApply',
 	'as' => 'applicant.apply'
+	])->middleware('auth');
+	
+	Route::get('applicant/job', [
+	'uses' => 'ApplicantController@getJobPage',
+	'as' => 'job'
+	])->middleware('auth');
+
+	Route::get('applicant/job/{jobid}', [
+	'uses' => 'ApplicantController@getJobSearch',
+	'as' => 'job/{jobid}'
+	])->middleware('auth');	
+
+	Route::get('applicant/job/category/{id}', [
+	'uses' => 'ApplicantController@getCategoryJobs',
+	'as' => 'category/{id}'
+	])->middleware('auth');
+
+	Route::get('applicant/test/{id}', [
+	'uses' => 'ApplicantController@test',
+	'as' => 'test'
 	])->middleware('auth');
 
 });

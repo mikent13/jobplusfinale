@@ -8,8 +8,13 @@ class Education extends Model
 {
     	protected $table = 'education';
 
-      public function degree()
+     public function degree()
     {
-        return $this->hasMany('Degrees');   
+        return $this->hasMany('App\Degrees');   
     }
+
+    public function profile(){
+    	return $this->belongsToMany('App\Profile');
+    }
+
 }

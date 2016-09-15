@@ -85,16 +85,14 @@ class Jobs extends Model implements Event
         return $this->options;
     }
 
-
-
-    public function jobs()
+    public function user()
     {
-        return $this->belongsTo('User');
+        return $this->belongsTo('App\User');
     }
 
     public function category()
     {
-        return $this->belongsTo('Categories');
+        return $this->belongsTo('App\Categories');
     }
 
     public function payType()

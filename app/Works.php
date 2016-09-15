@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Works extends Model
 {
-    
-        protected $table = 'works';
+
+    protected $table = 'works';
 
     public function appCal()
     {
@@ -25,8 +25,5 @@ class Works extends Model
     {
     	return $this->belongsTo('Jobs');
     }
-
-
-
 
 }

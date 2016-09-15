@@ -15,15 +15,12 @@ class CreateProfilesTable extends Migration
     {
         Schema::create('profiles', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('user_id');
             $table->string('lname');
             $table->string('fname');
             $table->double('lat');
             $table->double('long');
             $table->longtext('biography');
-            $table->integer('user_id');
-            $table->integer('education_id');
-            $table->integer('experience_id');
-            $table->integer('skill_id');
             $table->timestamps();
         });
     }

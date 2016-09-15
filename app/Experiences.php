@@ -10,9 +10,12 @@ class Experiences extends Model
 
  		protected $table = 'experiences';
   
-
     	public function user()
     	{
-    		return $this->belongsTo('User');
+    		return $this->belongsTo('App\User');
+    	}
+
+    	public function profile(){
+    		return $this->belongsToMany('App\Profile');
     	}
 }

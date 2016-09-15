@@ -15,16 +15,18 @@ class Profiles extends Model
     }
     public function experience()
     {
-        return $this->hasMany('Experiences');
+        return $this->belongsToMany('App\Experiences','prof_experiences','profile_id','experience_id');
     }
 
      public function education()
     {
-        return $this->belongsTo('Education');
+        return $this->belongsToMany('App\Education','prof_educations','profile_id','education_id');
     }
+
       public function skill()
     {
-        return $this->hasMany('Skills');   
+        return $this->belongsToMany('Skills','prof_skills');   
     }
 
 }
+ 

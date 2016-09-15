@@ -12,4 +12,9 @@ class Categories extends Model
     {
         return $this->hasMany('Skills');
     }
+
+    public function job(){
+    	return $this->hasMany('App\Jobs','category_id','id');
+    }
+
 }
