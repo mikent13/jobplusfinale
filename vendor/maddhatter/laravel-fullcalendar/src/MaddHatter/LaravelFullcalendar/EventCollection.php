@@ -38,9 +38,9 @@ class EventCollection
             'user_id' => $event->getUser(),
              'category_id' => $event->getCategory(),
              'title' => $event->getTitle(),
-   /*          'description' => $event->getDescription(),
-             'start_date' => $event->getStart()->format('c'),
-            'end_date' => $event->getEnd()->format('c'),*/
+             'description' => $event->getDescription(),
+             'start' => $event->getStart()->format('c'),
+            'end' => $event->getEnd()->format('c'),
             'paytype_id' => $event->getPaytype(),
             'salary' => $event->getSalary(),
             'is_all_day' => $event->isAllDay()

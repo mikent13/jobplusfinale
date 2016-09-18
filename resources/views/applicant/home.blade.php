@@ -27,6 +27,9 @@
         <!-- main area -->
         <div class="col-xs-12 col-sm-9 dash-content">
        	   <div id="calendar-{{ $calid }}"></div>
+           @foreach($app as $data)
+            {{  $data->start }}
+           @endforeach
         </div>
     </div>
   </div>
