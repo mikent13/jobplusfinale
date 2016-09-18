@@ -36,39 +36,24 @@
            <a class="navbar-brand " href="#">JobPlus</a>
         </div>
         <ul class="nav navbar-nav navbar-right">
+        <div class="col-md-4">
+           <a class="sub-nav noti" href="#"><i class="fa fa-bell" aria-hidden="true"></i></a>
+        </div>
+         <div class="col-md-8 dropdown pull-right">
             <a class="sub-nav" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true">
-              <i class="fa fa-user" aria-hidden="true"></i> {{ Auth::user()->username }} 
+             <i class="fa fa-user" aria-hidden="true"></i> {{ Auth::user()->username }} 
             </a>
-         <ul class="dropdown-menu " role="menu">
-            <li><a href="{{ url('/logout') }}"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
+            <ul class="dropdown-menu">
+              <li><a href="#">Switch to Employer</a></li>
+              <li><a href="{{url('/logout')}}">Logout</a></li>
+            </ul>
+        </div>
         </ul>
-         <a class="sub-nav" href="#"><i class="fa fa-bell" aria-hidden="true"></i> Notification</a>
-        </ul>
-
        </div>
        </div>
     </div>
    </div>
-
-    <div class="container">
-      <div class="row row-offcanvas row-offcanvas-left">
-        <!-- sidebar -->
-        <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
-            <ul class="nav">
-              <li class="active"><a href="#">Job+ Schedule</a></li>
-              <li><a href="{{ route('job') }}">Job+ Postings </a></li>
-              <li><a href="#">Bookmarks</a></li> 
-              <li><a href="#">Logs</a></li>
-              <li><a href="{{ route('profile')}}"> Profile</a></li>                
-            </ul>
-        </div>
-     
-        <!-- main area -->
-        <div class="col-xs-12 col-sm-9 dash-content">
-         @yield('body')
-        </div>
-    </div>
-  </div>
+  @yield('body')
 
     <footer class="footer">
       <div class="container">

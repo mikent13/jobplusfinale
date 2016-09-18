@@ -1,6 +1,8 @@
 @extends('masters.secondary')
   <link href="/css/jobpage-custom.css" rel="stylesheet">
 @section('body')
+ <div class="container">
+      <div class="row row-offcanvas row-offcanvas-left">
 
 		<div class="row">
 		<div class="container">
@@ -104,8 +106,8 @@
 				  <div class="col-md-12">
 				  <div class="box">
 				 	 <div class="box-title"><h4>Description</h4></div>
-				 	 <p>Nunc mauris nisl, rhoncus eget augue sed, iaculis imperdiet erat? Nullam varius neque nec est volutpat dictum. Curabitur ultricies risus pulvinar orci pulvinar, sed cursus odio imperdiet. Quisque sollicitudin iaculis lorem at faucibus. Cras posuere felis id nunc ornare malesuada ac tempor ipsum. Nullam posuere dapibus varius. Sed iaculis leo in nibh varius semper.
-					</p>
+					 	 <p>Nunc mauris nisl, rhoncus eget augue sed, iaculis imperdiet erat? Nullam varius neque nec est volutpat dictum. Curabitur ultricies risus pulvinar orci pulvinar, sed cursus odio imperdiet. Quisque sollicitudin iaculis lorem at faucibus. Cras posuere felis id nunc ornare malesuada ac tempor ipsum. Nullam posuere dapibus varius. Sed iaculis leo in nibh varius semper.
+						</p>
 				  </div>
 				  </div>
 				   <div class="col-md-6">
@@ -136,6 +138,8 @@
 				  </div>
 				</div>
 			</div>
+		</div>
+		</div>
 		</div>
 		</div>
 		</div>

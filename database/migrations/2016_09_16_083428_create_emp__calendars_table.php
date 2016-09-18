@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAppCalendarsTable extends Migration
+class CreateEmpCalendarsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,9 +12,10 @@ class CreateAppCalendarsTable extends Migration
      */
     public function up()
     {
-        Schema::create('app_calendars', function (Blueprint $table) {
+        Schema::create('emp_calendars', function (Blueprint $table) {
             $table->increments('id')->unique();
             $table->integer('work_id');
+            $table->integer('user_id');
             $table->timestamps();
         });
     }
@@ -26,6 +27,6 @@ class CreateAppCalendarsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('app_calendars');
+        Schema::drop('emp_calendars');
     }
 }

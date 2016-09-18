@@ -48,7 +48,13 @@ class Calendar
      *
      * @var array
      */
-    protected $callbacks = [];
+    protected $callbacks = [
+        'eventClick' => "
+        function(Event,jsEvent,view){
+            
+        }
+        "
+    ];
 
     /**
      * @param Factory         $view
@@ -71,9 +77,9 @@ class Calendar
      * @param array           $options
      * @return SimpleEvent
      */
-    public static function event($title, $isAllDay, $start, $end, $id = null, $options = [],$userid,$categoryid,$description,$scheduleid,$paytypeid,$salary)
+    public static function event($title, $isAllDay, $start, $end, $id = null, $options = [],$userid,$categoryid,$description,$paytypeid,$salary)
     {
-        return new SimpleEvent($title, $isAllDay, $start, $end, $id, $options,$userid,$categoryid,$description,$scheduleid,$paytypeid,$salary);
+        return new SimpleEvent($title, $isAllDay, $start, $end, $id, $options,$userid,$categoryid,$description,$paytypeid,$salary);
     }
 
     /**
@@ -190,6 +196,9 @@ class Calendar
      * @param array $callbacks
      * @return $this
      */
+
+
+
     public function setCallbacks(array $callbacks)
     {
         $this->callbacks = $callbacks;

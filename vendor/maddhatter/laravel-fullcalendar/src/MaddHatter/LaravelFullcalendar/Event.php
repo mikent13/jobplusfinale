@@ -8,7 +8,6 @@ interface Event
     public function getDescription();
     public function getUser();
     public function getCategory();
-    public function getSchedule();
     public function getPaytype();
     public function getSalary();
     public function isAllDay();

@@ -1,4 +1,7 @@
 $(document).ready(function() {
+
+      $('.dropdown-toggle').dropdown();
+
   $('[data-toggle=offcanvas]').click(function() {
     $('.row-offcanvas').toggleClass('active');
   });
@@ -47,7 +50,5 @@ $(document).ready(function() {
 function prevTab(elem) {
     $(elem).prev().find('a[data-toggle="tab"]').click();
 }
-
-
 
 });

@@ -38,20 +38,19 @@ class EventCollection
             'user_id' => $event->getUser(),
              'category_id' => $event->getCategory(),
              'title' => $event->getTitle(),
-             'description' => $event->getDescription(),
+   /*          'description' => $event->getDescription(),
              'start_date' => $event->getStart()->format('c'),
-            'end_date' => $event->getEnd()->format('c'),
-            'schedule_id' => $event->getSchedule(),
+            'end_date' => $event->getEnd()->format('c'),*/
             'paytype_id' => $event->getPaytype(),
             'salary' => $event->getSalary(),
-            'allDay' => $event->isAllDay()
+            'is_all_day' => $event->isAllDay()
         ];
 
-        $eventOptions = method_exists($event, 'getEventOptions') ? $event->getEventOptions() : [];
+        $eventOptions = [];
 
         return array_merge($eventArray, $eventOptions, $customAttributes);
     }
-
+    
     private function getEventId(Event $event)
     {
         if ($event instanceof IdentifiableEvent) {

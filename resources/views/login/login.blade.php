@@ -10,12 +10,11 @@
                     	    <p class="tagline">Great Career.Great Life</p>
                     	    <hr>
                     	   <p>Dont have an account yet?</p>
-                    	   <a href="{{ url('/register')}}">
+                    	   <a href="{{ url('register') }}">
                     	   <div class="signup">
                     	  	 <h3>Create account</h3>
                     	   </div>
                     	   </a>
-
                     </div>
                         <div class="col-sm-6 col-md-offset-1">
 
@@ -57,19 +56,14 @@
 					                                </div>
 					                            </div>
 					                        </div>
-					                 
 					                        <hr>
 				                        <button type="submit" class="btn">Sign in!</button>
 				                    </form>
 
 			                    </div>
 		                    </div>
-		                
-		        
                         </div>
-                       
                     </div>
-                    
                 </div>
             </div>
         </div>

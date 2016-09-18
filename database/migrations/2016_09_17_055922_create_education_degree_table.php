@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateEmpCalendarsTable extends Migration
+class CreateEducationDegreeTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,10 +12,11 @@ class CreateEmpCalendarsTable extends Migration
      */
     public function up()
     {
-        Schema::create('emp_calendars', function (Blueprint $table) {
-            $table->increments('id')->unique();
-            $table->integer('work_id');
-            $table->timestamps();
+        Schema::create('education_degrees', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('education_id');
+            $table->integer('degree_id');
+           
         });
     }
 
@@ -26,6 +27,6 @@ class CreateEmpCalendarsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('emp_calendars');
+        Schema::drop('education_degrees');
     }
 }

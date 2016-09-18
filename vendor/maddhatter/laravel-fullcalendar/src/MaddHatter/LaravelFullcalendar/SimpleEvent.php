@@ -12,71 +12,33 @@ use DateTime;
 class SimpleEvent implements IdentifiableEvent
 {
 
-    /**
-     * @var string|int|null
-     */
+
     public $id;
-
-    /**
-     * @var string
-     */
     public $title;
-
-    /**
-     * @var bool
-     */
-    public $isAllDay;
-
-    /**
-     * @var DateTime
-     */
+    public $is_all_day;
     public $start_date;
     public $end_date;
-    /**
-     * @var DateTime
-     */
-
     public $user_id;
     public $category_id;
     public $description;
-    public $schedule_id;
     public $paytype_id;
     public $salary;
-
-    /**
-     * @var array
-     */
     private $options;
 
-    /**
-     * @param string          $title
-     * @param bool            $isAllDay
-     * @param string|DateTime $start If string, must be valid datetime format: http://bit.ly/1z7QWbg
-     * @param string|DateTime $end   If string, must be valid datetime format: http://bit.ly/1z7QWbg
-     * @param int|string|null $id
-     * @param array           $options
-     */
-    public function __construct($title, $isAllDay, $start_date, $end_date, $id = null, $options = [],$userid,$categoryid,$description,$scheduleid,$paytypeid,$salary)
+    public function __construct($title, $isAllDay, $start_date, $end_date, $id = null, $options = [],$userid,$categoryid,$description,$paytypeid,$salary)
     {
         $this->id       = $id;
-         $this->user_id = $userid;
-          $this->category_id = $categoryid;
-          $this->title    = $title;
-          $this->description = $description;
-           $this->start_date    = $start_date instanceof DateTime ? $start_date : new DateTime($start_date);
-        $this->end_date      = $start_date instanceof DateTime ? $end_date : new DateTime($end_date);
-           $this->schedule_id = $scheduleid;
-           $this->paytype_id = $paytypeid;
+        $this->user_id = $userid;
+        $this->category_id = $categoryid;
+        $this->title    = $title;
+        $this->description = $description;
+        $this->start_date    = $start_date instanceof DateTime ? $start_date : new DateTime($start_date);
+        $this->end_date      = $end_date instanceof DateTime ? $end_date : new DateTime($end_date);
+        $this->paytype_id = $paytypeid;
         $this->salary = $salary;
-          $this->isAllDay = $isAllDay;
+        $this->is_all_day = $isAllDay;
         $this->options  = $options;
     }
-
-    /**
-     * Get the event's id number
-     *
-     * @return int
-     */
 
     public function getUser(){
         return $this->user_id;
@@ -87,9 +49,7 @@ class SimpleEvent implements IdentifiableEvent
     public function getDescription(){
         return $this->description;
     }
-    public function getSchedule(){
-        return $this->schedule_id;
-    }
+
     public function getPaytype(){
         return $this->paytype_id;
     }
@@ -118,7 +78,7 @@ class SimpleEvent implements IdentifiableEvent
      */
     public function isAllDay()
     {
-        return $this->isAllDay;
+        return $this->is_all_day;
     }
 
     /**
@@ -146,8 +106,9 @@ class SimpleEvent implements IdentifiableEvent
      *
      * @return array
      */
-    public function getEventOptions()
+  public function getEventOptions()
     {
         return $this->options;
     }
+
 }

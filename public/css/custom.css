@@ -51,35 +51,3 @@
 .navbar-default .navbar-nav > li > a {
     color: #fff;
 }
-.nav > li > a {
-    background-color: #fff;
-    border-bottom: 1px solid #dadada;
-    border-left: 2px solid #d35400;
-    display: block;
-    padding: 10px 15px;
-    position: relative;
-}
-.navbar-nav > li > a {
-    padding-bottom: 15px;
-    padding-top: 15px;
-}
-.navbar-nav > li > a {
-    line-height: 20px;
-    padding-bottom: 10px;
-    padding-top: 10px;
-}
-.nav > li > a {
-    display: block;
-    padding: 10px 15px;
-    position: relative;
-}
-a, a:hover, a:focus {
-    color: #d35400;
-    text-decoration: none;
-    transition: all 0.3s ease 0s;
-}
-a, a:hover, a:focus {
-    color: #19b9e7;
-    text-decoration: none;
-    transition: all 0.3s ease 0s;
-}

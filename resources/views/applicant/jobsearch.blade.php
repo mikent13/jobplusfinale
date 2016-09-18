@@ -3,13 +3,34 @@
  	<link rel="stylesheet" href="/css/custom.css">
  @endsection
 @section('body')
-<div class="jp-head">
-	<h1>Job Searching</h1>
-</div>
-	<div class="row">
+  <div class="container">
+      <div class="row row-offcanvas row-offcanvas-left">
+        <!-- sidebar -->
+        <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
+            <ul class="nav nav-primary">
+              <li><a href="{{route('app/dashboard')}}"><i class="fa fa-calendar nav-icon" aria-hidden="true"></i> Job+ Schedule</a></li>
+              <hr>
+              <li><a href="{{ route('app/job/search') }}"><i class="fa fa-suitcase nav-icon" aria-hidden="true"></i> Job+ Postings </a></li>
+              <hr>
+              <li><a href="#"><i class="fa fa-credit-card-alt nav-icon" aria-hidden="true"></i> Job+ Wallet </a></li>
+              <hr>
+              <li><a href="#"><i class="fa fa-bookmark nav-icon" aria-hidden="true"></i> Bookmarks</a></li> 
+              <hr>
+              <li><a href="#"><i class="fa fa-archive nav-icon" aria-hidden="true"></i> Logs</a></li>
+              <hr>
+              <li><a href="{{ route('user/profile',['id' => 'Auth::id()']) }}"><i class="fa fa-user nav-icon" aria-hidden="true"></i> Profile</a></li>                
+            </ul>
+        </div>
+        <!-- main area -->
+        <div class="col-xs-12 col-sm-9 dash-content">
+          <div class="jp-head">
+            <h1>Job Searching</h1>
+          </div>
+  <div class="row">
 
-		<section>
-		 <form role="form" action="jobsearch#step2" method="post" class="registration-form">
+    <section>
+     <form role="form" action="{{ route('app/job/result') }}" method="post" class="registration-form">
+    {{ csrf_field() }}
         <div class="wizard">
             <div class="wizard-inner">
                 <div class="jobpost-connecting-line"></div>
@@ -40,15 +61,12 @@
                     </li>
                 </ul>
             </div>
-
-         
                 <div class="tab-content">
                     <div class="tab-pane active" role="tabpanel" id="step1">
                         <h2>Categories and Skills </h2>
                          <p>Select your desired categories and skills to start with.</p>
                               <div class="form-box">
                                 <div class="col-sm-12">
-                                   
                                 <div class="panel">
                                 <div class="panel-heading"><h3>Housekeeping</h3></div>
                                 <div class="panel-body">
@@ -110,7 +128,7 @@
                         <h2>Location</h2>
                         <p>Search jobs nearby you.</p>
                            <div class="form-box">
-                		</div>
+                    </div>
                         <ul class="list-inline">
                             <li><button type="button" class="btn btn-primary prev-step">Previous</button></li>
                             <li><button type="button" class="btn btn-primary next-step">Next</button></li>
@@ -119,21 +137,21 @@
                     <div class="tab-pane" role="tabpanel" id="step3">
                         <h2>Basic Filters</h2>
                         <p>Filter your results.</p>
-         				<br> <br>
+                <br> <br>
                                 <h3>Salary</h3>
                                 <div class="col-sm-6">
                                 <p>Minimum</p>
                                    <div class="range range-danger">
-						            <input type="range" name="min" min="250" max="10000" step="250" value="50" onchange="minimum.value=value">
-						            <output id="minimum">50</output>
-						          </div>
-						         </div>
-						         <div class="col-sm-6">
-						            <p>Maximum</p>
+                        <input type="range" name="min" min="250" max="10000" step="250" value="50" onchange="minimum.value=value">
+                        <output id="minimum">50</output>
+                      </div>
+                     </div>
+                     <div class="col-sm-6">
+                        <p>Maximum</p>
                                    <div class="range range-danger">
-						            <input type="range" name="range" min="250" max="10000" step="250" value="50" onchange="maximum.value=value">
-						            <output id="maximum">50</output>
-						          </div>
+                        <input type="range" name="range" min="250" max="10000" step="250" value="50" onchange="maximum.value=value">
+                        <output id="maximum">50</output>
+                      </div>
                                 </div>
 
                                 <div class="row">
@@ -166,13 +184,16 @@
                                  <hr>
                         <ul class="list-inline ">
                             <li><button type="button" class="btn btn-primary prev-step">Previous</button></li>
-                            <li><button type="button" class="btn btn-primary btn-info-full next-step">Search</button></li>
+                            <li><button type="submit" class="btn btn-primary btn-info-full next-step">Search</button></li>
                         </ul>
                     </div>
                 </div>
+                     </div>
+                      <input type="hidden" name="_token" value="{{ Session::token() }}">
             </form>
-        </div>
-    </section>
-   </div>
+            </section>
 
+    </div>
+</div></div>
+     </div>
 @stop

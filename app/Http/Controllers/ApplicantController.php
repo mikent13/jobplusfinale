@@ -8,50 +8,67 @@ use App\Jobs;
 use App\User;
 use App\Profiles;
 use Carbon\Carbon;
+use DB;
 
 class ApplicantController extends Controller
 {
 
-      private $calendarEvent;
+    private $calendarEvent;
 
-    public function __construct(Jobs $jobs)
-    {
+    public function __construct(Jobs $jobs){
         $this->calendarEvent = $jobs;
     }
 
     public function index(){
-
-        $databaseEvents = $this->calendarEvent->all();
-        $calid = \Calendar::getId();
-
-        $calendar = \Calendar::addEvents($databaseEvents);
-    	return view('applicant.home',compact('calendar','calid'));
+ 
     }
 
-    public function getApply($jobid,$id){
-    	$user = $id;
-    	return view('applicant.home');
+    public function getDashboard(Request $request)
+    {
+    
+    $databaseEvents = $this->calendarEvent->all();
+    $calid = \Calendar::getId();
+
+    $calendar = \Calendar::addEvents($databaseEvents);
+
+     $id = $request['id'];
+     $app =  DB::table('users')
+            ->join('app_calendars','users.id','=','app_calendars.user_id')
+            ->join('works','app_calendars.user_id','=','works.user_id')
+            ->join('jobs','works.user_id','=','jobs.user_id')
+            ->leftjoin('schedules','jobs.id','=','schedules.job_id')
+            ->select('jobs.title','jobs.start_date','jobs.end_date')
+            ->where('users.id','=',$request['id'])
+            ->get();
+
+         return view('applicant.home',compact('calendar','calid'));
     }
 
-    public function getProfile(){
-    	return view('layouts.profile');
+    public function getNotification($id){
+     $noti = DB::table('users')
+        ->join('app_notifications','users.id','=','app_notifications.user_id')
+        ->select('app_notifications.description')
+        ->where('users.id','=',$id)
+        ->get();
+
     }
 
-    public function getJobSearch($jobid){
-        $job = Job::findorFail($jobid);
-        return view('applicant.jobsearch',compact('job'));
+    public function Apply(Request $request){
+    	
+        //Ajax Apply Request
+    	
     }
 
-    public function getJobPage(){
-    	return view('applicant.jobpage');
+    public function getJobSearch(){
+
+        //Filters and search
+
+         return view('applicant.jobsearch');
     }
 
-    public function degree(){
-        return Education::with('degrees')->get();
-    }
-    public function test($id){
-        $profile = Profiles::with('degrees')->get();   
-        return view('applicant.test',compact('profile'));
+    public function getJobPage(Request $request){
+
+        return view('applicant.jobpage');
     }
 
 }

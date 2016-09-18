@@ -21,9 +21,7 @@ class Jobs extends Model implements Event
     public function getDescription(){
         return $this->description;
     }
-    public function getSchedule(){
-        return $this->schedule_id;
-    }
+
     public function getPaytype(){
         return $this->paytype_id;
     }
@@ -36,7 +34,7 @@ class Jobs extends Model implements Event
     }
    public function isAllDay()
     {
-        return $this->isAllDay;
+        return $this->is_all_day;
     }
     /**
      * Get the event's title
@@ -97,12 +95,12 @@ class Jobs extends Model implements Event
 
     public function payType()
     {
-    	return $this->belongsTo('Paytypes');
+    	return $this->belongsTo('App\Paytypes');
     }
 
     public function skill()
     {
-    	return $this->hasMany('Skills');
+    	return $this->hasMany('App\Skills');
     }
 
     

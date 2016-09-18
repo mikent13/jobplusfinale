@@ -15,73 +15,82 @@ Route::get('/', function () {
     return view('login.login');
 });
 
+Route::get('register', ['as' => 'login.register', 'uses' => 'Auth\AuthController@showRegistrationForm']);
+Route::post('register', ['as' => 'auth.register', 'uses' => 'Auth\AuthController@register']);
+
 
 Route::auth();
 
-
-
-Route::get('/home', 'HomeController@index');
-
-
-
 Route::group(['middleware' => ['web']], function(){
-//Employer
+
+/*
+|--------------------------------------------------------------------------
+| User Routes
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/user/home', [
+	'uses' => 'UserController@getHome',
+	'as' => 'user/home'
+	])->middleware('auth');
+
+Route::get('/user/setup', [
+	'uses' => 'UserController@getSetup',
+	'as' => 'user/setup'
+	])->middleware('auth');
+
+Route::post('/setup/save', [
+	'uses' => 'UserController@saveData',
+	'as' => 'save'
+	])->middleware('auth');
+
+
+Route::get('/profile/{id}', [
+	'uses' => 'UserController@getProfile',
+	'as' => 'user/profile'
+	])->middleware('auth');
+
+/*
+|--------------------------------------------------------------------------
+| Employer Routes
+|--------------------------------------------------------------------------
+*/
 
 Route::get('/employer',[
 	'uses' => 'EmployerController@index',
 	'as' => 'employer'
 	])->middleware('auth');
 
-	Route::get('employer/test/{id}', [
+	Route::get('/employer/test/{id}', [
 	'uses' => 'EmployerController@test',
 	'as' => 'test'
 	])->middleware('auth');
 
+/*
+|--------------------------------------------------------------------------
+| Applicant Routes
+|--------------------------------------------------------------------------
+*/
 
-//Applicant
-Route::get('/applicant', [
-	'uses' => 'ApplicantController@index',
-	'as' => 'applicant'
+Route::get('/applicant/dashboard', [
+	'uses' => 'ApplicantController@getDashboard',
+	'as' => 'app/dashboard'
 	])->middleware('auth');
 
-Route::get('/profile', [
-	'uses' => 'ApplicantController@getProfile',
-	'as' => 'profile'
-	])->middleware('auth');
 
-Route::get('/job', [
-	'uses' => 'ApplicantController@getJob',
-	'as' => 'job'
-	])->middleware('auth');
-
-Route::get('/jobsearch', [
-	'uses' => 'ApplicantController@getJobSearch',
-	'as' => 'jobsearch'
-	])->middleware('auth');
-
-Route::get('/applicant/{$jobid}/{$id}',[
-	'uses' => 'ApplicantController@getApply',
-	'as' => 'applicant.apply'
-	])->middleware('auth');
-	
-	Route::get('applicant/job', [
+Route::post('/applicant/job', [
 	'uses' => 'ApplicantController@getJobPage',
-	'as' => 'job'
+	'as' => 'app/job/result'
 	])->middleware('auth');
 
-	Route::get('applicant/job/{jobid}', [
+Route::get('/applicant/jobsearch', [
 	'uses' => 'ApplicantController@getJobSearch',
-	'as' => 'job/{jobid}'
-	])->middleware('auth');	
-
-	Route::get('applicant/job/category/{id}', [
-	'uses' => 'ApplicantController@getCategoryJobs',
-	'as' => 'category/{id}'
+	'as' => 'app/job/search'
 	])->middleware('auth');
 
-	Route::get('applicant/test/{id}', [
-	'uses' => 'ApplicantController@test',
-	'as' => 'test'
+Route::get('/applicant/apply',[
+	'uses' => 'ApplicantController@getApply',
+	'as' => 'app/apply'
 	])->middleware('auth');
 
 });
