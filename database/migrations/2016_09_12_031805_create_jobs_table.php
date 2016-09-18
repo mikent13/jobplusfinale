@@ -18,8 +18,8 @@ class CreateJobsTable extends Migration
             $table->integer('category_id');            
             $table->string('title');
             $table->string('description');
-            $table->dateTime('start_date');
-            $table->dateTime('end_date');
+            $table->dateTime('start');
+            $table->dateTime('end');
             $table->integer('paytype_id');
             $table->float('salary');
             $table->boolean('is_all_day');

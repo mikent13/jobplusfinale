@@ -9,6 +9,11 @@ use DB;
 
 class UserController extends Controller
 {
+
+    public function getHome(){
+        return view('home');
+    }
+
     public function getProfile($id){
 
 	$users = DB::table('users')

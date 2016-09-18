@@ -16,8 +16,8 @@ class SimpleEvent implements IdentifiableEvent
     public $id;
     public $title;
     public $is_all_day;
-    public $start_date;
-    public $end_date;
+    public $start;
+    public $end;
     public $user_id;
     public $category_id;
     public $description;
@@ -25,15 +25,15 @@ class SimpleEvent implements IdentifiableEvent
     public $salary;
     private $options;
 
-    public function __construct($title, $isAllDay, $start_date, $end_date, $id = null, $options = [],$userid,$categoryid,$description,$paytypeid,$salary)
+    public function __construct($title, $isAllDay, $start, $end, $id = null, $options = [],$userid,$categoryid,$description,$paytypeid,$salary)
     {
         $this->id       = $id;
         $this->user_id = $userid;
         $this->category_id = $categoryid;
         $this->title    = $title;
         $this->description = $description;
-        $this->start_date    = $start_date instanceof DateTime ? $start_date : new DateTime($start_date);
-        $this->end_date      = $end_date instanceof DateTime ? $end_date : new DateTime($end_date);
+        $this->start    = $start instanceof DateTime ? $start : new DateTime($start);
+        $this->end     = $end instanceof DateTime ? $end : new DateTime($end);
         $this->paytype_id = $paytypeid;
         $this->salary = $salary;
         $this->is_all_day = $isAllDay;
@@ -88,7 +88,7 @@ class SimpleEvent implements IdentifiableEvent
      */
     public function getStart()
     {
-        return $this->start_date;
+        return $this->start;
     }
 
     /**
@@ -98,7 +98,7 @@ class SimpleEvent implements IdentifiableEvent
      */
     public function getEnd()
     {
-        return $this->end_date;
+        return $this->end;
     }
 
     /**

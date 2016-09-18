@@ -26,22 +26,22 @@ class ApplicantController extends Controller
     public function getDashboard(Request $request)
     {
     
-    $databaseEvents = $this->calendarEvent->all();
+    $databaseEvents = $this->calendarEvent->where('user_id', 1)->get();
     $calid = \Calendar::getId();
 
     $calendar = \Calendar::addEvents($databaseEvents);
 
-     $id = $request['id'];
+     $id = 1;
      $app =  DB::table('users')
             ->join('app_calendars','users.id','=','app_calendars.user_id')
             ->join('works','app_calendars.user_id','=','works.user_id')
             ->join('jobs','works.user_id','=','jobs.user_id')
-            ->leftjoin('schedules','jobs.id','=','schedules.job_id')
-            ->select('jobs.title','jobs.start_date','jobs.end_date')
-            ->where('users.id','=',$request['id'])
+            ->leftjoin('schedules','jobs.schedule_id','=','schedules.job_id')
+            ->select('jobs.title','jobs.start','jobs.end')
+            ->where('users.id','=',$id)
             ->get();
-
-         return view('applicant.home',compact('calendar','calid'));
+        var_dump($app);
+         return view('applicant.home',compact('calendar','calid','app'));
     }
 
     public function getNotification($id){
