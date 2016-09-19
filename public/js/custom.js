@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-      $('.dropdown-toggle').dropdown();
+    $('.dropdown-toggle').dropdown();
 
   $('[data-toggle=offcanvas]').click(function() {
     $('.row-offcanvas').toggleClass('active');
@@ -22,9 +22,7 @@ $(document).ready(function() {
     
     //Wizard
     $('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
-
         var $target = $(e.target);
-    
         if ($target.parent().hasClass('disabled')) {
             return false;
         }
@@ -50,5 +48,6 @@ $(document).ready(function() {
 function prevTab(elem) {
     $(elem).prev().find('a[data-toggle="tab"]').click();
 }
+
 
 });

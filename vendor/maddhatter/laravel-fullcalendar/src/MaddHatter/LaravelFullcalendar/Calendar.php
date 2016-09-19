@@ -51,7 +51,8 @@ class Calendar
     protected $callbacks = [
         'eventClick' => "
         function(Event,jsEvent,view){
-            
+            $('#myModal').modal();
+            var title = document.getElementById('job-title').textContent;
         }
         "
     ];
@@ -77,9 +78,10 @@ class Calendar
      * @param array           $options
      * @return SimpleEvent
      */
-    public static function event($title, $isAllDay, $start, $end, $id = null, $options = [],$userid,$categoryid,$description,$paytypeid,$salary)
+
+    public static function event($title, $isAllDay, $start, $end, $id = null, $options = [],$userid,$category,$description,$paytype,$salary,$slot)
     {
-        return new SimpleEvent($title, $isAllDay, $start, $end, $id, $options,$userid,$categoryid,$description,$paytypeid,$salary);
+        return new SimpleEvent($title, $isAllDay, $start, $end, $id, $options,$userid,$category,$description,$paytype,$salary,$slot);
     }
 
     /**
@@ -97,10 +99,10 @@ class Calendar
      *
      * @return \Illuminate\View\View
      */
+
     public function script()
     {
         $options = $this->getOptionsJson();
-
         return $this->view->make('fullcalendar::script', [
             'id' => $this->getId(),
             'options' => $options,
@@ -113,10 +115,10 @@ class Calendar
      * @param string $id
      * @return $this
      */
+
     public function setId($id)
     {
         $this->id = $id;
-
         return $this;
     }
 
@@ -236,7 +238,6 @@ class Calendar
         }
 
         return $json;
-
     }
 
     /**
@@ -272,7 +273,6 @@ class Calendar
             $search[]  = '"' . $placeholder . '"';
             $replace[] = $this->getCallbacks()[$name];
         }
-
         return str_replace($search, $replace, $json);
     }
 

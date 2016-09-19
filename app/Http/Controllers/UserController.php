@@ -9,23 +9,8 @@ use DB;
 
 class UserController extends Controller
 {
-
     public function getHome(){
         return view('home');
-    }
-
-    public function getProfile($id){
-
-	$users = DB::table('users')
-		->join('profiles', 'users.id', '=', 'profiles.user_id')
-		->join('prof_educations', 'profiles.id', '=', 'prof_educations.profile_id')
-		->join('education', 'prof_educations.education_id', '=', 'education.id')
-		->join('degrees', 'education.degree_id', '=', 'degrees.id')
-		->select('education.school','education.year', 'degrees.name','users.username','profiles.user_id')
-		->where('users.id','=',$id)
-		->get();
-
-        return view('users.profile',compact('users'));
     }
 
     public function getSetup(){

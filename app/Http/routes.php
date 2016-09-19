@@ -44,12 +44,6 @@ Route::post('/setup/save', [
 	'as' => 'save'
 	])->middleware('auth');
 
-
-Route::get('/profile/{id}', [
-	'uses' => 'UserController@getProfile',
-	'as' => 'user/profile'
-	])->middleware('auth');
-
 /*
 |--------------------------------------------------------------------------
 | Employer Routes
@@ -65,6 +59,23 @@ Route::get('/employer',[
 	'uses' => 'EmployerController@test',
 	'as' => 'test'
 	])->middleware('auth');
+
+	Route::get('/employer/dashboard', [
+	'uses' => 'EmployerController@getDashboard',
+	'as' => 'emp/dashboard'
+	])->middleware('auth');
+
+	Route::get('/employer/jobpost', [
+	'uses' => 'EmployerController@getJobPost',
+	'as' => 'emp/job/post'
+	])->middleware('auth');
+
+
+Route::get('employer/profile/{id}', [
+	'uses' => 'EmployerController@getProfile',
+	'as' => 'emp/profile'
+	])->middleware('auth');
+
 
 /*
 |--------------------------------------------------------------------------
@@ -91,6 +102,11 @@ Route::get('/applicant/jobsearch', [
 Route::get('/applicant/apply',[
 	'uses' => 'ApplicantController@getApply',
 	'as' => 'app/apply'
+	])->middleware('auth');
+
+Route::get('applicant/profile/{id}', [
+	'uses' => 'ApplicantController@getProfile',
+	'as' => 'app/profile'
 	])->middleware('auth');
 
 });

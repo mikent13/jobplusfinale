@@ -5,14 +5,13 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>JobPlus</title>
-
         <!-- CSS -->
         <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
         <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
         <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
 		    <link rel="stylesheet" href="/css/form-elements.css">
         <link rel="stylesheet" href="/css/style.css">
-
+        
         <!-- Favicon and touch icons -->
         <link rel="shortcut icon" href="/ico/favicon.png">
         <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/ico/apple-touch-icon-144-precomposed.png">
@@ -20,7 +19,8 @@
         <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/ico/apple-touch-icon-72-precomposed.png">
         <link rel="apple-touch-icon-precomposed" href="/ico/apple-touch-icon-57-precomposed.png">
         @yield('css')
-    </head> 
+</head> 
+
 <body id="parent">
 <div class="page-container">
   <div class="row">
@@ -44,7 +44,6 @@
              <i class="fa fa-user" aria-hidden="true"></i> {{ Auth::user()->username }} 
             </a>
             <ul class="dropdown-menu">
-              <li><a href="#">Switch to Employer</a></li>
               <li><a href="{{url('/logout')}}">Logout</a></li>
             </ul>
         </div>

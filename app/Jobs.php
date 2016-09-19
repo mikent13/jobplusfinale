@@ -11,6 +11,9 @@ class Jobs extends Model implements Event
     protected $table = 'jobs';
     protected $dates = ['start', 'end'];
 
+    public function getSlot(){
+        return $this->slot;
+    }
 
     public function getUser(){
         return $this->user_id;
@@ -23,7 +26,7 @@ class Jobs extends Model implements Event
     }
 
     public function getPaytype(){
-        return $this->paytype_id;
+        return $this->paytype;
     }
     public function getSalary(){
         return $this->salary;
