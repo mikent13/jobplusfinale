@@ -666,3 +666,7 @@ margin-top: 60px;
 .sub-nav{
     display: inline-block;
 }
+
+.modal-head{
+    background-image: url('/img/background.jpg');
+}

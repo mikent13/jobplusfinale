@@ -4,7 +4,6 @@ use Illuminate\Support\Collection;
 
 class EventCollection
 {
-
     /**
      * @var Collection
      */
@@ -36,14 +35,15 @@ class EventCollection
         $eventArray = [
             'id' => $this->getEventId($event),
             'user_id' => $event->getUser(),
-             'category_id' => $event->getCategory(),
+             'category' => $event->getCategory(),
              'title' => $event->getTitle(),
              'description' => $event->getDescription(),
              'start' => $event->getStart()->format('c'),
             'end' => $event->getEnd()->format('c'),
             'paytype_id' => $event->getPaytype(),
             'salary' => $event->getSalary(),
-            'is_all_day' => $event->isAllDay()
+            'is_all_day' => $event->isAllDay(),
+            'slot' => $event->getSlot()
         ];
 
         $eventOptions = [];

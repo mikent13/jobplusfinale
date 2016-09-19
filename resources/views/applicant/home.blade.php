@@ -1,6 +1,7 @@
 @extends('masters.primary')
 
 @section('css')
+  <link rel="stylesheet" href="/css/custom.css">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.2.7/fullcalendar.min.css"/>
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.2.7/fullcalendar.print.css" media="print"/>
 @endsection
@@ -21,15 +22,32 @@
               <hr>
               <li><a href="#"><i class="fa fa-archive nav-icon" aria-hidden="true"></i> Logs</a></li>
               <hr>
-              <li><a href="{{ route('user/profile',['id' => 'Auth::id()']) }}"><i class="fa fa-user nav-icon" aria-hidden="true"></i> Profile</a></li>                
+              <li><a href="{{ route('app/profile',['id' => 'Auth::id()']) }}"><i class="fa fa-user nav-icon" aria-hidden="true"></i> Profile</a></li>      
             </ul>
         </div>
+        <hr>
         <!-- main area -->
         <div class="col-xs-12 col-sm-9 dash-content">
-       	   <div id="calendar-{{ $calid }}"></div>
-           @foreach($app as $data)
-            {{  $data->start }}
-           @endforeach
+       	   <div id="calendar-{{ $calid }}">
+           </div>
+           <div class="container">
+          <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                <div class="modal-header modal-head">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h2 class="modal-title" id="job-title"></h2>
+                </div>
+                <div class="modal-body">
+                  <p>This is a large modal.</p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         </div>
     </div>
   </div>
@@ -41,5 +59,4 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.2.7/fullcalendar.min.js"></script>
 <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
 @endsection

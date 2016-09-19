@@ -28,7 +28,7 @@
                 <div class="col-md-6">
                 <div  class="cover-app-bott">
                  <h1>Millions of people waiting for you to hire! </h1>
-                    <a href="">
+                    <a href="{{ route('emp/dashboard') }}">
                         <button class="btn btn-primary">Find People Now</button>
                     </a>
                 </div>

@@ -24,8 +24,9 @@ class SimpleEvent implements IdentifiableEvent
     public $paytype_id;
     public $salary;
     private $options;
+    public $slot;
 
-    public function __construct($title, $isAllDay, $start, $end, $id = null, $options = [],$userid,$categoryid,$description,$paytypeid,$salary)
+    public function __construct($title, $isAllDay, $start, $end, $id = null, $options = [],$userid,$categoryid,$description,$paytype,$salary,$slot)
     {
         $this->id       = $id;
         $this->user_id = $userid;
@@ -34,10 +35,15 @@ class SimpleEvent implements IdentifiableEvent
         $this->description = $description;
         $this->start    = $start instanceof DateTime ? $start : new DateTime($start);
         $this->end     = $end instanceof DateTime ? $end : new DateTime($end);
-        $this->paytype_id = $paytypeid;
+        $this->paytype = $paytype;
         $this->salary = $salary;
         $this->is_all_day = $isAllDay;
         $this->options  = $options;
+        $this->slot = $slot;
+    }
+
+    public function getSlot(){
+        return $this->slot;
     }
 
     public function getUser(){
