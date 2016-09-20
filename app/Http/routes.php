@@ -109,4 +109,18 @@ Route::get('applicant/profile/{id}', [
 	'as' => 'app/profile'
 	])->middleware('auth');
 
+/*
+|--------------------------------------------------------------------------
+| Job Routes
+|--------------------------------------------------------------------------
+*/
+
+Route::get("/job/create", "jobController@create");
+Route::post("job/store", "jobController@store");
+Route::get("index", "jobController@index");
+Route::get("show/{id}", "jobController@show");
+Route::get("edit/{id}", "jobController@edit");
+Route::patch("update/{id}", "jobController@update");
+Route::get("delete/{id}", "jobController@destroy");
+
 });

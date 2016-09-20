@@ -49,8 +49,8 @@
             var description = document.getElementById("description").value;
             // var start_time = document.getElementById("start_time").value;
             // var end_time = document.getElementById("end_time").value;
-            var start_date = document.getElementById("start_date").value;
-            var end_date = document.getElementById("end_date").value;
+            var start_date = document.getElementById("start").value;
+            var end_date = document.getElementById("end").value;
             var slot = document.getElementById("slot").value;
             var salary = document.getElementById("salary").value;
             
@@ -208,7 +208,9 @@
 										</ul>
 									</div>
 
-								<form method="POST" action="store">
+								<form method="POST" action="{{url('job/store')}}">
+								{{ csrf_field() }}
+								<input type="hidden" value="{{Auth::user()->id}}" name="user_id">
 									<div class="tab-content">
 
 										<!-- STEP 1 -->
@@ -230,10 +232,10 @@
 											<div class="box-title"><h4>DATE AND TIME</h4></div>
 											<div class="form-group"><br>
 											    <label for="title">Start date:</label>
-											    <input type="date" name="start_date" id="start_date">
+											    <input type="date" name="start" id="start_date">
 											    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 											    <label for="title">End date:</label>
-											    <input type="date" name="end_date" id="end_date">
+											    <input type="date" name="end" id="end_date">
 											</div>
 											<!-- <div class="form-group"><br>
 											    <label for="start_time">Start time:</label>
@@ -331,18 +333,13 @@
 											<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
 											<input id="pac-input" class="controls" type="text" placeholder="Search Box">
 											<div class="container" id="map-canvas" style="height:400px;width:100%;"></div>
-
-
 											<!-- END OF GOOGLE MAPS-->
-
 											<ul class="list-inline pull-right">
 												<li><button type="button" class="btn btn-default prev-step">Previous</button></li>
 												<li><button type="button" class="btn btn-primary next-step">Next</button></li>
 											</ul>
 										</div>
 										<!-- END OF STEP 2 -->
-
-
 										<!-- STEP 3 -->
 										<div class="tab-pane" role="tabpanel" id="step3">
 											<h3>Step 3: Payment</h3>
@@ -360,7 +357,6 @@
 											    <label class="radio-inline"><input type="radio" name="paytype_id" value="hourly" checked="checked">Hourly</label>
 												<label class="radio-inline"><input type="radio" name="paytype_id" value="daily">Daily</label>
 												<label class="radio-inline"><input type="radio" name="paytype_id" value="project">Project</label>
-												
 											</div>
 											</center>
 											<div class="form-group">
@@ -402,7 +398,6 @@
 										</div>
 										<div class="clearfix"></div>
 										 <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
-       
 									</div>
 								</form>
 								</div>
@@ -410,11 +405,9 @@
 							</div>
 							</div>
 				      	</div>
-				      
 				    	</div>
 				  </div>				  
 				</div>
-
 				  	 	 <div class="col-md-3">
 					  	 	<img src="../images/businessman.png" class="img-rounded pull-left result-pic" name="category" id="category_id" value="2" alt="Rounded Image">					  	 	
 					  	 </div>
@@ -438,7 +431,6 @@
 				  	<div class="panel panel-default">
 				  	<div class="panel-heading"><h3>Feed</h3></div>
 				  	<div class="panel-body">
-
 
 				  		<!-- LABANDERA -->
 						  <div class="col-md-12">
@@ -488,7 +480,7 @@
 	<script type="text/javascript" src="jquery.gmap.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
-    <script src="/js/custom.js"></script>
+
 
 			<script type="text/javascript">
 				
