@@ -6,15 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Education extends Model
 {
-    	protected $table = 'education';
+    	protected $primaryKey = 'education_id';
+    protected $table= 'education';
+    public $timestamps = false;
 
-     public function degree()
-    {
-        return $this->hasMany('App\Degrees');   
-    }
+    protected $fillable =[
+	    'degree_id',
+	    'school',
+	    'year'
+    ];
 
-    public function profile(){
-    	return $this->belongsToMany('App\Profile');
-    }
 
 }

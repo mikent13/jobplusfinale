@@ -40,8 +40,8 @@ Route::get('/user/setup', [
 	])->middleware('auth');
 
 Route::post('/setup/save', [
-	'uses' => 'UserController@saveData',
-	'as' => 'save'
+	'uses' => 'UserController@saveProfile',
+	'as' => '/user/save'
 	])->middleware('auth');
 
 /*
@@ -55,7 +55,7 @@ Route::get('/employer',[
 	'as' => 'employer'
 	])->middleware('auth');
 
-	Route::get('/employer/test/{id}', [
+	Route::get('/employer/test/{$id}', [
 	'uses' => 'EmployerController@test',
 	'as' => 'test'
 	])->middleware('auth');
@@ -71,7 +71,7 @@ Route::get('/employer',[
 	])->middleware('auth');
 
 
-Route::get('employer/profile/{id}', [
+Route::get('employer/profile', [
 	'uses' => 'EmployerController@getProfile',
 	'as' => 'emp/profile'
 	])->middleware('auth');
@@ -83,7 +83,7 @@ Route::get('employer/profile/{id}', [
 |--------------------------------------------------------------------------
 */
 
-Route::get('/applicant/dashboard', [
+Route::get('/applicant/dashboard/', [
 	'uses' => 'ApplicantController@getDashboard',
 	'as' => 'app/dashboard'
 	])->middleware('auth');
@@ -104,7 +104,7 @@ Route::get('/applicant/apply',[
 	'as' => 'app/apply'
 	])->middleware('auth');
 
-Route::get('applicant/profile/{id}', [
+Route::get('applicant/profile', [
 	'uses' => 'ApplicantController@getProfile',
 	'as' => 'app/profile'
 	])->middleware('auth');

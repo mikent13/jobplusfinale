@@ -13,10 +13,9 @@ class CreateAppCalendarsTable extends Migration
     public function up()
     {
         Schema::create('app_calendars', function (Blueprint $table) {
-            $table->increments('id')->unique();
+            $table->increments('id');
             $table->integer('work_id');
             $table->integer('user_id');
-            $table->timestamps();
         });
     }
 

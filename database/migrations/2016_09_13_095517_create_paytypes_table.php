@@ -13,9 +13,8 @@ class CreatePaytypesTable extends Migration
     public function up()
     {
         Schema::create('paytypes', function (Blueprint $table) {
-            $table->increments('id');
+            $table->increments('paytype_id');
             $table->string('name');
-            $table->timestamps();
         });
     }
 

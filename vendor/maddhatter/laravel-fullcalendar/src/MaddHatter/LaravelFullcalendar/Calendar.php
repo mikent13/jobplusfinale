@@ -3,7 +3,7 @@
 use ArrayAccess;
 use DateTime;
 use Illuminate\View\Factory;
-
+use Carbon\Carbon;
 class Calendar
 {
 
@@ -51,8 +51,14 @@ class Calendar
     protected $callbacks = [
         'eventClick' => "
         function(Event,jsEvent,view){
+        var title = Event.title;
+       alert(''+Event.start);
+
+        var title = document.getElementById('job-title').innerHTML = ''+title;
+        var start = document.getElementById('start_date').innerHTML = ''+start;
+        
             $('#myModal').modal();
-            var title = document.getElementById('job-title').textContent;
+           
         }
         "
     ];

@@ -39,7 +39,6 @@
         	var radioValue = $("button[name='paytype_id']:checked").val();
         });
     });
-
     </script>
 
     <!-- DISPLAY VALUES-->
@@ -47,23 +46,17 @@
         function showMessage(){
             var title = document.getElementById("title").value;
             var description = document.getElementById("description").value;
-            // var start_time = document.getElementById("start_time").value;
-            // var end_time = document.getElementById("end_time").value;
             var start_date = document.getElementById("start").value;
             var end_date = document.getElementById("end").value;
             var slot = document.getElementById("slot").value;
             var salary = document.getElementById("salary").value;
-            
-            // var categoryId= document.getElementById("category_id").value;
+
 			display_title.innerHTML= title;
             display_description.innerHTML= description;
             display_startDate.innerHTML= start_date;
             display_endDate.innerHTML= end_date;
             display_slot.innerHTML= slot;
             display_salary.innerHTML= salary;
-            // display_paytypeId.innerHTML= radioValue;
-            // display_startTime.innerHTML= start_time;
-            // display_endTime.innerHTML= end_time;
         }
     </script>
     <!-- END OF DISPLAY VALUES-->
@@ -82,7 +75,6 @@
 		      </button>
 		      <div class="navbar-brand navbar-brand-centered">Job+</div>
 		    </div>
-
 		    <!-- Collect the nav links, forms, and other content for toggling -->
 		    <div class="collapse navbar-collapse" id="navbar-brand-centered">
 		      <ul class="nav navbar-nav navbar-right">
@@ -90,12 +82,12 @@
 		        <li class="dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ Auth::user()->username }}<span class="caret"></span></a>
                   <ul class="dropdown-menu" role="menu">
-                    <li><a href="{{route('emp/dashboard')}}">Job+ Schedule</a><li>
+                    <li><a  href="{{route('emp/dashboard')}}">Job+ Schedule</a><li>
                     <li><a href="#">Job+ Wallet</a></li>
                     <li><a href="#">Bookmarks</a></li>
                     <li><a href="#">Log</a></li>
                     <li class="divider"></li>
-                    <li><a href="#">Sign out</a></li>
+                    <li><a href="{{url('/logout')}}">Sign out</a></li>
                   </ul>
                 </li>		        
 		      </ul>
@@ -113,31 +105,31 @@
 				</form>
 				<div class="search-result">
 					<section id="" class="result pull-left">
-						<img src="../images/pic.png" class="img-rounded pull-left job-pic" alt="Rounded Image">
+						<img src="/img/pic.png" class="img-rounded pull-left job-pic" alt="Rounded Image">
 						<p class="meta-loc" id="job-title"><b>Labandera</b></p>
 						<small >Banawa, Cebu City</small>
 						<div class="bookmark pull-right"><span class="glyphicon glyphicon-heart-empty"></span></div>
 					</section> 
 					<section id="" class="result pull-left">
-						<img src="../images/pic.png" class="img-rounded pull-left job-pic" alt="Rounded Image">
+						<img src="/img/pic.png" class="img-rounded pull-left job-pic" alt="Rounded Image">
 						<p class="meta-loc" id="job-title"><b>Carpentero</b></p>
 						<small >Banawa, Cebu City</small>
 						<div class="bookmark pull-right"><span class="glyphicon glyphicon-heart-empty"></span></div>
 					</section> 
 						<section id="" class="result pull-left">
-						<img src="../images/pic.png" class="img-rounded pull-left job-pic" alt="Rounded Image">
+						<img src="/img/pic.png" class="img-rounded pull-left job-pic" alt="Rounded Image">
 						<p class="meta-loc" id="job-title"><b>Yaya</b></p>
 						<small >Banawa, Cebu City</small>
 						<div class="bookmark pull-right"><span class="glyphicon glyphicon-heart-empty"></span></div>
 					</section>
 					<section id="" class="result pull-left">
-						<img src="../images/pic.png" class="img-rounded pull-left job-pic" alt="Rounded Image">
+						<img src="/img/pic.png" class="img-rounded pull-left job-pic" alt="Rounded Image">
 						<p class="meta-loc" id="job-title"><b>Cook</b></p>
 						<small >Banawa, Cebu City</small>
 						<div class="bookmark pull-right"><span class="glyphicon glyphicon-heart-empty"></span></div>
 					</section>
 					<section id="" class="result pull-left">
-						<img src="../images/pic.png" class="img-rounded pull-left job-pic" alt="Rounded Image">
+						<img src="/img/pic.png" class="img-rounded pull-left job-pic" alt="Rounded Image">
 						<p class="meta-loc" id="job-title"><b>Baby Sitter</b></p>
 						<small >Banawa, Cebu City</small>
 						<div class="bookmark pull-right"><span class="glyphicon glyphicon-heart-empty"></span></div>
@@ -156,9 +148,25 @@
 				    
 				    <div class="col-md-3">
 				  	 	<button type="button" class="btn btn-cat"  name="category" id="category_id" value="1" data-toggle="modal" data-target="#myModal">
-				  	 	<img src="../images/lady.png" class="img-rounded pull-left result-pic" alt="Rounded Image">
+				  	 	<img src="/img/lady.png" class="pull-left result-pic" >
 				  	 	</button>
 				  	 </div>
+				  	   <div class="col-md-3">
+				  	 	<button type="button" class="btn btn-cat"  name="category" id="category_id" value="2" data-toggle="modal" data-target="#myModal">
+				  	 	<img src="/img/construction.png" class=" pull-left result-pic" >
+				  	 	</button>
+				  	 </div>
+				  	   <div class="col-md-3">
+				  	 	<button type="button" class="btn btn-cat"  name="category" id="category_id" value="3" data-toggle="modal" data-target="#myModal">
+				  	 	<img src="/img/businessman.png" class="pull-left result-pic">
+				  	 	</button>
+				  	 </div>
+				  	   <div class="col-md-3">
+				  	 	<button type="button" class="btn btn-cat"  name="category" id="category_id" value="4" data-toggle="modal" data-target="#myModal">
+				  	 	<img src="/img/maintenance.png" class="pull-left result-pic">
+				  	 	</button>
+				  	 </div>
+
 				  	 <!-- MODAL -->
 				  	<div id="myModal" class="modal fade" role="dialog">
   					<div class="modal-dialog">
@@ -263,77 +271,197 @@
 										     	</div>
 
 										    <!-- GOOGLE MAPS -->
-											<script src="http://maps.googleapis.com/maps/api/js"></script>
-											<script>
-											 function init() {
-											   var map = new google.maps.Map(document.getElementById('map-canvas'), {
-											     center: {
-											       lat: 12.9715987,
-											       lng: 77.59456269999998
-											     },
-											     zoom: 12
-											   });
+											<div id="map"></div>
+    <script>
+      // This example adds a search box to a map, using the Google Place Autocomplete
+      // feature. People can enter geographical searches. The search box will return a
+      // pick list containing a mix of places and predicted search terms.
+
+      // This example requires the Places library. Include the libraries=places
+      // parameter when you first load the API. For example:
+      // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
+
+      function initAutocomplete() {
+        var lat= 10.355181;
+        var long = 123.844222;
+        var map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: lat, lng: long},
+          zoom: 10,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+
+        });
+        // Trigger map resize when tab is shown
+             google.maps.event.trigger(map, "resize");
+        
+        // Create the search box and link it to the UI element.
+        var input = document.getElementById('pac-input');
+        var searchBox = new google.maps.places.SearchBox(input);
+        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+      
+        
+
+        // Bias the SearchBox results towards current map's viewport.
+        map.addListener('bounds_changed', function() {
+          searchBox.setBounds(map.getBounds());
+        });
+
+        var markers = [];
+        
+
+        google.maps.event.addListener(map, 'click', function (e) {
+                 
+              var ll = {lat: e.latLng.lat(), lng: e.latLng.lng()}; 
+
+              //alert(e.latLng.lat());  
+               markers.forEach(function(marker) {
+                          marker.setMap(null);
+                });
+              
+               markers = []; 
+
+               lastMarker = new google.maps.Marker({
+                                position: ll,
+                                map: map,
+                                title: 'Hello World!'
+                            });
+                markers.push(lastMarker);
+
+                getAddressByLatlng(ll);
 
 
-											   var searchBox = new google.maps.places.SearchBox(document.getElementById('pac-input'));
-											   map.controls[google.maps.ControlPosition.TOP_CENTER].push(document.getElementById('pac-input'));
-											   google.maps.event.addListener(searchBox, 'places_changed', function() {
-											     searchBox.set('map', null);
+         });
 
 
-											     var places = searchBox.getPlaces();
+        // Listen for the event fired when the user selects a prediction and retrieve
+        // more details for that place.
+        searchBox.addListener('places_changed', function() {
+          var places = searchBox.getPlaces();
 
-											     var bounds = new google.maps.LatLngBounds();
-											     var i, place;
-											     for (i = 0; place = places[i]; i++) {
-											       (function(place) {
-											         var marker = new google.maps.Marker({
+          if (places.length == 0) {
+            return;
+          }
 
-											           position: place.geometry.location
-											         });
-											         marker.bindTo('map', searchBox, 'map');
-											         google.maps.event.addListener(marker, 'map_changed', function() {
-											           if (!this.getMap()) {
-											             this.unbindAll();
-											           }
-											         });
-											         bounds.extend(place.geometry.location);
+          // Clear out the old markers.
+          markers.forEach(function(marker) {
+            marker.setMap(null);
+          });
+          markers = [];
+
+          // For each place, get the icon, name and location.
+          var bounds = new google.maps.LatLngBounds();
+          places.forEach(function(place) {
+            var icon = {
+              url: place.icon,
+              size: new google.maps.Size(71, 71),
+              origin: new google.maps.Point(0, 0),
+              anchor: new google.maps.Point(17, 34),
+              scaledSize: new google.maps.Size(25, 25)
+            };
+
+            // Create a marker for each place.
+            markers.push(new google.maps.Marker({
+              map: map,
+              icon: icon,
+              title: place.name,
+              position: place.geometry.location
+            }));
+
+            if (place.geometry.viewport) {
+              // Only geocodes have viewport.
+              bounds.union(place.geometry.viewport);
+            } else {
+              bounds.extend(place.geometry.location);
+            }
+          });
+          map.fitBounds(bounds);
+        });
+      }
+
+    </script>
+
+    <script type="text/javascript">
+
+      function getAddressByLatlng(latlng){
+             
+                var lat =latlng.lat;
+                var lng =latlng.lng;
+        
+                var inputSearchBox = document.getElementById('pac-input');
+
+                var cLatValId = document.getElementById('clat');
+                var cLongValId = document.getElementById('clong');
+
+                cLatValId.value=lat;
+                cLongValId.value=lng;
+
+                var geocoder = new google.maps.Geocoder();
+                        geocoder.geocode({ 'latLng': latlng }, function (results, status) {
+                             if (status == google.maps.GeocoderStatus.OK) {
+                                if (results[1]) {
+                                   // myHomeLocText.value =  results[1].formatted_address;
+                                    inputSearchBox.value =  results[1].formatted_address;
+                                }
+                            }
+                 });
+
+              }
 
 
-											       }(place));
+    </script>
 
-											     }
-											     map.fitBounds(bounds);
-											     searchBox.set('map', map);
-											     map.setZoom(Math.min(map.getZoom(),12));
+   <script>
+      // This example requires the Places library. Include the libraries=places
+      // parameter when you first load the API. For example:
+      // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
 
-											   });
-											 }
-											 google.maps.event.addDomListener(window, 'load', init);
+      var map;
+      var infowindow;
 
+      function initMap() {
+       
+        var lat= 10.355181;
+        var long = 123.844222;
+        var pyrmont = {lat: lat, lng: long};
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: pyrmont,
+          zoom: 10,
+          width: '500px',
+        height: '500px',
+        });
 
-											// var myCenter = new google.maps.LatLng(41.878114, -87.629798);
-											// function initialize() {
-											// var mapProp = {
-											//   center:myCenter,
-											//   zoom:12,
-											//   scrollwheel:false,
-											//   draggable:false,
-											//   mapTypeId:google.maps.MapTypeId.ROADMAP
-											//   };
-											// var map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
-											// var marker = new google.maps.Marker({
-											//   position:myCenter,
-											//   });
-											// marker.setMap(map);
-											// }
-											// google.maps.event.addDomListener(window, 'load', initialize);
-											</script>										    
-											<!-- <div id="googleMap" style="height:400px;width:100%;"></div>	 -->
-											<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
-											<input id="pac-input" class="controls" type="text" placeholder="Search Box">
-											<div class="container" id="map-canvas" style="height:400px;width:100%;"></div>
-											<!-- END OF GOOGLE MAPS-->
+        infowindow = new google.maps.InfoWindow();
+        var service = new google.maps.places.PlacesService(map);
+        service.nearbySearch({
+          location: pyrmont,
+          radius: 200,
+          type: ['store']
+        }, callback);
+      }
+
+      function callback(results, status) {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+          for (var i = 0; i < results.length; i++) {
+            createMarker(results[i]);
+          }
+        }
+      }
+
+      function createMarker(place) {
+        var placeLoc = place.geometry.location;
+        var marker = new google.maps.Marker({
+          map: map,
+          position: place.geometry.location
+        });
+
+        google.maps.event.addListener(marker, 'click', function() {
+          infowindow.setContent(place.name);
+          infowindow.open(map, this);
+        });
+      }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDBJJH4SL6eCDPu7N5C-2XcBt8jpZJeMyQ&libraries=places&callback=initAutocomplete" async defer>
+    	
+    </script><!-- END OF GOOGLE MAPS-->
 											<ul class="list-inline pull-right">
 												<li><button type="button" class="btn btn-default prev-step">Previous</button></li>
 												<li><button type="button" class="btn btn-primary next-step">Next</button></li>
@@ -408,8 +536,8 @@
 				    	</div>
 				  </div>				  
 				</div>
-				  	 	 <div class="col-md-3">
-					  	 	<img src="../images/businessman.png" class="img-rounded pull-left result-pic" name="category" id="category_id" value="2" alt="Rounded Image">					  	 	
+				  	 	<!--  <div class="col-md-3">
+					  	 	<img src="../images/businessman.png" class="img-rounded pull-left result-pic" name="category" id="category_id" value="2">					  	 	
 					  	 </div>
 
 					  	 <div class="col-md-3">
@@ -418,7 +546,7 @@
 
 					  	 <div class="col-md-3">
 					  	 	<img src="../images/maintenance.png" class="img-rounded pull-left result-pic" name="category" id="category_id" value="4" alt="Rounded Image">					  	 	
-					  	 </div>
+					  	 </div> -->
 				  </div>
 				  </div>
 				  
@@ -436,7 +564,6 @@
 						  <div class="col-md-12">
 						  	<div class="box">
 							 	 <div class="box-title"><h4>Labandera</h4></div>
-							 	 <div class="box-active"><p>Active</p></div>
 							 	 <p><b>Description:</b> Nunc mauris nisl, rhoncus eget augue sed, iaculis imperdiet erat?<br/>
 							 	 <b>Schedule:</b> Monday-Wednesday<br/>
 							 	 <b>Time:</b> 8:00AM-9:00AM
@@ -450,7 +577,6 @@
 						  <div class="col-md-12">
 						  	<div class="box">
 							 	 <div class="box-title"><h4>Driver</h4></div>
-							 	 <div class="box-done"><p>Done</p></div>
 							 	 <p><b>Description:</b> Nunc mauris nisl, rhoncus eget augue sed, iaculis imperdiet erat?<br/>
 							 	 <b>Schedule:</b> Monday-Wednesday<br/>
 							 	 <b>Time:</b> 8:00AM-9:00AM
@@ -464,7 +590,6 @@
 						  <div class="col-md-12">
 						  	<div class="box">
 							 	 <div class="box-title"><h4>Saleslady</h4></div>
-							 	 <div class="box-progress"><p>On progress</p></div>
 							 	 <p><b>Description:</b> Nunc mauris nisl, rhoncus eget augue sed, iaculis imperdiet erat?<br/>
 							 	 <b>Schedule:</b> Monday-Wednesday<br/>
 							 	 <b>Time:</b> 8:00AM-9:00AM
@@ -480,11 +605,8 @@
 	<script type="text/javascript" src="jquery.gmap.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
-
-
 			<script type="text/javascript">
 				
-				$(document).ready(function () {
 			    //Initialize tooltips
 			    $('.nav-tabs > li a[title]').tooltip();
 			    
@@ -511,7 +633,7 @@
 			        prevTab($active);
 
 			    });
-			});
+			};
 
 			function nextTab(elem) {
 			    $(elem).next().find('a[data-toggle="tab"]').click();

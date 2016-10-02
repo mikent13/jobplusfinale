@@ -6,8 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Reviews extends Model
 {
-   
-		protected $table = 'reviews';
+   protected $primaryKey = 'review_id';
+	protected $table = 'reviews';
+	protected $fillable =[
+		'rating',
+		'comment',
+		'reviewed_id',
+		'reviewer_id',
+		'work_id'
+	];
 
 
     public function reviews()

@@ -18,9 +18,11 @@ class Jobs extends Model implements Event
     public function getUser(){
         return $this->user_id;
     }
+
     public function getCategory(){
         return $this->category_id;
     }
+
     public function getDescription(){
         return $this->description;
     }
@@ -28,9 +30,11 @@ class Jobs extends Model implements Event
     public function getPaytype(){
         return $this->paytype;
     }
+
     public function getSalary(){
         return $this->salary;
     }
+    
     public function getId()
     {
         return $this->id;

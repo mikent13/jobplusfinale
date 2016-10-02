@@ -16,7 +16,6 @@ class CreateProfSkillsTable extends Migration
             $table->increments('id');
             $table->integer('profile_id');
             $table->integer('skill_id');
-            $table->timestamps();
         });
     }
 

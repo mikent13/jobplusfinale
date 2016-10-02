@@ -4,19 +4,14 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Experiences extends Model
+class Prof_Skill extends Model
 {
- 
 	protected $primaryKey = 'id';
-    protected $table= 'experiences';
+    protected $table= 'prof_skills';
     public $timestamps = false;
 
     protected $fillable =[
-	    'jobname',
-	    'skill_id',
-	    'employer',
-	    'year'
+    'profile_id',
+    'skill_id'
     ];
- 		
-
 }

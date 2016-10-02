@@ -17,7 +17,7 @@
                 <div class="col-md-6">
                 <div class="cover-app">
                 <h1>Become one of thousands of people that gets hired everyday! </h1>
-                    <a href="{{ route('app/dashboard') }}">
+                    <a id="abutton" href="{{ route('app/dashboard') }}">
                         <button class="btn btn-primary">Get Hired Now</button>
                     </a>
                 </div>
@@ -41,5 +41,7 @@
        
     </div>
 </div>
+
+
 @endsection
 

@@ -18,7 +18,7 @@
               <hr>
               <li><a href="#"><i class="fa fa-archive nav-icon" aria-hidden="true"></i> Logs</a></li>
               <hr>
-              <li><a href="{{ route('user/profile',['id' => 'Auth::id()']) }}"><i class="fa fa-user nav-icon" aria-hidden="true"></i> Profile</a></li>                
+              <li><a href=""><i class="fa fa-user nav-icon" aria-hidden="true"></i> Profile</a></li>                
             </ul>
         </div>
         <!-- main area -->
@@ -27,7 +27,6 @@
             <h1>Job Searching</h1>
           </div>
   <div class="row">
-
     <section>
      <form role="form" action="{{ route('app/job/result') }}" method="post" class="registration-form">
     {{ csrf_field() }}

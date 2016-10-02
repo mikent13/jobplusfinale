@@ -6,35 +6,31 @@ use App\Http\Requests;
 use App\Jobs;
 use Carbon\Carbon;
 use DB;
+use Auth;
 
 class ApplicantController extends Controller
 {
-
     private $calendarEvent;
 
     public function __construct(Jobs $jobs){
         $this->calendarEvent = $jobs;
     }
 
-    public function index(){
- 
-    }
-    public function getDashboard(Request $request)
+    public function getDashboard()
     {
-    $id = 1;
-    $databaseEvents = $this->calendarEvent->where('user_id', $id)->get();
-    $calid = \Calendar::getId();
+        $id = Auth::user()->id;
+        $databaseEvents = $this->calendarEvent->where('user_id', $id)->get();
+        $calid = \Calendar::getId();
+        $calendar = \Calendar::addEvents($databaseEvents);
 
-    $calendar = \Calendar::addEvents($databaseEvents);
-
-     $app =  DB::table('users')
+        $app =  DB::table('users')
             ->join('app_calendars','users.id','=','app_calendars.user_id')
             ->join('works','app_calendars.user_id','=','works.user_id')
             ->join('jobs','works.user_id','=','jobs.user_id')
-            ->leftjoin('schedules','jobs.id','=','schedules.job_id')
-            ->select('jobs.title','jobs.start','jobs.end','schedules.start_date','schedules.end_date')
+            ->select('jobs.title','jobs.start','jobs.end')
             ->where('users.id','=',$id)
             ->get();
+
          return view('applicant.home',compact('calendar','calid','app'));
     }
 
@@ -56,11 +52,11 @@ class ApplicantController extends Controller
     }
 
     public function getJobPage(Request $request){
-
         return view('applicant.jobpage');
     }
 
-    public function getProfile($id){
+    public function getProfile(){
+        
         return view('users.app-profile');
     }
 

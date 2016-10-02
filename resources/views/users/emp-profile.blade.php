@@ -49,7 +49,7 @@
       <div class="custom-card">
         <h3><i class="fa fa-user custom-card-icon" aria-hidden="true"></i> Biography</h3>
         <p>
-          Nullam molestie, lectus ac congue lacinia, nisi ex dictum ligula, et ornare erat urna tempus odio. Nunc orci diam, pellentesque ac nulla eget, feugiat finibus neque. Aenean ornare ac orci id ultricies! Nulla at magna sit amet erat feugiat varius ut non mi. Fusce et ex laoreet; maximus felis sed, pretium leo. Ut enim erat, suscipit nec magna ac, dapibus efficitur mauris. Nullam nec ligula nec nibh volutpat porttitor vel ac nisi.
+          Hi! I am Kent Michael Baguion, a man who will dominate the web world. Fusce et ex laoreet; maximus felis sed, pretium leo. Ut enim erat, suscipit nec magna ac, dapibus efficitur mauris. Nullam nec ligula nec nibh volutpat porttitor vel ac nisi.
         </p>
       </div>
       <hr>

@@ -22,7 +22,7 @@
               <hr>
               <li><a href="#"><i class="fa fa-archive nav-icon" aria-hidden="true"></i> Logs</a></li>
               <hr>
-              <li><a href="{{ route('app/profile',['id' => 'Auth::id()']) }}"><i class="fa fa-user nav-icon" aria-hidden="true"></i> Profile</a></li>      
+              <li><a href="{{ route('app/profile') }}"><i class="fa fa-user nav-icon" aria-hidden="true"></i> Profile</a></li>      
             </ul>
         </div>
         <hr>
@@ -37,6 +37,7 @@
                 <div class="modal-header modal-head">
                   <button type="button" class="close" data-dismiss="modal">&times;</button>
                   <h2 class="modal-title" id="job-title"></h2>
+                  <h3 id="start_date"></h3>
                 </div>
                 <div class="modal-body">
                   <p>This is a large modal.</p>
@@ -54,7 +55,7 @@
 @endsection
 
 @section('scripts')
-    {!! $calendar->script() !!}
+  {!! $calendar->script() !!}
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.2.7/fullcalendar.min.js"></script>

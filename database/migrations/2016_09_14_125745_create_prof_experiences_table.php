@@ -16,7 +16,6 @@ class CreateProfExperiencesTable extends Migration
             $table->increments('id');
             $table->integer('profile_id');
             $table->integer('experience_id');
-            $table->timestamps();
         });
     }
 
