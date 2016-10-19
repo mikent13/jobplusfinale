@@ -4,13 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Profiles;
+use App\Skills;
+use App\Prof_Skill;
+use App\Degrees;
 use Illuminate\Support\Facades\Input;
 use App\Http\Requests;
 use DB;
 use Auth;
-
-
-
 class UserController extends Controller
 {
     public function getHome(){
@@ -18,37 +18,16 @@ class UserController extends Controller
     }
 
     public function getSetup(){
-
-        $housekeeping = DB::table('categories')
-            ->join('category_skill','categories.id','=','category_skill.category_id')
-            ->leftjoin('skills','category_skill.skill_id','=','skills.id')
-            ->select('skills.name','skills.id')
-            ->where('categories.id','=',1)
-            ->get();
-         $personel = DB::table('categories')
-            ->join('category_skill','categories.id','=','category_skill.category_id')
-            ->leftjoin('skills','category_skill.skill_id','=','skills.id')
-            ->select('skills.name','skills.id')
-            ->where('categories.id','=',2)
-            ->get();
-         $maintenance = DB::table('categories')
-            ->join('category_skill','categories.id','=','category_skill.category_id')
-            ->leftjoin('skills','category_skill.skill_id','=','skills.id')
-            ->select('skills.name','skills.id')
-            ->where('categories.id','=',3)
-            ->get();
-         $construction = DB::table('categories')
-            ->join('category_skill','categories.id','=','category_skill.category_id')
-            ->leftjoin('skills','category_skill.skill_id','=','skills.id')
-            ->select('skills.name','skills.id')
-            ->where('categories.id','=',4)
-            ->get();
-     
-        return view('users.setup',compact('housekeeping','personel','maintenance','construction'));
+        $housekeeping = Skills::where('category_id',1)->get();
+        $construction = Skills::where('category_id',2)->get();
+        $personel = Skills::where('category_id',3)->get();
+        $maintenance = Skills::where('category_id',4)->get();
+        $degree = Degrees::all();
+        
+        return view('users.setup',compact('housekeeping','personel','maintenance','construction','degree'));
     }
 
     public function saveProfile(Request $request){
-
     $userid = Auth::user()->id;
 
     $profile = new Profiles;
@@ -63,62 +42,55 @@ class UserController extends Controller
         $profile->user_id = $userid;
         $profile->save();
 
-    $new_prof = Profile::where('user_id',$userid)->get();
-    dd($new_prof->id);
+    $new_prof = Profiles::where('user_id',$userid)->firstOrFail();
+    $profid = $new_prof->profile_id;
     
-   $housekeep = $request['housekeeping'];
+   $housekeep = Input::get('housekeeping');
     if(isset($housekeep[0])) {     
        foreach($housekeep as $hk){
-            $hous[] = $hk;
+            $house = new Prof_Skill;
+            $house->profile_id = $profid;
+            $house->skill_id = $hk;
+            $house->save();
         }
     }
 
    $construction = $request['construction'];
     if(isset($construction[0])){     
         foreach($construction as $ct){
-            $cons[] = $ct;
+            $construct = new Prof_Skill;
+            $construct->profile_id = $profid;
+            $construct->skill_id = $ct;
+            $construct->save();
       } 
     }
 
    $personel = $request['personel'];
     if(isset($personel[0])){     
        foreach($personel as $ps){
-            $pers[] = $ps;        
+            $person = new Prof_Skill;
+            $person->profile_id = $profid;
+            $person->skill_id = $ps;
+            $person->save();
        }
     }
 
     $maintenance = $request['maintenance'];
    if(isset($maintenance[0])){     
        foreach($maintenance as $mt){
-            $main[] = $mt;        
+            $mainte = new Prof_Skill;
+            $mainte->profile_id = $profid;
+            $mainte->skill_id = $mt;
+            $mainte->save();        
        }
    }
 
-
 // Education
-
-       $degree = $request['degree'];
-       $year = $request['year'];
-       $school = $request['school'];
-
-       foreach($degree as $deg){
-            $edu['degree'] = $degree;
-            $edu['year'] = $year;
-            $edu['school'] = $school; 
-       }
-
-// Work
-        $work= $request['work'];
-        $work_year= $request['work_year'];
-        $employer= $request['employer'];
-
-        foreach($work as $wo){
-            $works['work'] = $work;
-            $works['work_year'] = $work_year;
-            $works['employer'] = $employer; 
-       }
-
-        return view('users.test',compact('hous','cons','pers','main'));
+       $degree = Input::get('degrees');
+       $year = Input::get('year');
+       $school = Input::get('school');
+  
+        return redirect()->route('user/home');
     }
 
     public function getWallet($id){

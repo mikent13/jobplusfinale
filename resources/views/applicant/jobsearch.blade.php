@@ -23,9 +23,11 @@
         </div>
         <!-- main area -->
         <div class="col-xs-12 col-sm-9 dash-content">
-          <div class="jp-head">
-            <h1>Job Searching</h1>
-          </div>
+        <br>
+              <div class="well well-md">
+                <h2>Job Searching</h2>
+                <p>Here we will assist you to find a job that fits your needs.</p>
+              </div>
   <div class="row">
     <section>
      <form role="form" action="{{ route('app/job/result') }}" method="post" class="registration-form">
@@ -63,7 +65,7 @@
                 <div class="tab-content">
                     <div class="tab-pane active" role="tabpanel" id="step1">
                         <h2>Categories and Skills </h2>
-                         <p>Select your desired categories and skills to start with.</p>
+                         <p>Select your desired category and skills to start with.</p>
                               <div class="form-box">
                                 <div class="col-sm-12">
                                 <div class="panel">
@@ -71,9 +73,10 @@
                                 <div class="panel-body">
                                     <ul class="input-list">
                                          <li class="setup-skills">
-                                        <div class="pure-checkbox">
-                                            <input id="housekeeping[]" name="housekeeping[]" type="checkbox">
-                                            <tag></tag>
+                                        <div class="pure-checkbox">@foreach ($housekeeping as $house)
+                                      <input id="{{$house->name}}" name="housekeeping[]" type="checkbox" value="{{$house->skill_id}}">
+                                     <tag>{{$house->name}}</tag>
+                                     @endforeach
                                         </div>
                                         </li>
                                     </ul>
@@ -84,8 +87,10 @@
                                     <ul class="input-list">
                                          <li class="setup-skills">
                                         <div class="pure-checkbox">
-                                            <input id="construction[]" name="construction[]" type="checkbox">
-                                            <tag></tag>
+                                             @foreach ($construction as $cons)
+                                    <input id="{{$cons->name}}" name="construction[]" type="checkbox" value="{{$cons->skill_id}}">
+                                    <tag>{{$cons->name}}</tag>
+                                    @endforeach
                                         </div>
                                         </li>
                                     </ul>
@@ -96,8 +101,10 @@
                                     <ul class="input-list">
                                          <li class="setup-skills">
                                         <div class="pure-checkbox">
-                                            <input id="con[]" name="personel[]" type="checkbox">
-                                            <tag></tag>
+                                            @foreach ($personel as $per)
+                                                               <input id="{{$per->name}}" name="personel[]" type="checkbox" value="{{$per->skill_id}}">
+                                                            <tag>{{$per->name}}</tag>
+                                             @endforeach
                                         </div>
                                         </li>
                                     </ul>
@@ -108,8 +115,10 @@
                                     <ul class="input-list">
                                          <li class="setup-skills">
                                         <div class="pure-checkbox">
-                                            <input id="maintenance[]" name="maintenance[]" type="checkbox">
-                                            <tag></tag>
+                                              @foreach ($maintenance as $main)
+                                    <input id="{{$main->name}}" value="{{$main->skill_id}}" name="maintenance[]" type="checkbox">
+                                    <tag>{{$main->name}}</tag>
+                                 @endforeach
                                         </div>
                                         </li>
                                     </ul>
@@ -148,7 +157,7 @@
                      <div class="col-sm-6">
                         <p>Maximum</p>
                                    <div class="range range-danger">
-                        <input type="range" name="range" min="250" max="10000" step="250" value="50" onchange="maximum.value=value">
+                        <input type="range" name="max" min="250" max="10000" step="250" value="50" onchange="maximum.value=value">
                         <output id="maximum">50</output>
                       </div>
                                 </div>
@@ -179,7 +188,6 @@
                                  </ul>
                                  </div>
                                  </div>
-                               
                                  <hr>
                         <ul class="list-inline ">
                             <li><button type="button" class="btn btn-primary prev-step">Previous</button></li>
@@ -196,3 +204,5 @@
 </div></div>
      </div>
 @stop
+
+ <script src="/js/jquery-1.11.1.min.js"></script>

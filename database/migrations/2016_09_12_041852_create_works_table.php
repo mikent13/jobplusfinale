@@ -17,6 +17,7 @@ class CreateWorksTable extends Migration
             $table->string('job_id');
             $table->string('user_id');
             $table->integer('status');
+            $table->dateTime('date');
         });
     }
 

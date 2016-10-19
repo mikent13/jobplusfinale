@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -6,42 +5,15 @@
     <meta name="robots" content="noindex">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">    
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css" id="bootstrap-css">
     <link href="/css/jp.css" rel="stylesheet">
-  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-  	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script type="text/javascript" async="" src="http://www.google-analytics.com/ga.js"></script>      
-    <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
-    
-
+     <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
+  	 <link rel="stylesheet" href="/bootcards/css/bootcards-desktop.min">
+  	  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+  	  <style>
+  	  	
+  	  </style>
    	<title>JobPlus</title>
-
-   	<!-- STEPS-->
-    <script type="text/javascript">
-        window.alert = function(){};
-        var defaultCSS = document.getElementById('bootstrap-css');
-        function changeCSS(css){
-            if(css) $('head > link').filter(':first').replaceWith('<link rel="stylesheet" href="'+ css +'" type="text/css" />'); 
-            else $('head > link').filter(':first').replaceWith(defaultCSS); 
-        }
-        $( document ).ready(function() {
-          var iframe_height = parseInt($('html').height()); 
-          window.parent.postMessage( iframe_height, 'http://bootsnipp.com');
-        });
-    </script>
-    <!-- END OF STEPS-->
-
-    <script type="text/javascript">
-    $(document).ready(function(){
-        $("button[type='button']").click(function(){
-        	var radioValue = $("button[name='paytype_id']:checked").val();
-        });
-    });
-    </script>
-
-
   </head>
   <body>
     <nav class="navbar navbar-default" role="navigation">
@@ -56,13 +28,12 @@
 		      </button>
 		      <div class="navbar-brand navbar-brand-centered">Job+</div>
 		    </div>
-
 		    <!-- Collect the nav links, forms, and other content for toggling -->
 		    <div class="collapse navbar-collapse" id="navbar-brand-centered">
 		      <ul class="nav navbar-nav navbar-right">
 		        <li><a href="#"></a></li>
 		        <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dashboard<span class="caret"></span></a>
+                  <a href="{{route('app/dashboard')}}" class="dropdown-toggle" data-toggle="dropdown">Dashboard<span class="caret"></span></a>
                   <ul class="dropdown-menu" role="menu">
                     <li><a href="{{route('app/dashboard')}}">Job+ Schedule</a><li>
                     <li><a href="#">Job+ Wallet</a></li>
@@ -76,117 +47,114 @@
 		    </div><!-- /.navbar-collapse -->
 		  </div><!-- /.container-fluid -->
 		</nav>
+
 		<!---End of Nav -->
+		<div class="row">
+			<div class="well well-lg">
+			<div class="container">
+				<form>
+				<div class="form-group form-group-md col-xs-3">
+				  <select class = "form-control input-md" id="search-sel">
+			      </select>
+				</div>
+					<div class="form-group form-group-md col-xs-4">
+					  <input list="skills" type="text" class="form-control input-md" id="search-skill">
+					</div>
+					<datalist id="skills">
+						
+					</datalist>
+					<div class="form-group form-group-md col-xs-4 ">
+					  <input type="text" class="form-control input-md" id="search-loc">
+					</div>
+				    <button id="btn-search" type="button" class="btn btn-primary btn-md">Search</button>
+				</form>
+				</div>
+			</div>
+		</div>
 
 		<div class="row">
 		<div class="container">
-			<div class="col-md-3 outer-search-box">
-				<div class="search-box">
-				<form id="search">
-						<input type="text" class="form-control" id="search" placeholder="Search Job"/>
-				</form>
-				<div class="search-result">
-					<section id="" class="result pull-left">
-						<p class="meta-loc" id="job-title"><b>Labandera</b></p>
-						<small >Banawa, Cebu City</small>
-						<div class="bookmark pull-right"><span class="glyphicon glyphicon-heart-empty"></span></div>
-					</section> 
+		<div class="col-md-12">
+		<div class="col-md-4">
+			<div class="panel panel-default">
+						<div class="panel-heading clearfix">
+							<div class="btn-group ">
+								 <div class="form-group col-md-6">
+								      <select class="form-control input-sm filters" id="fil-date">
+								      <option value="0" selected="selected">Posted Any Time </option>
+								        <option value="1">Today</option>
+								        <option value="2">1 week ago</option>
+								        <option value="3">2 weeks ago</option>
+								        <option value="4">later than 2 weeks</option>
+								      </select>
+								    </div>
+								    
+								    <div class="form-group col-md-6">
+								      <select class="form-control input-sm filters" id="fil-ptype">
+								       <option value="0" selected="selected">Any Pay Types</option>
+								      </select>
+								    </div>
+
+								     <div class="form-group col-md-6">
+								      <select class="form-control input-sm filters" id="fil-dist">
+								       <option value="0" selected="selected">Distance</option>
+								        <option value="5">5 miles</option>
+								        <option value="10">10 miles</option>
+								        <option value="15">15 miles</option>
+								      </select>
+								    </div>
+
+								    <div class="form-group col-md-6">
+								      <select class="form-control input-sm filters" id="fil-sal">
+								       <option value="0" selected="selected">Salary Range</option>
+								        <option value="500">below 500</option>
+								        <option value="1000">below 1000</option>
+								        <option value="5000">above 1000</option>
+								      </select>
+								    </div>
+
+								    <div class="form-group col-md-6">
+									<button class="btn btn-default btn-sm ">Reset filter</button>
+								</div>						
+							</div>	
+						</div>	
+						<!-- Job list-->
+						<div class="list-group " id="side-res"></div>
+						<!-- End Job list-->
+					</div>
+					</div>
+			<div class="col-md-8 dash-content">
+<div class="panel panel-default">
+						<div class="panel-heading clearfix">
+							<p id="res-jobid"></p>
+							<h4 class="panel-title pull-left" id="result-title"></h4>
+							<br>
+							<p id="result-postby"></p>
+							<div class="btn-group pull-right">
+								<a id="apply-btn btn-sm btn-default" class="btn btn-primary">
+										<span>Apply</span>
+								</a>
+								<a id="bmark-btn" class="btn btn-default">
+									<span>Bookmark</span>
+								</a>
+							</div>							
+						</div>					
+						<ul id="res-filtering"></ul>
+						<h3>schedule</h3>						
+						<ul id="result-sched"></ul>
+						<div id="key"></div>
+						<p id="result-skill"></p>
+						</div>
 		
-				</div>
-				</div>
-			</div>
+					</div>	
+					</div>
+		</div>
+		</div>
+		
+<script src="/js/jquery-1.11.1.min.js"></script>
+	<script src="/js/jquery-ui.min.js"></script>
 
-				  <div class="col-md-9 content-feed">
-				  	<div class="panel panel-default">
-				  	<div class="panel-heading"><h3>Feed</h3></div>
-				  	<div class="panel-body">
-
-
-				  		<!-- LABANDERA -->
-						  <div class="col-md-12">
-						  	<div class="box">
-							 	 <div class="box-title"><h4>Labandera</h4></div>
-							 
-							 	 <p><b>Description:</b> Nunc mauris nisl, rhoncus eget augue sed, iaculis imperdiet erat?<br/>
-							 	 <b>Schedule:</b> Monday-Wednesday<br/>
-							 	 <b>Time:</b> 8:00AM-9:00AM
-							 	 </p>
-								<hr>
-							</div>
-						  </div> 
-						  <!-- END OF LABANDERA -->
-
-						  <!-- DRIVER -->
-						  <div class="col-md-12">
-						  	<div class="box">
-							 	 <div class="box-title"><h4>Driver</h4></div>
-							 	 <p><b>Description:</b> Nunc mauris nisl, rhoncus eget augue sed, iaculis imperdiet erat?<br/>
-							 	 <b>Schedule:</b> Monday-Wednesday<br/>
-							 	 <b>Time:</b> 8:00AM-9:00AM
-							 	 </p>
-								<hr>
-							</div>
-						  </div>
-						  <!-- DRIVER -->
-
-						  <!-- SALESLADY -->
-						  <div class="col-md-12">
-						  	<div class="box">
-							 	 <div class="box-title"><h4>Saleslady</h4></div>
-							 	 <p><b>Description:</b> Nunc mauris nisl, rhoncus eget augue sed, iaculis imperdiet erat?<br/>
-							 	 <b>Schedule:</b> Monday-Wednesday<br/>
-							 	 <b>Time:</b> 8:00AM-9:00AM
-							 	 </p>
-								<hr>
-							</div>
-						  </div>
-						  <!-- SALESLADY -->
-				   	</div>
-				   	</div>
-				</div>
-
-	<script type="text/javascript" src="jquery.gmap.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script src="../js/bootstrap.min.js"></script>
-    <script src="../js/custom.js"></script>
-
-			<script type="text/javascript">
-				
-				$(document).ready(function () {
-			    //Initialize tooltips
-			    $('.nav-tabs > li a[title]').tooltip();
-			    
-			    //Wizard
-			    $('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
-
-			        var $target = $(e.target);
-			    
-			        if ($target.parent().hasClass('disabled')) {
-			            return false;
-			        }
-			    });
-
-			    $(".next-step").click(function (e) {
-
-			        var $active = $('.wizard .nav-tabs li.active');
-			        $active.next().removeClass('disabled');
-			        nextTab($active);
-
-			    });
-			    $(".prev-step").click(function (e) {
-
-			        var $active = $('.wizard .nav-tabs li.active');
-			        prevTab($active);
-
-			    });
-			});
-
-			function nextTab(elem) {
-			    $(elem).next().find('a[data-toggle="tab"]').click();
-			}
-			function prevTab(elem) {
-			    $(elem).prev().find('a[data-toggle="tab"]').click();
-			}
-			</script>
+    <script src="/calendar/moment.min.js"></script>
+    <script src="/bootcard/js/bootcards.min.js"></script>
+    <script src="/js/custom.js"></script>
   </body>
-</html>

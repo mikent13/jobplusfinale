@@ -41,7 +41,7 @@ Route::get('/user/setup', [
 
 Route::post('/setup/save', [
 	'uses' => 'UserController@saveProfile',
-	'as' => '/user/save'
+	'as' => 'user/save'
 	])->middleware('auth');
 
 /*
@@ -89,25 +89,36 @@ Route::get('/applicant/dashboard/', [
 	])->middleware('auth');
 
 
-Route::post('/applicant/job', [
+Route::get('/applicant/job', [
 	'uses' => 'ApplicantController@getJobPage',
 	'as' => 'app/job/result'
 	])->middleware('auth');
-
-Route::get('/applicant/jobsearch', [
-	'uses' => 'ApplicantController@getJobSearch',
-	'as' => 'app/job/search'
-	])->middleware('auth');
-
-Route::get('/applicant/apply',[
-	'uses' => 'ApplicantController@getApply',
-	'as' => 'app/apply'
-	])->middleware('auth');
+Route::get('/app/job/filter','ApplicantController@getFilter');
+Route::get('/app/job/getskill','ApplicantController@getSkills');
+Route::get('/app/jobsearch', 'ApplicantController@getJobSearch');
+Route::get('/get/jobdata','ApplicantController@getJobPageData');
+Route::get('/get/job','ApplicantController@getResult');
+Route::get('/app/apply','ApplicantController@Apply');
+Route::get('/app/autocomplete',[
+	'uses' => 'ApplicantController@getAuto',
+	'as' => 'autocompletes']);
 
 Route::get('applicant/profile', [
 	'uses' => 'ApplicantController@getProfile',
 	'as' => 'app/profile'
 	])->middleware('auth');
+
+Route::get('/applicant/job/start/{id}',[
+	'uses' => 'ApplicantController@StartJob',
+	'as' => 'app/job/start'
+	])->middleware('auth');
+
+Route::get('/applicant/job/end/{id}',[
+	'uses' => 'ApplicantController@EndJob',
+	'as' => 'app/job/end'
+	])->middleware('auth');
+
+Route::get('searchcomplete', 'ApplicantController@getAuto')->middleware('auth');
 
 /*
 |--------------------------------------------------------------------------

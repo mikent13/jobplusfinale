@@ -4,14 +4,18 @@
 @endsection
 @section('content')
 <div class="container">
-<panel-body><h1>Complete your profile.</h1></panel>
+
     <div class="row">
         <section>
+        <panel-body>
         <div class="wizard">
+        <h1>Welcome to JobPlus!</h1>
+        <p>This section will help us serve you the job that fits your interest and connects you to thousands of job seekers through JobPlus. We'll ask you to select jobs of interest and complete a profile for review. 
+        </p>
+        </panel>
             <div class="wizard-inner">
                 <div class="connecting-line"></div>
                 <ul class="nav nav-tabs" role="tablist">
-
                     <li role="presentation" class="active">
                         <a href="#step1" data-toggle="tab" aria-controls="step1" role="tab" title="Step 1">
                             <span class="round-tab">
@@ -43,186 +47,185 @@
                 </ul>
             </div>
 
-            <form id="setup" role="form" action="{{route('/user/save')}}" method="post">
+            <form id="setup" role="form" action="{{route('user/save')}}" method="post">
             {{csrf_field()}}
-            <input type="hidden" value="{{Auth::user()->id}}" name="id">
                 <div class="tab-content">
                     <div class="tab-pane active" role="tabpanel" id="step1">
                         <h2>Basic Informations</h2>
                         <p>Kindly fill up the form below.</p>
                         <hr>
                         <div class="row">
-                        <h3>Upload Picture</h3>
-                            <div class="col-sm-4 col-sm-offset-2">
+                      
+                            <div class="col-sm-4 col-sm-offset-1">
+                              <h3>Upload Picture</h3>
                                <input type="file" name="picture" id="picture">
                              </div>
                         </div>
-                        <hr>
+                        <br>
                        <div class="row">
-                        <h3>Name</h3>
-                        <div class="col-sm-4 col-sm-offset-2">
+                       <h3>Name</h3>
+                        <div class="col-sm-4 col-sm-offset-1">
                             <div class="form-group">
-                            <p>Last Name</p>
-                                <input type="text" name="lastname" class="form-LastName form-control" id="lastname">
+                                <input type="text" name="lastname" class="form-LastName form-control" id="lastname" placeholder="LastName">
                             </div>
                         </div>
-                        <div class="col-sm-4 ">
+                        <div class="col-sm-4">
                             <div class="form-group">
-                            <p>First Name</p>
-                                <input type="text" name="firstname"  class="form-firstname form-control" id="firstname">
+                                <input type="text" name="firstname"  class="form-firstname form-control" id="firstname" placeholder="FirstName">
                             </div>
                         </div>
                         </div>
-                         <hr>
                          <div class="row">
+                         <div class="col-sm-4 col-sm-offset-1">
                          <h3>Contact</h3>
-                         <div class="col-sm-4 col-sm-offset-2">
                             <div class="form-group">
-                                 <p>Mobile Number</p>
-                                 <input type="text" name="mobile" class="form-mobile form-control" id="mobile">
+                                 <input type="text" name="mobile" class="form-mobile form-control" id="mobile" placeholder="Mobile Number">
                             </div>
                          </div>
                          </div>
-                         <hr>
                          <div class="row">
-                         <h3>About Me</h3>
-                         <div class="col-sm-8 col-sm-offset-2">
+                         <div class="col-sm-8 col-sm-offset-1">
+                             <h3>About Me</h3>
                             <div class="form-group ">
-                                 <p>Biography</p>
                                  <textarea style="width:100%;height:130px;" name="aboutme" form="setup"></textarea>
                             </div>
                          </div>
                          </div>
                          <hr>
                          <div class="row">
-                         <h3>Educational Background</h3>
-                         <div class="col-sm-2 col-sm-offset-2">
+                         <div class="col-sm-2 col-sm-offset-1">
+                         <h3>Education</h3>
                             <div class="form-group">
                                  <p>Degree</p>
-                                 <div id="divdegree">
-                                    <input type="text" name="degree[]" id="degree[]" value="">
-
-                                 </div>
+                                 <select name="degrees" id="degree">
+                                 @foreach($degree as $deg)
+                                    <option value="{{ $deg->degree_id }}" >{{ $deg->name }}</option>
+                                 @endforeach
+                                 </select>
                             </div>
                          </div>
+                         </div>
+                         <div class="row">
                            <div class="col-sm-2 col-sm-offset-1">
                             <div class="form-group">
-                                 <p>Year</p>
-                                 <div id="divyear">
-                                   <input type="text" name="year[]" id="year[]" value="">
+                                 <p>Year Attended</p>
+                                 <div id="divstartyear">
+                                   <input type="text" name="yearstart[]" id="year[]">
                                    </div>
-                                 </div>
+                             </div>
+                        </div>
+                           <div class="col-sm-2 col-sm-offset-1">
+                            <div class="form-group">
+                                 <p>Year Ended</p>
+                                 <div id="divendyear">
+                                   <input type="text" name="yearend[]" id="year[]">
+                                   </div>
+                             </div>
                         </div>
                          <div class="col-sm-4">
                             <div class="form-group">
                                  <p>School</p>
                                  <div id="divschool">
-                                    <input type="text" name="school[]" id="school[]" value=""></div>
+                                    <input type="text" name="school[]" id="school[]"></div>
                                  </div>
                             </div>
                          </div>
-                           <input type="button" value="Add Education" onClick="addEducation('divschool','divyear','divdegree');">
+                           <input type="button" value="Add Education" onClick="addEducation('divschool','divstartyear','divendyear');">
                          <hr>
                         <ul class="list-inline ">
                             <li><button type="button" class="btn btn-primary btn-info-full next-step">Next Step</button></li>
                         </ul>
                     </div>
                     <div class="tab-pane" role="tabpanel" id="step2">
-                        <h3>Skills and Experience</h3>
-                        <p></p>
-                        <hr>
-                        <div class="row">
-                         <h3>Work Experience</h3>
-                         <div class="col-sm-2 col-sm-offset-2">
-                            <div class="form-group">
-                                 <p>Work</p>
-                                 <div id="divwork">
-                                    <input type="text" name="work[]" id="work[]" value="">
-                                 </div>
-                            </div>
-                         </div>
-                           <div class="col-sm-2 col-sm-offset-1">
-                            <div class="form-group">
-                                 <p>Year</p>
-                                 <div id="divyears">
-                                   <input type="text" name="work_year[]" id="work_year[]" value="">
-                                   </div>
-                                 </div>
-                        </div>
-                         <div class="col-sm-4">
-                            <div class="form-group">
-                                 <p>Employer</p>
-                                 <div id="divemployer">
-                                    <input type="text" name="employer[]" id="employer[]" value="">
-                                    </div>
-                                 </div>
-                            </div>
-                         </div>
-                          <input type="button" value="Add Work" onClick="addWork('divwork','divyears','divemployer');">
-                         <hr>
                          <div class="row">
-                                   <h3>Categories and Skills </h3>
+                                   <h3>Skills </h3>
                               <div class="form-box">
                                 <div class="col-sm-12">
                                 <div class="panel">
-                                <div class="panel-heading"><h3>Housekeeping</h3></div>
                                 <div class="panel-body">
-                                    <ul class="input-list">
-                                         <li class="setup-skills">
-                                        <div class="pure-checkbox">
-                                            @foreach ($housekeeping as $house)
-                                              <input id="{{$house->name}}" name="housekeeping[]" type="checkbox" value="{{$house->id}}">
-                                             <tag>{{$house->name}}</tag>
-                                             @endforeach
-                                        </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                                </div>
-                                <div class="panel-heading"><h3>Construction</h3></div>
-                                <div class="panel-body">
-                                    <ul class="input-list">
-                                         <li class="setup-skills">
-                                        <div class="pure-checkbox">
-                                            <tag for="construction[]"></tag>
-                                             @foreach ($construction as $cons)
-                                            <input id="{{$cons->name}}" name="construction[]" type="checkbox" value="{{$cons->id}}">
-                                            <tag>{{$cons->name}}</tag>
-                                            @endforeach
-
-                                        </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                                 <hr>
-                                <div class="panel-heading"><h3>Personel</h3></div>
-                                <div class="panel-body">
-                                    <ul class="input-list">
-                                         <li class="setup-skills">
-                                        <div class="pure-checkbox">
-                                          @foreach ($personel as $per)
-                                               <input id="{{$per->name}}" name="personel[]" type="checkbox" value="{{$per->id}}">
-                                            <tag>{{$per->name}}</tag>
+                <div class="col-sm-10 col-md-offset-1">
+                    <div class="btn-pref btn-group btn-group-justified btn-group-lg" role="group" aria-label="...">
+                        <div class="btn-group" role="group">
+                            <button type="button" id="stars" class="btn btn-primary" href="#tab1" data-toggle="tab"><span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                                <div class="hidden-xs">Housekeeping</div>
+                            </button>
+                        </div>
+                        <div class="btn-group" role="group">
+                            <button type="button" id="stars" class="btn btn-primary" href="#tab2" data-toggle="tab"><span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                                <div class="hidden-xs">Construction</div>
+                            </button>
+                        </div>
+                        <div class="btn-group" role="group">
+                            <button type="button" id="stars" class="btn btn-primary" href="#tab3" data-toggle="tab"><span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                                <div class="hidden-xs">Personel</div>
+                            </button>
+                        </div>
+                        <div class="btn-group" role="group">
+                            <button type="button" id="favorites" class="btn btn-default" href="#tab4" data-toggle="tab"><span class="glyphicon glyphicon-heart" aria-hidden="true"></span>
+                                <div class="hidden-xs">Maintenance</div>
+                            </button>
+                        </div>
+                    </div>
+                     
+                      <div class="tab-content">
+                        <div class="tab-pane fade in active" id="tab1">
+                          <h3>Housekeeping</h3>
+                            <ul class="input-list">
+                                 <li class="setup-skills">
+                                <div class="pure-checkbox">
+                                    @foreach ($housekeeping as $house)
+                                      <input id="{{$house->name}}" name="housekeeping[]" type="checkbox" value="{{$house->skill_id}}">
+                                     <tag>{{$house->name}}</tag>
                                      @endforeach
-                                        </div>
-                                        </li>
-                                    </ul>
                                 </div>
-                                <hr>
-                                 <div class="panel-heading"><h3>Maintenance</h3></div>
-                                <div class="panel-body">
-                                    <ul class="input-list">
-                                         <li class="setup-skills">
-                                        <div class="pure-checkbox">
-                                          @foreach ($maintenance as $main)
-                                            <input id="{{$main->name}}" value="{{$main->id}}" name="maintenance[]" type="checkbox">
-                                            <tag>{{$main->name}}</tag>
-                                         @endforeach
-                                        </div>
-                                        </li>
-                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="tab-pane fade in" id="tab2">
+                          <h3>Construction</h3>
+                            <ul class="input-list">
+                                 <li class="setup-skills">
+                                <div class="pure-checkbox">
+                                    <tag for="construction[]"></tag>
+                                     @foreach ($construction as $cons)
+                                    <input id="{{$cons->name}}" name="construction[]" type="checkbox" value="{{$cons->skill_id}}">
+                                    <tag>{{$cons->name}}</tag>
+                                    @endforeach
                                 </div>
-                                <hr>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="tab-pane fade in" id="tab3">
+                          <h3>Personel</h3>
+                              <ul class="input-list">
+                                                         <li class="setup-skills">
+                                                        <div class="pure-checkbox">
+                                                          @foreach ($personel as $per)
+                                                               <input id="{{$per->name}}" name="personel[]" type="checkbox" value="{{$per->skill_id}}">
+                                                            <tag>{{$per->name}}</tag>
+                                                     @endforeach
+                                                        </div>
+                                                        </li>
+                                                    </ul>
+                        </div>
+                         <div class="tab-pane fade in" id="tab4">
+                          <h3>Maintenance</h3>
+                            <ul class="input-list">
+                                 <li class="setup-skills">
+                                <div class="pure-checkbox">
+                                  @foreach ($maintenance as $main)
+                                    <input id="{{$main->name}}" value="{{$main->skill_id}}" name="maintenance[]" type="checkbox">
+                                    <tag>{{$main->name}}</tag>
+                                 @endforeach
+                                </div>
+                                </li>
+                            </ul>
+                        </div>
+                      </div>
+                    </div>
+                    </div>
+                    </div>
+  
                                </div>
                             </div>
                          </div>
@@ -235,46 +238,71 @@
                         <h3>Location</h3>
                         <p>locate your address</p>
                          <input id="pac-input" class="controls" type="text" placeholder="Search Box">
-    <input id="clat" type="text" name="clat">
-    <input id="clong" type="text" name="clong">
-    <div id="map"></div>
-    <script>
-      // This example adds a search box to a map, using the Google Place Autocomplete
-      // feature. People can enter geographical searches. The search box will return a
-      // pick list containing a mix of places and predicted search terms.
+                        <input id="clat" type="text" name="clat">
+                        <input id="clong" type="text" name="clong">
+                        <div id="map"></div>
 
-      // This example requires the Places library. Include the libraries=places
-      // parameter when you first load the API. For example:
-      // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
-
+ 
+                        <hr>
+                        <ul class="list-inline ">
+                            <li><button type="button" class="btn btn-default prev-step">Previous</button></li>
+                            <li><button type="button" class="btn btn-default next-step">Next Step</button></li>
+                        </ul>
+                    </div>
+                    <div class="tab-pane" role="tabpanel" id="complete">
+                        <h3>Setup Payment Option</h3>
+                        <p>Fill in your credentials.</p>
+                        <hr>
+                        <div class="col-sm-4 col-sm-offset-2">
+                            <div class="form-group">
+                                 <p>Account Number</p>
+                                 <div id="divdegree">
+                                    <input type="text" name="account" id="account">
+                                 </div>
+                            </div>
+                         </div>
+                         <div class="col-sm-4 col-sm-offset-1">
+                            <div class="form-group">
+                                 <p>Key</p>
+                                 <div id="divdegree">
+                                    <input type="text" name="key" id="key">
+                                 </div>
+                            </div>
+                         </div>
+                         <hr>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <input type="hidden" name="_token" value="{{ Session::token() }}">
+            </form>
+        </div>
+    </section>
+   </div>
+</div>
+@stop
+   <script>
       function initAutocomplete() {
         var lat= 10.355181;
         var long = 123.844222;
         var map = new google.maps.Map(document.getElementById('map'), {
           center: {lat: lat, lng: long},
-          zoom: 10,
+          zoom: 15,
           mapTypeId: google.maps.MapTypeId.ROADMAP
-
         });
 
-        // Trigger map resize when tab iss hown
-        google.maps.event.trigger(map, "resize");
-        
+     google.maps.event.trigger(map, "resize");
         // Create the search box and link it to the UI element.
         var input = document.getElementById('pac-input');
         var searchBox = new google.maps.places.SearchBox(input);
         map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
       
-        
-
         // Bias the SearchBox results towards current map's viewport.
         map.addListener('bounds_changed', function() {
           searchBox.setBounds(map.getBounds());
         });
 
         var markers = [];
-        
-
         google.maps.event.addListener(map, 'click', function (e) {
                  
               var ll = {lat: e.latLng.lat(), lng: e.latLng.lng()}; 
@@ -297,10 +325,6 @@
 
 
          });
-
-
-
-
         // Listen for the event fired when the user selects a prediction and retrieve
         // more details for that place.
         searchBox.addListener('places_changed', function() {
@@ -344,6 +368,12 @@
           });
           map.fitBounds(bounds);
         });
+
+
+ $('a[href="#step3"]').on('shown.bs.tab', function() {
+        
+          
+    });
       }
 
     </script>
@@ -431,97 +461,59 @@
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDBJJH4SL6eCDPu7N5C-2XcBt8jpZJeMyQ&libraries=places&callback=initAutocomplete"
          async defer></script>
 
-                        <hr>
-                        <ul class="list-inline ">
-                            <li><button type="button" class="btn btn-default prev-step">Previous</button></li>
-                            <li><button type="button" class="btn btn-default next-step">Next Step</button></li>
-                        </ul>
-                    </div>
-                    <div class="tab-pane" role="tabpanel" id="complete">
-                        <h3>Setup Payment Option</h3>
-                        <p>Fill in your credentials.</p>
-                        <hr>
-                        <div class="col-sm-4 col-sm-offset-2">
-                            <div class="form-group">
-                                 <p>Account Number</p>
-                                 <div id="divdegree">
-                                    <input type="text" name="account" id="account">
-                                 </div>
-                            </div>
-                         </div>
-                         <div class="col-sm-4 col-sm-offset-1">
-                            <div class="form-group">
-                                 <p>Key</p>
-                                 <div id="divdegree">
-                                    <input type="text" name="key" id="key">
-                                 </div>
-                            </div>
-                         </div>
-                         <hr>
-                    <button type="submit" class="btn btn-primary">Save</button>
-                    </div>
-
-                    <div class="clearfix"></div>
-                </div>
-                <input type="hidden" name="_token" value="{{ Session::token() }}">
-            </form>
-        </div>
-    </section>
-   </div>
-</div>
-@stop
 <script>
 
     var ctrdegree = 0;
     var ctryear = 0;
     var ctrschool = 0;
    
-    function addEducation(divschool,divyear,divdegree){
+    function addEducation(divschool,divstartyear,divendyear){
               
-              var years = document.createElement('div');
+              var start = document.createElement('div');
+              var end = document.createElement('div');
               var schools = document.createElement('div');
-              var degrees = document.createElement('div');
-           
-              years.innerHTML = "<br><input type='text' name='year[]' value=''>";
+             
+              start.innerHTML = "<br><input type='text' name='yearstart[]' value=''>";
+              end.innerHTML = "<br><input type='text' name='yearend[]' value=''>";
               schools.innerHTML ="<br><input type='text' name='school[]'value=''>";
-              degrees.innerHTML ="<br><input type='text' name='degree[]'value=''>";
+             
               ctrschool++;
-              ctryear++;
-              ctrdegree++;
+              ctrstart++;
+              ctrend++;
 
-              document.getElementById(divyear).appendChild(years);
+              document.getElementById(divstartyear).appendChild(start);
+              document.getElementById(divendyear).appendChild(end);
               document.getElementById(divschool).appendChild(schools);
-              document.getElementById(divdegree).appendChild(degrees);
-              document.getElementById(divyear).value++;
+             
+              document.getElementById(divstartyear).value++;
+              document.getElementById(divendyear).value++;
               document.getElementById(divschool).value++;
-              document.getElementById(divdegree).value++;
+
     }
 
-   var ctrwork =0;
-   var ctryears =0;
-   var ctremployer= 0;
+   // var ctrwork =0;
+   // var ctryears =0;
+   // var ctremployer= 0;
 
-       function addWork(divwork,divyears,divemployer){
+   //     function addWork(divwork,divyears,divemployer){
               
-              var work = document.createElement('div');
-              var years = document.createElement('div');
-              var employer = document.createElement('div');
+   //            var work = document.createElement('div');
+   //            var years = document.createElement('div');
+   //            var employer = document.createElement('div');
            
-              work.innerHTML = "<br><input type='text' name='work[]'value=''>";
-              years.innerHTML ="<br><input type='text' name='years[]'value=''>";
-              employer.innerHTML ="<br><input type='text' name='employer[]'value=''>";
-               ctrwork++;
-                ctryears++;
-                ctremployer++;
+   //            work.innerHTML = "<br><input type='text' name='work[]'value=''>";
+   //            years.innerHTML ="<br><input type='text' name='years[]'value=''>";
+   //            employer.innerHTML ="<br><input type='text' name='employer[]'value=''>";
+   //             ctrwork++;
+   //              ctryears++;
+   //              ctremployer++;
 
-              document.getElementById(divwork).appendChild(work);
-              document.getElementById(divyears).appendChild(years);
-              document.getElementById(divemployer).appendChild(employer);
-              document.getElementById(divyear).value++;
-              document.getElementById(divschool).value++;
-              document.getElementById(divdegree).value++;
-    }
-
+   //            document.getElementById(divwork).appendChild(work);
+   //            document.getElementById(divyears).appendChild(years);
+   //            document.getElementById(divemployer).appendChild(employer);
+   //            document.getElementById(divyear).value++;
+   //            document.getElementById(divschool).value++;
+   //            document.getElementById(divdegree).value++;
+   //  }
 
 </script>
-

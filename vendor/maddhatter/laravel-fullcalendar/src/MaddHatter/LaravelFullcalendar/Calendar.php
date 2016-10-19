@@ -48,17 +48,16 @@ class Calendar
      *
      * @var array
      */
+
     protected $callbacks = [
-        'eventClick' => "
+    'eventClick' => "
         function(Event,jsEvent,view){
-        var title = Event.title;
-       alert(''+Event.start);
+        var title = Event.id;
+        var start = Event.start;
 
         var title = document.getElementById('job-title').innerHTML = ''+title;
         var start = document.getElementById('start_date').innerHTML = ''+start;
-        
-            $('#myModal').modal();
-           
+        $('#myModal').modal();
         }
         "
     ];
@@ -85,9 +84,9 @@ class Calendar
      * @return SimpleEvent
      */
 
-    public static function event($title, $isAllDay, $start, $end, $id = null, $options = [],$userid,$category,$description,$paytype,$salary,$slot)
+    public static function event($id = null,$user,$category,$skill,$description,$lat,$long,$start, $end,$paytype,$salary,$isAllDay,$slot,$date_posted,$options = [])
     {
-        return new SimpleEvent($title, $isAllDay, $start, $end, $id, $options,$userid,$category,$description,$paytype,$salary,$slot);
+        return new SimpleEvent($id,$user,$category,$skill,$description,$lat,$long,$start,$end,$paytype,$salary,$isAllDay,$slot,$date_posted,$options);
     }
 
     /**
@@ -139,7 +138,6 @@ class Calendar
         if ( ! empty($this->id)) {
             return $this->id;
         }
-
         $this->id = str_random(8);
 
         return $this->id;
@@ -166,6 +164,7 @@ class Calendar
      * @param array $customAttributes
      * @return $this
      */
+    
     public function addEvents($events, array $customAttributes = [])
     {
         foreach ($events as $event) {

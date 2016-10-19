@@ -6,7 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\User;
 use App\Jobs;
-use DB;
+use App\Works;
+use App\Profiles;
 use Auth;
 
 class EmployerController extends Controller
@@ -23,22 +24,20 @@ class EmployerController extends Controller
     }
 
   	public function getDashboard(){
+        $userid = Auth::user()->id;
+        $jobs = Jobs::where('user_id',$userid)->get();
+        $jobb = array();
+        
+        foreach($jobs as $job){
+          $jobb[] = $job->job_id;
+        };
 
-     $id = Auth::user()->id;
-    $databaseEvents = $this->calendarEvent->where('user_id', $id)->get();
-    $calid = \Calendar::getId();
+        $applications = Works::whereIn('job_id',$jobb)
+                              ->where('status',0)
+                              ->get();
 
-    $calendar = \Calendar::addEvents($databaseEvents);
-
-     $emp =  DB::table('users')
-            ->join('emp_calendars','users.id','=','emp_calendars.user_id')
-            ->join('works','emp_calendars.user_id','=','works.user_id')
-            ->join('jobs','works.user_id','=','jobs.user_id')
-            ->select('jobs.title','jobs.start','jobs.end')
-            ->where('users.id','=',$id)
-            ->get();
-
-         return view('employer.home',compact('calendar','calid','emp'));
+        $profiles = Profiles::all();
+         return view('employer.home',compact('applications','profiles'));
   	}
 
   	public function getJobPost(){

@@ -112,7 +112,7 @@ span.round-tab:hover {
 }
 
 .wizard h3 {
-    margin-top: 0;
+    text-align: left;
 }
 
 @media( max-width : 585px ) {

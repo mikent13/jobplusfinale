@@ -11,6 +11,7 @@
         <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
 		    <link rel="stylesheet" href="/css/form-elements.css">
         <link rel="stylesheet" href="/css/style.css">
+        <link rel="stylesheet" href="/bootcard/css/bootcards-desktop.min">
         
         <!-- Favicon and touch icons -->
         <link rel="shortcut icon" href="/ico/favicon.png">
@@ -62,12 +63,12 @@
         </div>
       </div>
     </footer>
-
+    
         <!-- Javascript -->
-        <script src="/js/jquery-1.11.1.min.js"></script>
-        <script src="/bootstrap/js/bootstrap.min.js"></script>
         <script src="/js/scripts.js"></script>
         <script src="/js/custom.js"></script>
+        <script src="/bootstrap/js/bootstrap.min.js"></script>
+        <script src="/bootcard/js/bootcards.min.js"></script>
         @yield('scripts')
 
     </body>

@@ -18,7 +18,7 @@
                 <div class="cover-app">
                 <h1>Become one of thousands of people that gets hired everyday! </h1>
                     <a id="abutton" href="{{ route('app/dashboard') }}">
-                        <button class="btn btn-primary">Get Hired Now</button>
+                        <button class="btn btn-primary">I want to Work</button>
                     </a>
                 </div>
                 </div>
@@ -29,7 +29,7 @@
                 <div  class="cover-app-bott">
                  <h1>Millions of people waiting for you to hire! </h1>
                     <a href="{{ route('emp/dashboard') }}">
-                        <button class="btn btn-primary">Find People Now</button>
+                        <button class="btn btn-primary">I want to Hire People</button>
                     </a>
                 </div>
                 </div>

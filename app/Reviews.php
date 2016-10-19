@@ -8,6 +8,7 @@ class Reviews extends Model
 {
    protected $primaryKey = 'review_id';
 	protected $table = 'reviews';
+	public $timestamps = false;
 	protected $fillable =[
 		'rating',
 		'comment',
@@ -17,8 +18,4 @@ class Reviews extends Model
 	];
 
 
-    public function reviews()
-    {
-    	return $this->morphTo();
-    }
 }

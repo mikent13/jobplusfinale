@@ -6,7 +6,6 @@ body {
     font-weight: 300;
     color: #888;
     line-height: 30px;
-    text-align: center;
 }
 
 strong { font-weight: 500; }
@@ -411,6 +410,7 @@ a, a:hover, a:focus {
 .dash-content{
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 6px 5px 0 rgba(0, 0, 0, 0.19);
     margin-top: -21px;
+    padding-bottom: 20px;
 }
 
 .sub-nav{
@@ -582,7 +582,7 @@ html {
 }
 
 .nav-primary > li >a:focus , .nav-primary >li>a:hover{
-    background-color: rgb(236,240,241);
+  
     color: rgb(52,73,94);
     font-weight: 400;
     font-size: 17px;
