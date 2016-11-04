@@ -4,7 +4,6 @@
   <link rel="stylesheet" href="/css/custom.css">
   <link rel="stylesheet" href="/calendar/fullcalendar.min.css"/>
   <link rel="stylesheet" href="/calendar/fullcalendar.print.css" media="print"/>
-  
 @endsection
 
 @section('body')
@@ -28,17 +27,20 @@
         </div>
         <hr>
         <!-- main area -->
-        {{ dd($prof) }}
 
         <div class="col-xs-12 dash-content">
           @foreach($applications as $app)
               @foreach($profiles as $prof)
-                @if($app->user_id === $prof->user_id)
-                <h3>{{ $prof->fname }} {{$prof->fname}}</h3>
-                <p>wants to work with you.</p>
+                @if($app->user_id == $prof->user_id)
+                  @foreach($jobs as $job)
+                    @if($app->job_id == $job->job_id)
+                <h3>{{ $prof->fname }} {{ $prof->lname }}</h3>
+                <p>wants to work with you with the job <b>{{ $job->title }}.</b></p>
                 <a class="btn btn-primary btn-md">
                   Accept
                 </a>
+                    @endif
+                  @endforeach
                 @endif
               @endforeach
           @endforeach

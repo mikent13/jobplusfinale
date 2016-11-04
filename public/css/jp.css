@@ -1,8 +1,8 @@
 
 body{
-      overflow:hidden;
+      overflow-x: hidden;
 }
-
+   
  .navbar-brand-centered {
         position: absolute;
         left: 50%;

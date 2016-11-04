@@ -33,12 +33,10 @@ Route::get('/user/home', [
 	'uses' => 'UserController@getHome',
 	'as' => 'user/home'
 	])->middleware('auth');
-
 Route::get('/user/setup', [
 	'uses' => 'UserController@getSetup',
 	'as' => 'user/setup'
 	])->middleware('auth');
-
 Route::post('/setup/save', [
 	'uses' => 'UserController@saveProfile',
 	'as' => 'user/save'
@@ -69,8 +67,6 @@ Route::get('/employer',[
 	'uses' => 'EmployerController@getJobPost',
 	'as' => 'emp/job/post'
 	])->middleware('auth');
-
-
 Route::get('employer/profile', [
 	'uses' => 'EmployerController@getProfile',
 	'as' => 'emp/profile'
@@ -88,37 +84,36 @@ Route::get('/applicant/dashboard/', [
 	'as' => 'app/dashboard'
 	])->middleware('auth');
 
-
 Route::get('/applicant/job', [
 	'uses' => 'ApplicantController@getJobPage',
 	'as' => 'app/job/result'
 	])->middleware('auth');
+
 Route::get('/app/job/filter','ApplicantController@getFilter');
 Route::get('/app/job/getskill','ApplicantController@getSkills');
 Route::get('/app/jobsearch', 'ApplicantController@getJobSearch');
-Route::get('/get/jobdata','ApplicantController@getJobPageData');
+Route::get('/get/jobpagedata','ApplicantController@getJobPageData');
+Route::get('/get/job/recommended','ApplicantController@getJobRecommended');
 Route::get('/get/job','ApplicantController@getResult');
 Route::get('/app/apply','ApplicantController@Apply');
-Route::get('/app/autocomplete',[
-	'uses' => 'ApplicantController@getAuto',
-	'as' => 'autocompletes']);
+
+Route::get('/app/upcomingJob','ApplicantController@getUpcoming');
+Route::get('/app/ongoingJob','ApplicantController@getOngoing');
+Route::get('/app/activeJob','ApplicantController@getActive');
 
 Route::get('applicant/profile', [
 	'uses' => 'ApplicantController@getProfile',
 	'as' => 'app/profile'
 	])->middleware('auth');
-
-Route::get('/applicant/job/start/{id}',[
+Route::get('/applicant/job/start',[
 	'uses' => 'ApplicantController@StartJob',
 	'as' => 'app/job/start'
 	])->middleware('auth');
-
-Route::get('/applicant/job/end/{id}',[
+Route::get('/applicant/job/end',[
 	'uses' => 'ApplicantController@EndJob',
 	'as' => 'app/job/end'
 	])->middleware('auth');
 
-Route::get('searchcomplete', 'ApplicantController@getAuto')->middleware('auth');
 
 /*
 |--------------------------------------------------------------------------

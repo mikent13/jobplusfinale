@@ -6,15 +6,13 @@
     <meta name="robots" content="noindex">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">    
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css" id="bootstrap-css">
     <link href="/css/jp.css" rel="stylesheet">
     <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
   	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
   	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" async="" src="http://www.google-analytics.com/ga.js"></script>      
-    <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="/js/jquery-1.11.1.min.js"></script>
     
    	<title>JobPlus</title>
 
@@ -30,10 +28,7 @@
           var iframe_height = parseInt($('html').height()); 
           window.parent.postMessage( iframe_height, 'http://bootsnipp.com');
         });
-    </script>
-    <!-- END OF STEPS-->
 
-    <script type="text/javascript">
     $(document).ready(function(){
         $("button[type='button']").click(function(){
         	var radioValue = $("button[name='paytype_id']:checked").val();
@@ -606,7 +601,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
 			<script type="text/javascript">
-				
 			    //Initialize tooltips
 			    $('.nav-tabs > li a[title]').tooltip();
 			    
@@ -633,7 +627,6 @@
 			        prevTab($active);
 
 			    });
-			};
 
 			function nextTab(elem) {
 			    $(elem).next().find('a[data-toggle="tab"]').click();

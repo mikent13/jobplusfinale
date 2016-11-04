@@ -281,7 +281,11 @@
    </div>
 </div>
 @stop
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDBJJH4SL6eCDPu7N5C-2XcBt8jpZJeMyQ&libraries=places"></script>
    <script>
+   $(document).ready(function(){
+    initAutocomplete();
+   });
       function initAutocomplete() {
         var lat= 10.355181;
         var long = 123.844222;
@@ -295,7 +299,6 @@
         // Create the search box and link it to the UI element.
         var input = document.getElementById('pac-input');
         var searchBox = new google.maps.places.SearchBox(input);
-        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
       
         // Bias the SearchBox results towards current map's viewport.
         map.addListener('bounds_changed', function() {
@@ -323,8 +326,8 @@
 
                 getAddressByLatlng(ll);
 
-
          });
+
         // Listen for the event fired when the user selects a prediction and retrieve
         // more details for that place.
         searchBox.addListener('places_changed', function() {
@@ -338,6 +341,7 @@
           markers.forEach(function(marker) {
             marker.setMap(null);
           });
+          
           markers = [];
 
           // For each place, get the icon, name and location.
@@ -370,10 +374,8 @@
         });
 
 
- $('a[href="#step3"]').on('shown.bs.tab', function() {
-        
-          
-    });
+ // $('a[href="#step3"]').on('shown.bs.tab', function() {
+ //    });
       }
 
     </script>
@@ -397,14 +399,12 @@
                         geocoder.geocode({ 'latLng': latlng }, function (results, status) {
                              if (status == google.maps.GeocoderStatus.OK) {
                                 if (results[1]) {
-                                   // myHomeLocText.value =  results[1].formatted_address;
                                     inputSearchBox.value =  results[1].formatted_address;
                                 }
                             }
                  });
 
               }
-
 
     </script>
 
@@ -458,8 +458,7 @@
         });
       }
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDBJJH4SL6eCDPu7N5C-2XcBt8jpZJeMyQ&libraries=places&callback=initAutocomplete"
-         async defer></script>
+    
 
 <script>
 

@@ -8,10 +8,11 @@
     <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css" id="bootstrap-css">
     <link href="/css/jp.css" rel="stylesheet">
      <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
-  	 <link rel="stylesheet" href="/bootcards/css/bootcards-desktop.min">
-  	  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
-  	  <style>
-  	  	
+  	  <style type="text/css">
+		  #map{
+		    width: 100%;
+		    height: 250px;
+		   }
   	  </style>
    	<title>JobPlus</title>
   </head>
@@ -54,20 +55,35 @@
 			<div class="container">
 				<form>
 				<div class="form-group form-group-md col-xs-3">
-				  <select class = "form-control input-md" id="search-sel">
-			      </select>
+				  <select class = "form-control input-md" id="search-sel"></select>
 				</div>
-					<div class="form-group form-group-md col-xs-4">
-					  <input list="skills" type="text" class="form-control input-md" id="search-skill">
-					</div>
-					<datalist id="skills">
-						
-					</datalist>
-					<div class="form-group form-group-md col-xs-4 ">
-					  <input type="text" class="form-control input-md" id="search-loc">
-					</div>
-				    <button id="btn-search" type="button" class="btn btn-primary btn-md">Search</button>
+				<div class="form-group form-group-md col-xs-4">
+				  <input list="skills" type="text" class="form-control input-md" id="search-skill" placeholder="Input keywords or jobtitle">
+				</div>
+				<datalist id="skills"></datalist>
+				<div class="form-group form-group-md col-xs-4 ">
+				  <input type="text" class="form-control input-md" id="search-loc" placeholder="Enter your city">
+				</div>
+			   <button id="btn-search" type="button" class="btn btn-primary btn-md">Search</button>
 				</form>
+				<div class="btn-group ">								    
+					 <div class="form-group col-md-4">
+					    <select class="form-control input-sm filters" id="fil-ptype">
+					    	<option value="0" selected="selected">Any Pay Types</option>
+					    </select>
+					 </div>
+					 <div class="form-group col-md-3">
+					    <select class="form-control input-sm filters" id="fil-sal">
+					       <option value="0" selected="selected">Any Salary</option>
+					       <option value="1">below 500</option>
+					       <option value="2">below 1000</option>
+					       <option value="3">above 1000</option>
+					    </select>
+					 </div>
+					    <div class="form-group col-md-1">
+						<button class="btn btn-default btn-sm ">Reset filter</button>
+					</div>						
+				</div>	
 				</div>
 			</div>
 		</div>
@@ -77,54 +93,24 @@
 		<div class="col-md-12">
 		<div class="col-md-4">
 			<div class="panel panel-default">
-						<div class="panel-heading clearfix">
-							<div class="btn-group ">
-								 <div class="form-group col-md-6">
-								      <select class="form-control input-sm filters" id="fil-date">
-								      <option value="0" selected="selected">Posted Any Time </option>
-								        <option value="1">Today</option>
-								        <option value="2">1 week ago</option>
-								        <option value="3">2 weeks ago</option>
-								        <option value="4">later than 2 weeks</option>
-								      </select>
-								    </div>
-								    
-								    <div class="form-group col-md-6">
-								      <select class="form-control input-sm filters" id="fil-ptype">
-								       <option value="0" selected="selected">Any Pay Types</option>
-								      </select>
-								    </div>
-
-								     <div class="form-group col-md-6">
-								      <select class="form-control input-sm filters" id="fil-dist">
-								       <option value="0" selected="selected">Distance</option>
-								        <option value="5">5 miles</option>
-								        <option value="10">10 miles</option>
-								        <option value="15">15 miles</option>
-								      </select>
-								    </div>
-
-								    <div class="form-group col-md-6">
-								      <select class="form-control input-sm filters" id="fil-sal">
-								       <option value="0" selected="selected">Salary Range</option>
-								        <option value="500">below 500</option>
-								        <option value="1000">below 1000</option>
-								        <option value="5000">above 1000</option>
-								      </select>
-								    </div>
-
-								    <div class="form-group col-md-6">
-									<button class="btn btn-default btn-sm ">Reset filter</button>
-								</div>						
-							</div>	
-						</div>	
-						<!-- Job list-->
-						<div class="list-group " id="side-res"></div>
-						<!-- End Job list-->
-					</div>
-					</div>
+				<div class="panel-heading clearfix">
+					<label>
+						<select class="form-control input-sm sort" id="sorter" >
+					       <option value="0" selected="selected">Any Pay Types</option>
+				        </select>
+					</label>
+					<h4>Job Feeds</h4>
+					<div id="#bag"></div>
+				</div>	
+				<!-- Job list-->
+				<div class="list-group " id="side-res"></div>
+				<!-- End Job list-->
+			</div>
+		</div>
 			<div class="col-md-8 dash-content">
-<div class="panel panel-default">
+			<div id="map"></div>
+			<h1 id="address"></h1>
+			<div class="panel panel-default">
 						<div class="panel-heading clearfix">
 							<p id="res-jobid"></p>
 							<h4 class="panel-title pull-left" id="result-title"></h4>
@@ -138,22 +124,21 @@
 									<span>Bookmark</span>
 								</a>
 							</div>							
-						</div>					
+						</div>	
 						<ul id="res-filtering"></ul>
 						<h3>schedule</h3>						
 						<ul id="result-sched"></ul>
 						<div id="key"></div>
 						<p id="result-skill"></p>
 						</div>
-		
 					</div>	
 					</div>
 		</div>
 		</div>
 		
-<script src="/js/jquery-1.11.1.min.js"></script>
+	<script src="/js/jquery-1.11.1.min.js"></script>
 	<script src="/js/jquery-ui.min.js"></script>
-
+    <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDBJJH4SL6eCDPu7N5C-2XcBt8jpZJeMyQ&libraries=places"></script> -->
     <script src="/calendar/moment.min.js"></script>
     <script src="/bootcard/js/bootcards.min.js"></script>
     <script src="/js/custom.js"></script>

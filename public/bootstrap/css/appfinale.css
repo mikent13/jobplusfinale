@@ -1,0 +1,240 @@
+@font-face{
+	font-family: 'Lato-Light';
+	src: url('/fonts/Lato-Light.ttf');
+}
+@font-face{
+	font-family: 'Lato-Regular';
+	src: url('/fonts/Lato-Regular.ttf');
+}
+@font-face{
+	font-family: 'OpenSans-Light';
+	src: url('/fonts/OpenSans-Light.ttf');
+}
+@font-face{
+	font-family: 'OpenSans-Regular';
+	src: url('/fonts/OpenSans-Regular.ttf');
+}
+		  #map{
+		    width: 100%;
+		    height: 250px;
+		   }
+
+.active{
+	font-size: 18px;
+	color: #ecf0f1;
+}
+.brand{
+	font-family: 'Lato-Regular';
+	font-size: 20px;
+	color: #ecf0f1;	
+}
+h1,h2,h3{
+	font-family: 'Lato-Light';
+}
+h1{
+	font-size: 30px;
+}
+h2{
+	font-size: 25px;
+}
+h3{
+	font-size: 20px;
+	color: #ea782d;
+
+}
+h4{
+	font-family: 'Lato-Regular';
+}
+a,p{
+	font-family: 'OpenSans-Regular';
+	color: #3c3c3c;
+}
+.nav>li>a{
+	color: #ecf0f1;
+}
+
+.nav .open>a, .nav .open>a:focus, .nav .open>a:hover {
+    background-color: transparent;
+    border-color: #337ab7;
+}
+.nav .open>a, .nav .open>a:focus, .nav .open>a:hover {
+    border-color: #337ab7;
+}
+.nav>li>a:hover,.nav>li>a:focus {
+	background-color: transparent;
+}
+.main-nav{
+	background-color: #d35400;
+	margin-top: -80px;
+}
+.sub-nav{
+	height: 20px;
+	margin-top: -20px;
+	font-size: 15px;
+	background-color: #ecf0f1;
+}
+
+.sub-nav-header > a > p {
+	color: #fff;
+}
+	
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 190px;
+}
+
+.dropdown-content-main{
+	margin-top: 10px;
+	display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 150px;
+    z-index: 1;
+}
+.dropdown-content-main > ul{
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	margin-left: -25px;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+.dropdown-content-main:hover {
+    display: block;
+}
+.dropdown:hover .dropdown-content-main {
+    display: block;
+}
+
+.dropdown-content > ul{
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	margin-left: -25px;
+}
+
+.img-avatar{
+	margin-top: -5px;
+}
+
+.jpHeroImage{
+	background-image: url('/img/jumbotron.jpg');
+	min-height: 500px; 
+	background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+	margin-top: -20px;
+	z-index: -1;
+}
+
+.jbcontents{
+	margin-top: -350px;
+	color:	#fff;
+}
+.jbheader{
+	margin-bottom: 20px;
+
+}
+
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover { border-width: 0; }
+.nav-tabs > li > a { border: none; color: #666; }
+.nav-tabs > li.active > a, .nav-tabs > li > a:hover { border: none; color: #4285F4 !important; background: transparent; }
+.nav-tabs > li > a::after { content: ""; background: #4285F4; height: 3px; position: absolute; width: 100%; left: 0px; bottom: -1px; transition: all 250ms ease 0s; transform: scale(0); }
+.nav-tabs > li.active > a::after, .nav-tabs > li:hover > a::after { transform: scale(1); }
+.tab-nav  > li > a::after { background: #21527d none repeat scroll 0% 0%; color: #fff; }
+
+.tab-pane { 
+margin-left:-15px;
+padding-top: 15px;
+margin-bottom: 30px;
+}
+
+.sticky {
+  color: #fff;
+  background-color:#ea782d;
+  position: fixed;
+  height: 80px;
+  width: 100%;
+  left: 0;
+  top: 0;
+  z-index: 100;
+  border-top: 0;
+  padding-top: 25px;
+  padding-bottom: 25px;
+}
+
+.ellipsis {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.list-group-item-heading{
+	width: 250px;
+	color: red;
+
+}
+
+.meta{
+	font-size: 13px;
+	color: #616161;
+}
+
+.meta-title{
+	font-size: 17px;
+}
+
+.meta-employer{
+	font-size: 14px;
+}
+
+.meta-loc{
+	display: inline-block;
+	vertical-align: bottom;
+	padding-top: 5px;
+	padding-bottom: 10px;
+}
+
+.meta-locality{
+	margin-left: -23px;
+	font-size: 14px;
+	color: #3c3c3c;
+}
+.meta-marker{
+	margin-left: 40px;
+	color: black;
+}
+.item-res{
+	border: none;
+}
+.recom-res{
+	border: none;
+}
+
+.cont-feeds{
+	padding-top: 7px;
+	border-bottom: 1px solid #BDBDBD;
+	margin-bottom: -7px;
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+.jp-content{
+	padding-left: 0px;
+	padding-right: 0px;
+
+}
+.jp-body{
+	padding-left: 0px;
+	padding-right: 0px;
+}

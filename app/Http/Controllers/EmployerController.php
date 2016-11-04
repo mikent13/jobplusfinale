@@ -37,7 +37,7 @@ class EmployerController extends Controller
                               ->get();
 
         $profiles = Profiles::all();
-         return view('employer.home',compact('applications','profiles'));
+         return view('employer.home',compact('applications','profiles','jobs'));
   	}
 
   	public function getJobPost(){
