@@ -49,7 +49,6 @@ function initializeData(){
         $('#search-sel').append($('<option>', {
           value:vals.category_id,
           text: vals.name}));
-
      });
 
       $.each(data.paytypes,function(key,value){

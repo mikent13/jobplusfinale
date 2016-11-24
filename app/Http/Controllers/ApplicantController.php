@@ -158,7 +158,7 @@ class ApplicantController extends Controller
             $startdate = $start->format('Ymd');
            
             $result    = $start->diff($current);  
-          
+            
             if($startdate === $currdate){
               $data['m1'] = 'same day and hour.';
 
@@ -258,33 +258,50 @@ class ApplicantController extends Controller
     }
 
     public function getJobSearch(Request $req){
+      
+      $skill = [];
+
       $loc      = $req->location;
       $cat      = $req->cat;
       $skill    = $req->skill;
       $salary   = $req->salary;
       $paytype  = $req->ptype;
-      $firstids = array();
+      $firstids = [];
       $addids = [];
+      $newskid = [];
+      $jskid = [];
+      $profid = [];
+      $jobaddid =[];
       $profile = Profiles::all();
       $jobadd = Job_Address::all();
-
-      $data['jobadd'] = $jobadd;
-      $data['profile'] = $profile;
       
-      if( $cat != 0 && $skill != null ){
-        $newsk = Skills::where('name','like', '%'.$skill.'%')->first();
-        $firsts = Jobs::where('category_id',$cat)->where('skill_id',$newsk->skill_id)->get()->sortBy('date_posted');
-      }
+      $data['loc'] = $loc;
+      
+      if(  $skill != null ){
+        $newsk = Skills::whereIn('skill_id',$skill)->get();
+
+        foreach($newsk as $newerskill){
+          $newskid[] = $newerskill->skill_id;
+        }
+
+        $jskill = Job_Skill::whereIn('skill_id',$newskid)->get();
+       
+        foreach($jskill as $newerjskill){
+          $jskid[] = $newerjskill->job_id;
+        }
+
+        $data['jobskill'] = $jskid;
+      
+        $firsts = Jobs::whereIn('job_id',$jskid)->get();
+    }
+      
       elseif( $cat != 0 && $skill == null ){
         $firsts = Jobs::where('category_id',$cat)->get();
       }
-      elseif( $cat == 0 && $skill != null ){
-        $newsk = Skills::where('name','like', '%'.$skill.'%')->first();
-        $firsts = Jobs::where('skill_id',$newsk->skill_id)->get()->sortBy('date_posted');
-      }
-      elseif( $cat == 0 && $skill == null ){
-        $firsts = Jobs::all()->sortBy('date_posted');
-      }
+
+      // // elseif( $cat == 0 && $skill == null ){
+      // //   $firsts = Jobs::all()->sortBy('date_posted');
+      // // }
 
       foreach($firsts as $first){
         $firstids[] = $first->job_id;
@@ -299,28 +316,40 @@ class ApplicantController extends Controller
 
       $first = Jobs::whereIn('job_id',$addids)->get();
 
+      //Getting the profiles
+      foreach($first as $f){
+        $profid[] = $f->user_id;
+        $jobaddid[] = $f->job_id;
+      }
+      $newprof = Profiles::whereIn('user_id',$profid)->get();
+      $data['profile'] = $newprof;
+
+      //Getting the Address
+      $jobadd = Job_Address::whereIn('jobid',$jobaddid)->get();
+      $data['add'] = $jobadd;
+
       if($paytype == 0 && $salary == 0){
         $data['jobs'] = $first;
         $data['message'] = $firstids;
-        $data['add'] = $loc;
-        return response()->json($data);
+       return response()->json($data);
       }
       
       // Filters
         if( $paytype == 0 && $salary != 0 ){
           if($salary == 1){     
-            $seconds = Jobs::whereIn('job_id',$firstids)
+            $seconds = Jobs::whereIn('job_id',$jobaddid)
                             ->where('salary', '<=' , 500)->get();
           }
           elseif($salary == 2){
-            $seconds = Jobs::whereIn('job_id',$firstids)
+            $seconds = Jobs::whereIn('job_id',$jobaddid)
                             ->where('salary', '<=' , 1000)->get(); 
           }
           elseif($salary == 3){
-            $seconds = Jobs::whereIn('job_id',$firstids)
+            $seconds = Jobs::whereIn('job_id',$jobaddid)
                             ->where('salary', '>=' , 1000)->get();
           }
         }
+
         elseif( $paytype != 0 && $salary == 0 ){
             $seconds = Jobs::whereIn('job_id',$firstids)
                             ->where('paytype', $paytype)->get();
@@ -342,9 +371,8 @@ class ApplicantController extends Controller
                           ->where('salary', '>' , 1000)->get(); 
           }
         }
+        $data['jobs'] = $seconds;
 
-      $data['jobs'] = $seconds;
-      $data['message'] = 'second';
       return response()->json($data);
 
     }
@@ -384,7 +412,6 @@ class ApplicantController extends Controller
 
       $profile  = Profiles::where('user_id',$id)->first();
       $skill    = Prof_Skill::where('profile_id',$profile->profile_id)->get();
-      $jobadd   = Job_Address::where('locality',$profile->locality)->get();
 
       foreach($skill as $sk){
         $skids[] = $sk->skill_id;
@@ -392,10 +419,26 @@ class ApplicantController extends Controller
      
       $jobskills = Job_Skill::whereIn('skill_id',$skids)
                               ->get();
+      $jskid = [];
+
+      foreach($jobskills as $jsk){
+        $jskid[] = $jsk->job_id;
+      } 
+
+      $jobadd   = Job_Address::where('locality',$profile->locality)
+                              ->whereIn('jobid',$jskid)->get();
+
+      $jaddids =[];
+      foreach($jobadd as $jadd){
+        $jaddids[] = $jadd->jobid;
+      }
+
+      $jobs = Jobs::WhereIn('job_id',$jaddids)->get();
+
 
       $data['jobs'] = $jobs;
       $data['jobskills'] = $jobskills;
-      $data['jobadd'] = $jobadd;
+      $data['add'] = $jobadd;
       $data['profile'] = $outputprofile;
       $data['message'] = 'success';
 

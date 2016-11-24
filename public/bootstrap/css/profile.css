@@ -1,0 +1,127 @@
+
+.profcontainer{
+	border:1px solid #BDBDBD;
+	background-color: #fff;
+	margin-bottom: 30px;
+}
+
+.profbody{
+	padding: 20px;
+}
+
+.main{
+	border-bottom: 3px solid #D35400;
+}
+
+.pic-container{
+	margin-right: 10px;
+}
+
+.profile-pic{
+	border-radius: 50%;
+	width: 150px;
+	height: 150px;
+}
+
+.pic-body{
+	width: 100%;
+}
+
+.skills	{
+	margin-top: 10px;
+	width: 100%;
+	padding-left: 10px;
+}
+
+.skills > p{
+	background-color: #D35400;
+	display: inline-block;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	padding-left: 10px;
+	padding-right: 10px;
+	border-radius: 25px;
+	color: #fff;
+	margin-right: 5px;
+}
+
+.top-name > h2{
+margin-top: -2px;
+width: 100%;
+}
+.top-name > i , .top-name > h4{
+	display: inline-block;
+	margin-top: -2px;
+}
+
+.top-name > h1{
+	color: #D35400;
+}
+
+.profinfo{
+	padding-left: 16px;
+	padding-right: 16px;
+	margin-bottom: 10px;
+}
+
+.profinfo > button{
+	margin-top: 15px;
+}
+
+.btn-tool{
+	border-radius: none;
+	padding-left: 20px;
+	padding-right: 20px;
+	border:1px solid transparent;
+	transition: all 0.3s ease 0s;
+	font-family: 'OpenSans-Regular';
+}
+
+.btn-tool:hover, .btn-tool:focus, .btn-tool:active{
+	border:1px solid #D35400;
+	background-color: #fff;
+	transition: all 0.3s ease 0s;
+}
+.education > p{
+	display: inline-block;
+	margin-right: 3px;
+}
+.education > h4{
+	margin-bottom: 0px;
+}
+.container > h1{
+	margin-bottom: 30px;
+}
+
+.balance > h1{
+	display: inline-block;
+	padding-right: 20px;
+	margin-bottom: 20px;
+}
+.balance > h2{
+	text-align: center;
+}
+.btn-reload{
+	background-color: #D35400;
+	transition: all 0.3s ease 0s;
+	color: #fff;
+}
+.btn-reload:hover, .btn-reload:focus{
+	color: #fff;
+	opacity: 0.8;
+}
+
+.modal-header{
+	background-color: #D35400;
+	color: #fff;
+	padding-top: 25px;
+	padding-bottom: 25px;
+}
+
+#myModal{
+margin-top: 5%;
+}
+
+.modal-body > .form-group{
+	padding-bottom: 30px;
+}

@@ -1,3 +1,7 @@
+@extends('masters.AppPrimary')
+
+@section('body')
+
 <?php
 
 namespace App;

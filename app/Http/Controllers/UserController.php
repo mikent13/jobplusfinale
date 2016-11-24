@@ -6,15 +6,63 @@ use Illuminate\Http\Request;
 use App\Profiles;
 use App\Skills;
 use App\Prof_Skill;
+use App\Paytypes;
 use App\Degrees;
 use Illuminate\Support\Facades\Input;
 use App\Http\Requests;
 use DB;
+use App\Jobs;
+use App\Job_Skill;
+use App\Job_Address;
+use App\Schedules;
+use App\Categories;
 use Auth;
 class UserController extends Controller
 {
     public function getHome(){
         return view('home');
+    }
+
+    public function getProfile(){
+      return view('users.app-profile');
+    }
+    
+    public function getAdmin(){
+        $job = Jobs::all();
+        $skill = Job_Skill::all();
+        $sk = Skills::all();
+        $address = Job_Address::all();
+        $paytype = Paytypes::all();
+        $schedule = Schedules::all();
+        $category = Categories::all();
+        return view('masters.admin',compact('job','skill','sk','address','paytype','schedule','category'));
+    }
+    public function getProfileData(){
+        $skill_ids = [];
+        $id = Auth::user()->id;
+        $profile = Profiles::where('user_id',$id)->first();
+        $prof_skills = Prof_Skill::where('profile_id',$profile->profile_id)->get();
+
+        foreach($prof_skills as $skills){
+            $skill_ids[] = $skills->skill_id;
+        }
+
+        $newskill = Skills::whereIn('skill_id',$skill_ids)->get();
+
+        $data['profile'] = $profile;
+        $data['skills'] = $newskill;
+        $data['message'] = 'success';
+        return response()->json($data);
+    }
+
+    public function updateName(Request $req){
+        $id = Auth::user()->id;
+        $profile = Profiles::where('user_id',$id)->first();
+        $profile->fname = $req->fname;
+        $profile->lname = $req->lname;
+        $profile->save();
+        $data['message'] = 'success';
+        return response()->json($data);
     }
 
     public function getSetup(){

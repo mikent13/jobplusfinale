@@ -1,6 +1,16 @@
 @extends('masters.AppPrimary')
 
 @section('body')
+ <div id="loading">
+<div id="loading-center">
+<div id="loading-center-absolute">
+<div class="object" id="object_one"></div>
+<div class="object" id="object_two"></div>
+<div class="object" id="object_three"></div>
+<div class="object" id="object_four"></div>
+</div>
+</div>
+</div>
         <div class="container">
         <h1>Schedule</h1>
 		<hr>
@@ -29,7 +39,7 @@
                                         <div class="modal-content">
                                           <div class="modal-header">
                                             <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                            <h3 class="modal-title">How's your experience working with 
+                                            <h3 class="modal-title">How's your experience?
                                             <p></p></h3>
                                           </div>
                                           <div class="modal-body">

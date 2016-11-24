@@ -1,18 +1,63 @@
+@font-face{
+    font-family: 'Lato-Light';
+    src: url('/fonts/Lato-Light.ttf');
+}
+@font-face{
+    font-family: 'Lato-Regular';
+    src: url('/fonts/Lato-Regular.ttf');
+}
+@font-face{
+    font-family: 'OpenSans-Light';
+    src: url('/fonts/OpenSans-Light.ttf');
+}
+@font-face{
+    font-family: 'OpenSans-Regular';
+    src: url('/fonts/OpenSans-Regular.ttf');
+}
+.jpinput{
+    max-width: 100%;
+}
+
+h1,h2,h3{
+    font-family: 'Lato-Light';
+}
+
+h1{
+    font-size: 30px;
+}
+h2{
+    font-size: 25px;
+}
+h3{
+    font-size: 20px;
+    color: #ea782d;
+}
+h4{
+    font-family: 'Lato-Regular';
+}
+a,p{
+    font-family: 'OpenSans-Regular';
+    color: #3c3c3c;
+}
+body{
+    overflow-x:hidden;
+}
+
 .wizard {
     margin: 20px auto;
     background: #fff;
 }
 
-    .wizard .nav-tabs {
-        position: relative;
-        margin: 40px auto;
-        margin-bottom: 0;
-        border-bottom-color: #e0e0e0;
-    }
+.wizard .nav-tabs {
+    position: relative;
+    margin: 40px auto;
+    margin-bottom: 0;
+    border-bottom-color: #e0e0e0;
+}
 
-    .wizard > div.wizard-inner {
-        position: relative;
-    }
+.wizard > div.wizard-inner {
+    position: relative;
+}
 
 .connecting-line {
     height: 2px;
@@ -47,6 +92,9 @@ span.round-tab {
     text-align: center;
     font-size: 25px;
 }
+span.round-tab:active, span.round-tab:focus{
+     border: 2px solid #d35400;
+}
 
 span.round-tab i{
     color:#555555;
@@ -55,16 +103,16 @@ span.round-tab i{
 
 .wizard li.active span.round-tab {
     background: #fff;
-    border: 2px solid #5bc0de;
+    border: 2px solid #d35400;
     
 }
 .wizard li.active span.round-tab i{
-    color: #5bc0de;
+    color: #d35400;
 }
 
 span.round-tab:hover {
     color: #333;
-    border: 2px solid #333;
+    border: 2px solid #d35400;
 }
 
 .wizard .nav-tabs > li {
@@ -91,7 +139,7 @@ span.round-tab:hover {
     margin: 0 auto;
     bottom: 0px;
     border: 10px solid transparent;
-    border-bottom-color: #5bc0de;
+    border-bottom-color: #d35400;
 }
 
 .wizard .nav-tabs > li a {
@@ -109,10 +157,6 @@ span.round-tab:hover {
 .wizard .tab-pane {
     position: relative;
     padding-top: 50px;
-}
-
-.wizard h3 {
-    text-align: left;
 }
 
 @media( max-width : 585px ) {
@@ -142,50 +186,109 @@ span.round-tab:hover {
     }
 }
 
-#map {
-        height: 50%;
-      }
-      .controls {
-        margin-top: 10px;
-        border: 1px solid transparent;
-        border-radius: 2px 0 0 2px;
-        box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        height: 32px;
-        outline: none;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-      }
+.setup-header > h2{
 
-      #pac-input {
-        background-color: #fff;
-        font-family: Roboto;
-        font-size: 15px;
-        font-weight: 300;
-        margin-left: 12px;
-        padding: 0 11px 0 13px;
-        text-overflow: ellipsis;
-        width: 300px;
-      }
+}
+.setup-header{
+    margin-left: 5%;
+    margin-right: 5%;
+}
+.tab-header{
+    padding-top: 15px;
+    background-color: #F7F7F7;
+    padding-bottom: 15px;
+    padding-left: 25px;
+    margin-top: -50px;
 
-      #pac-input:focus {
-        border-color: #4d90fe;
-      }
+}
+.setup-selectp{
+    max-width: 100%;
+    padding-left: 12px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    font-size: 19px;
+    font-family: 'Lato-Light';
+    background: #fff;
+    color: #3c3c3c;
+    border:1px solid  rgba(207,216,220 ,1);
+}
 
-      .pac-container {
-        font-family: Roboto;
-      }
+.setup-textp{
+    height: 53px;
+    width: 100%;
+    font-size: 19px;
+    padding-left: 12px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    color: #3c3c3c;
+    background: #fff;
+    border:1px solid rgba(207,216,220 ,1);
+}
 
-      #type-selector {
-        color: #fff;
-        background-color: #4d90fe;
-        padding: 5px 11px 0px 11px;
-      }
+.setup-mapinput {
+    height: 50px;
+    width: 1000px;
+    font-size: 19px;
+    margin-top: 10px;
+    margin-left: 25px;
+    padding-left: 12px;
+    margin-right: 25px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    color: #3c3c3c;
+    background: #fff;
+    border: 1px solid rgba(207,216,220 ,1);
+}
 
-      #type-selector label {
-        font-family: Roboto;
-        font-size: 13px;
-        font-weight: 300;
-      }
-      #target {
-        width: 345px;
-      }
+.pac-container, .pac-item, .pac-item-query {
+    width: 100%;
+    font-size: 19px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.jpinput{
+    max-width: 100%;
+    border-radius: none;
+}
+
+
+.setup-selectoption{
+    font-family: 'OpenSans-Regular';
+    font-size: 19px;
+    color: #3c3c3c;
+    border-bottom: 1px solid transparent;
+}
+.bootstrap-select>.dropdown-toggle {
+    width: auto;
+}
+.setup-school{
+    margin-left: -10px;
+}
+.setup-year{
+    margin-left: -60px;
+}
+
+.setup-skills > label{
+border:1px solid rgba(207,216,220 ,1);
+    padding-top: 7px;
+    padding-bottom: 7px;
+    padding-left: 10px;
+    padding-right: 5px;
+    width: 100%;
+}
+.input-list{
+    list-style: none;
+    font-weight: normal;
+    margin-left: -35px;
+}
+
+label{
+    font-family: 'OpenSans-Regular';
+    color: #3c3c3c;
+    font-weight: 100;
+}
+input[type=checkbox] {
+    padding-left: 5px;
+    padding-right: 5px;
+}

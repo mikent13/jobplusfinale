@@ -1,3 +1,6 @@
+function loadEnd(){
+   $("#loading").fadeOut(300);
+}
 
 function activeJob(){
 $('#act-endbtn').attr('disabled',true);
@@ -9,7 +12,8 @@ $('#act-endbtn').attr('disabled',true);
 
 	var active = $.ajax({
           url: '/app/activeJob',
-          method: 'GET'
+          method: 'GET',
+          complete: loadEnd
         });
 
         active.done(function(data){
@@ -93,8 +97,7 @@ function upcomingJob(){
 }
 
 $(document).ready(function(){
-  activeJob();
-	// setInterval(activeJob,1000);
+activeJob();
 
   $(document).on('click','#act-startbtn',function(e){
     $.ajaxSetup({

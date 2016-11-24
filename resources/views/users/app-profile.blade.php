@@ -1,143 +1,147 @@
-@extends('masters.primary')
-
+@extends('masters.AppPrimary')
+@section('css')
+      <link rel="stylesheet" href="/bootstrap/css/profile.css">
+@endsection
 @section('body')
+ <div id="loading">
+<div id="loading-center">
+<div id="loading-center-absolute">
+<div class="object" id="object_one"></div>
+<div class="object" id="object_two"></div>
+<div class="object" id="object_three"></div>
+<div class="object" id="object_four"></div>
+</div>
+</div>
+</div>
   <div class="container">
-      <div class="row row-offcanvas row-offcanvas-left">
-        <!-- sidebar -->
-        <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
-            <ul class="nav nav-primary">
-              <li><a href="{{route('app/dashboard')}}"><i class="fa fa-calendar nav-icon" aria-hidden="true"></i> Job+ Schedule</a></li>
-              <hr>
-              <li><a href="{{ route('app/job/search') }}"><i class="fa fa-suitcase nav-icon" aria-hidden="true"></i> Job+ Postings </a></li>
-              <hr>
-              <li><a href="#"><i class="fa fa-credit-card-alt nav-icon" aria-hidden="true"></i> Job+ Wallet </a></li>
-              <hr>
-              <li><a href="#"><i class="fa fa-bookmark nav-icon" aria-hidden="true"></i> Bookmarks</a></li> 
-              <hr>
-              <li><a href="#"><i class="fa fa-archive nav-icon" aria-hidden="true"></i> Logs</a></li>
-              <hr>
-              <li><a href=""><i class="fa fa-user nav-icon" aria-hidden="true"></i> Profile</a></li>                
-            </ul>
-        </div>
-        <!-- main area -->
-        <div class="col-xs-12 col-sm-9 dash-content">
-          <div class="row">
-    <div class="col-md-12 top-banner">
-    <h1 class="head-text"><img class="banner" src="/img/background.jpg"/> </h1>
-      <div class="col-md-6 col-md-offset-3 prof-head">
-        <div class="img-box">
-          <img class="dp" src="/img/dp.jpg">
-        </div>
-        <div class="rate">
-        <span><i class="fa fa-star star" aria-hidden="true"></i></span>
-        <span><i class="fa fa-star star" aria-hidden="true"></i></span>
-        <span><i class="fa fa-star star" aria-hidden="true"></i></span>
-        <span><i class="fa fa-star star" aria-hidden="true"></i></span>
-        <span><i class="fa fa-star star" aria-hidden="true"></i></span>
-        </div>
-        <p><i class="fa fa-map-marker" aria-hidden="true"></i> Banawa, Cebu City</p>
-        <h2>Kent Michael Baguion</h2>
-        <div class="edit-tool">
-          <p>Edit Profile</p>
-        </div>
-        </div>
-      <hr>
+  <h1>My Profile</h1>
+
+<div class="col-md-8">
+  <div class="profcontainer">
+    <div class="profbody main">
+      <div class="col-md-3 pic-container">
+        <span class="pic-body">
+          <img src="{{Auth::user()->profile->avatar}}" class="profile-pic">
+        </span>
+      </div>
+      <div class="top-name col-md-offset-3">
+      <button class="btn btn-md pull-right btn-tool" id="edit-name" ><i class="fa fa-pencil" aria-hidden="true"></i> Edit</button>
+        <h1 class="prof-name"></h1>
+        <i class="fa fa-lg fa-map-marker" aria-hidden="true"></i><h4 class="prof-address"></h4>
+          <div id="prof-skills" class="skills">
+          
+          </div>
+      </div>
     </div>
   </div>
-  <div class="row">
-    <div class="col-md-12">
-      <div class="custom-card">
-        <h3><i class="fa fa-user custom-card-icon" aria-hidden="true"></i> Biography</h3>
-        <p>
-          Nullam molestie, lectus ac congue lacinia, nisi ex dictum ligula, et ornare erat urna tempus odio. Nunc orci diam, pellentesque ac nulla eget, feugiat finibus neque. Aenean ornare ac orci id ultricies! Nulla at magna sit amet erat feugiat varius ut non mi. Fusce et ex laoreet; maximus felis sed, pretium leo. Ut enim erat, suscipit nec magna ac, dapibus efficitur mauris. Nullam nec ligula nec nibh volutpat porttitor vel ac nisi.
-        </p>
-      </div>
-      <hr>
+
+  <div class="profcontainer">
+    <div class="profbody">
+    <div class="row profinfo">
+      <button class="btn btn-md pull-right btn-tool" id="edit-overview"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</button>
+      <h1>Overview</h1>
     </div>
-    <div class="col-md-6">
-      <div class="custom-card">
-        <h3><i class="fa fa-graduation-cap custom-card-icon" aria-hidden="true"></i> Education</h3>
-        <div class="card-edu">
-          <h3>2011</h3>
-          <p>Saint Peter's College of Ormoc</p>
-          <p>Ormoc City</p>
-        </div>
-        <div class="card-edu">
-          <h3>2012</h3>
-          <p>University of San Jose Recoletos</p>
-          <p>Cebu City</p>
-        </div>
-        <div class="card-edu">
-          <h3>2017</h3>
-          <p>University of San Jose Recoletos</p>
-          <p>Cebu City</p>
-        </div>
-      </div>
+      <p>Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Mauris blandit aliquet elit, eget tincidunt nibh pulvinar a. Proin eget tortor risus. Donec sollicitudin molestie malesuada. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit amet ligula. Cras ultricies ligula sed magna dictum porta. Vivamus magna justo, lacinia eget consectetur sed, convallis at tellus. Vivamus suscipit tortor eget felis porttitor volutpat. Nulla porttitor accumsan tincidunt. Nulla porttitor accumsan tincidunt.
+      </p>
+    </div>
   </div>
-  <div class="col-md-6">
-      <div class="custom-card">
-        <h3><i class="fa fa-briefcase custom-card-icon" aria-hidden="true"></i> Experience</h3>
-        <div class="card-edu">
-          <h3>2011</h3>
-          <p>Saint Peter's College of Ormoc</p>
+
+  <div class="profcontainer">
+    <div class="profbody">
+    <div class="row profinfo">
+      <button class="btn btn-md pull-right btn-tool" id="edit-education"><i class="fa fa-plus" aria-hidden="true"></i> Add</button>
+      <h1>Education</h1>
+      <div class="education">
+        <h3>Bachelor of Science in Information Technology</h3>
+        <h4>University of San Jose-Recoletos</h4>
+        <p>2013-2014</p>
         </div>
-        <div class="card-edu">
-          <h3>2012</h3>
-          <p>University of San Jose Recoletos</p>
+        <div class="education">
+        <h3>Bachelor of Science in Computer Science</h3>
+        <h4>University of San Carlos</h4>
+        <p>2016 - Present</p>
         </div>
-        <div class="card-edu">
-          <h3>2017</h3>
-          <p>University of San Jose Recoletos</p>
-        </div>
+    </div>
+    </div>
+  </div>
+
+  <div class="profcontainer">
+    <div class="profbody">
+      <div class="row profinfo">
+      <button class="btn btn-md pull-right btn-tool" id="edit-work"><i class="fa fa-plus" aria-hidden="true"></i> Add</button>
+      <h1>Work & Experience</h1>
+      <h3>2013</h3>
+      <h4>Dishwasher</h4>
+      <p>in Bagzki's House</p>
       </div>
     </div>
+  </div>
+
+  <div class="profcontainer">
+    <div class="profbody">
+      <h1>Job+ Work History</h1>
+      <p>No items to display.</p>
+    </div>
+  </div>
+</div> <!-- End of col-md-8 -->
+
+<div class="col-md-4">
+  <div class="profcontainer">
+    <div class="profbody">
+    <div class="balance">
+      <h1>Balance </h1>
+      <h1><i class="fa fa-usd" aria-hidden="true"></i>30.12</h1>
+      <button class="btn btn-lg btn-block btn-reload">Reload</button>
+      <h2>View Transaction History</h2>
+      </div>
+    </div>
+  </div>
+
+<button class="btn btn-block btn-lg"><i class="fa fa-cog" aria-hidden="true"></i> Account Settings</button>
+</div> <!-- End of col-md-4 -->
+
+  <!-- Modal -->
+  <div class="modal fade " id="myModal" role="dialog" data-backdrop="static">
+    <div class="modal-dialog modal-lg">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"><i class="fa fa-2x fa-times" aria-hidden="true"></i></button>
+          <h1 class="modal-title"></h1>
+        </div>
+        <div class="modal-body">
+        <div class="row col-md-12">
+          <div class="form-group form-group-md col-md-6 ">
+               <h3>Last Name</h3>
+              <input type="text" name="lastname" class="setup-textp" id="lastname" placeholder="LastName">
+              <li class="setup-skills">
+                  <label>
+                    <input id="skillbox" class="skill-select" name="housekeeping" type="checkbox" value="1">
+                   Checkbox
+                   </label>
+              </li>
+          </div>
+          <div class="form-group form-group-md col-md-6 ">
+               <h3>First Name</h3>
+              <input type="text" name="firstname" class="setup-textp" id="firstname" placeholder="LastName">
+          </div>
+          </div>
+          <div class="row col-md-12">
+
+          </div>
+        </div>
+          <button type="button" id="name-save" class="btn btn-lg " data-dismiss="modal">Save</button>
+          <button type="button" class="btn btn-lg " data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
 
 </div>
-<div class="row">
-<hr>
-    <div class="col-md-12">
-      <div class="custom-card">
-        <h3><i class="fa fa-wrench custom-card-icon" aria-hidden="true"></i> Skills</h3>
-      </div>
-    </div>
-    <div class="col-md-3 ">
-      <div class="custom-card">
-      <h3>Household</h3>
-      <p><i class="fa fa-check" aria-hidden="true"></i> Housekeeper</p>
-      <p><i class="fa fa-check" aria-hidden="true"></i> Cook</p>
-      <p><i class="fa fa-check" aria-hidden="true"></i> Cook</p>
-      </div>
-    </div>
-    <div class="col-md-3">
-    <div class="custom-card">
-      <h3>Construction</h3>
-      <p><i class="fa fa-check" aria-hidden="true"></i> Housekeeper</p>
-      <p><i class="fa fa-check" aria-hidden="true"></i> Cook</p>
-      <p><i class="fa fa-check" aria-hidden="true"></i> Cook</p>
-      </div>
-    </div>
-    <div class="col-md-3">
-    <div class="custom-card">
-      <h3>Personel</h3>
-      <p><i class="fa fa-check" aria-hidden="true"></i> Housekeeper</p>
-      <p><i class="fa fa-check" aria-hidden="true"></i> Cook</p>
-      <p><i class="fa fa-check" aria-hidden="true"></i> Cook</p>
-      </div>
-    </div>
-    <div class="col-md-3">
-    <div class="custom-card">
-
-      <h3>Maintenance</h3>
-      <p><i class="fa fa-check" aria-hidden="true"></i> Housekeeper</p>
-      <p><i class="fa fa-check" aria-hidden="true"></i> Cook</p>
-      <p><i class="fa fa-check" aria-hidden="true"></i> Cook</p>
-      </div>
-    </div>
- </div>
-  <br>
-        </div>
-    </div>
-  </div>
-
   
+@endsection
+
+@section('js')
+<script src="/js/jquery-1.11.1.min.js"></script>
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+<script src="/js/profiles.js"></script>
 @endsection

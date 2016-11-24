@@ -33,14 +33,32 @@ Route::get('/user/home', [
 	'uses' => 'UserController@getHome',
 	'as' => 'user/home'
 	])->middleware('auth');
+
 Route::get('/user/setup', [
 	'uses' => 'UserController@getSetup',
 	'as' => 'user/setup'
 	])->middleware('auth');
+
+Route::get('/app/setup', [
+	'uses' => 'UserController@getSetup',
+	'as' => 'app/setup'
+	])->middleware('auth');
+
 Route::post('/setup/save', [
 	'uses' => 'UserController@saveProfile',
 	'as' => 'user/save'
 	])->middleware('auth');
+
+Route::get('/get/user/profile','UserController@getProfile');
+
+Route::get('user/profile', [
+	'uses' => 'UserController@getProfile',
+	'as' => 'app/profile'
+	])->middleware('auth');
+
+Route::get('/get/profiledata', 'UserController@getProfileData');
+Route::get('/get/update/name', 'UserController@updateName');
+Route::get('/admin','UserController@getAdmin');
 
 /*
 |--------------------------------------------------------------------------
@@ -67,11 +85,11 @@ Route::get('/employer',[
 	'uses' => 'EmployerController@getJobPost',
 	'as' => 'emp/job/post'
 	])->middleware('auth');
-Route::get('employer/profile', [
+
+	Route::get('employer/profile', [
 	'uses' => 'EmployerController@getProfile',
 	'as' => 'emp/profile'
 	])->middleware('auth');
-
 
 /*
 |--------------------------------------------------------------------------
@@ -101,10 +119,7 @@ Route::get('/app/upcomingJob','ApplicantController@getUpcoming');
 Route::get('/app/ongoingJob','ApplicantController@getOngoing');
 Route::get('/app/activeJob','ApplicantController@getActive');
 
-Route::get('applicant/profile', [
-	'uses' => 'ApplicantController@getProfile',
-	'as' => 'app/profile'
-	])->middleware('auth');
+
 Route::get('/applicant/job/start',[
 	'uses' => 'ApplicantController@StartJob',
 	'as' => 'app/job/start'
@@ -120,7 +135,6 @@ Route::get('/applicant/job/end',[
 | Job Routes
 |--------------------------------------------------------------------------
 */
-
 Route::get("/job/create", "jobController@create");
 Route::post("job/store", "jobController@store");
 Route::get("index", "jobController@index");

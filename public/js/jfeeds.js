@@ -5,8 +5,6 @@ var input;
 var searchBox;
 var place;
 
-
-
 //----------------------------Initialization------------------------------------//
 function initializeMap(){
 $('#feed-gmap').attr('hidden',true);
@@ -14,29 +12,30 @@ $('#rec-gmap').attr('hidden',true);
 
      if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(function(position) {
-            var geolocation = {
+            var geolocations = {
               lat: position.coords.latitude,
               lng: position.coords.longitude
             };
+         
+
              maps = new google.maps.Map(document.getElementById('feed-gmap'), {
-          center: {lat: geolocation.lat, lng: geolocation.lng},
+          center: {lat: geolocations.lat, lng: geolocations.lng},
           zoom: 18
         });
 
          map = new google.maps.Map(document.getElementById('rec-gmap'), {
-          center: {lat: geolocation.lat, lng: geolocation.lng},
+          center: {lat: geolocations.lat, lng: geolocations.lng},
           zoom: 18
         });
 
         });
         }
+ $("#loading").fadeOut(300);
 }
 
 function initializeData(){
-    $('#feed-body').attr('hidden',true);
-    $('#rec-body').attr('hidden',true);
-
-
+ 
+ $('#feed-body').attr('hidden',true);
      $.ajaxSetup({
       headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -49,30 +48,33 @@ function initializeData(){
     });
 
     jobdatas.done(function(data){
-      var index = 0;
-      $('#search-sel').append($('<option>', {
-          value:index,
-          text: 'Select Category'
-        }).attr('value',index));
+      console.log(data);
+      var index = 0;$
 
-     $.each(data.categories,function(key,vals){
-        $('#search-sel').append($('<option>', {
-          value:vals.category_id,
-          text: vals.name})); 
-
-     });
-
-      $.each(data.paytypes,function(key,value){
-        $('#fil-ptype').append($('<option>').text(value.name).attr('value',value.paytype_id));
-     });
-
-        $('#skills').empty();
-       $.each(data.skill,function(key,val){
-         $('#skills').append($('<option>').text(val.skill_id).attr('value',val.name))
+       $.each(data.categories,function(key,val){
+         $('#search-sel').append($('<option>').text(val.name).attr('value',val.category_id).addClass('selectoption'))
       });
 
-  //----------------Job Feeds------------//
+       $('#search-sel').selectpicker('refresh');
 
+        $('#s-skill').empty();
+        $.each(data.skill,function(key,val){
+         $('#s-skill').append($('<option>').text(val.name).attr('value',val.skill_id).addClass('selectoption'))
+      });
+        
+
+        $('#s-skill').selectpicker('refresh');
+
+      $.each(data.paytypes,function(key,value){
+        $('#fil-ptype').append($('<option>').text(value.name).attr('value',value.paytype_id).addClass('selectoption'));
+     });
+
+      $('#fil-ptype').selectpicker('refresh');
+
+       
+
+        
+  //----------------Job Feeds------------//
 for(i = 0; i< data.jobs.length; i++){
   for(z = 0; z< data.jobadd.length; z++){
     if(data.jobs[i].job_id == data.jobadd[z].jobid){
@@ -89,6 +91,7 @@ for(i = 0; i< data.jobs.length; i++){
       }
     }}
     }
+   
 
 
       //   for(z = 0; z< data.jobadd.length; z++){
@@ -124,6 +127,7 @@ for(i = 0; i< data.jobs.length; i++){
           }
         });
 });
+
   };
 
 $(document).ready(function(){
@@ -146,16 +150,46 @@ $(window).scroll(function() {
   stickyNav();
 });
 
- initializeMap();
  initializeData();
+ initializeMap();
+
+$('a[href*=#scrolled]:not([href=#])').click(function() {
+    if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') 
+        || location.hostname == this.hostname) {
+
+        var target = $('#scrolled');
+        target = target.length ? target : $('[name=' + '#scrolled'.slice(1) +']');
+           if (target.length) {
+             $('html,body').animate({
+                 scrollTop: target.offset().top
+            }, 1000);
+            return false;
+        }
+    }
+});
+
+   $('.feed-panel').attr('hidden',false);
 
   
 //----------------------------Requests------------------------------------//
+function loadStart(){
+   $("#loading").fadeIn(200);
+$('#feed-body').attr('hidden',true);
 
+}
+function loadEnd(){
+$('#scroll').click();
+$('#loading').fadeOut(200);
+}
 //--------Job Search  --------//
   var loc;
   $(document).on('click','#btn-search',function(e){
     e.preventDefault();
+
+  console.log($('#s-skill').val());
+   console.log($('#search-loc').val());
+   var json = $('#s-skill').val();
+   console.log(json);
      var zips = [];
       var geocode = new google.maps.Geocoder();
    
@@ -178,51 +212,61 @@ $(window).scroll(function() {
                 var search = $.ajax({
           url: '/app/jobsearch',
           method: 'GET',
+          beforeSend:loadStart,
+          complete:loadEnd,
           data:{
             'cat'  : $('#search-sel option:selected').val(),
-            'skill': $('#search-skill').val(),
+            'skill': json,
             'location':this.loc,
             'salary': $('#fil-sal').val(),
             'ptype': $('#fil-ptype').val(),
           },
         });
-
         search.done(function(data){
-          $('#jobfeed-res').empty();
           console.log(data);
+          $('#jobfeed-res').empty();
+    if(data.jobs.length == 0){
+      $('#result-count').text(' No result found. ');  
+    }
+    else{
+   $('#result-count').text(data.jobs.length + ' Job(s) found in ' + data.loc);  
+    }
 
-  for(i = 0; i< data.jobs.length; i++){
-    for(z = 0; z< data.jobadd.length; z++){
-    if(data.jobs[i].job_id == data.jobadd[z].jobid){
-    for(x = 0; x< data.profile.length; x++){
-      if(data.jobs[i].user_id == data.profile[x].user_id){
-         $('#jobfeed-res').append($('<a>').addClass('list-group-item item-res').attr('data-val',data.jobs[i].job_id)
-                        .append($('<div>').addClass('cont-feeds')
-                        .append($('<img>').addClass('img-rounded pull-left').attr('src',''))
-                        .append($('<h4>').addClass('list-group-item-heading ellipsis meta-title').text(data.jobs[i].title))
-                        .append($('<p>').addClass('list-group-item-text meta meta-employer').text('by '+data.profile[x].fname + ' ' + data.profile[x].lname))
-                        .append($('<i>').addClass('meta-loc meta-marker fa-1x fa fa-map-marker'))
-                        .append($('<p>').addClass('list-group-item-text meta meta-loc meta-locality').text(data.jobadd[z].locality))));
+for(i = 0; i< data.jobs.length; i++){
+  for(x = 0; x< data.profile.length; x++){
+    for(z = 0; z< data.add.length; z++){
+      if(data.jobs[i].job_id == data.add[z].jobid){
+        console.log(data.jobs[i].title);
+        if(data.jobs[i].user_id == data.profile[x].user_id){
+          $('#jobfeed-res').append($('<a>').addClass('list-group-item item-res').attr('data-val',data.jobs[i].job_id)
+                            .append($('<div>').addClass('cont-feeds')
+                            .append($('<img>').addClass('img-rounded pull-left').attr('src',''))
+                            .append($('<h4>').addClass('list-group-item-heading ellipsis meta-title').text(data.jobs[i].title))
+                            .append($('<p>').addClass('list-group-item-text meta meta-employer').text('by '+data.profile[x].fname + ' ' + data.profile[x].lname))
+                            .append($('<i>').addClass('meta-loc meta-marker fa-1x fa fa-map-marker'))
+                            .append($('<p>').addClass('list-group-item-text meta meta-loc meta-locality').text(data.add[z].locality))));
         }
       }
-    }}
     }
-        }); 
+  }
+}
 
-      });
+    }); 
   });
+});
 
 //-------- Onclick  Tab recommended --------//
 
 $(document).on('click','#tab-recommended',function(e){
   e.preventDefault();
   $('#feed-body').attr('hidden',true);
+  $('#rec-body').attr('hidden',true);
   $.ajaxSetup({
       headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
       }
     });
-
+var jobids = [];
   var search = $.ajax({
           url: '/get/job/recommended',
           method: 'GET',
@@ -231,34 +275,44 @@ $(document).on('click','#tab-recommended',function(e){
     search.done(function(data){
       console.log(data);
       $('#recommended-res').empty();
-  for(i = 0; i< data.jobs.length; i++){
-  for(z = 0; z< data.jobadd.length; z++){
-    if(data.jobs[i].job_id == data.jobadd[z].jobid){
-      for(y = 0; y< data.jobskills.length; y++){
-        if(data.jobs[i].job_id == data.jobskills[y].job_id){
-    for(x = 0; x< data.profile.length; x++){
-      if(data.jobs[i].user_id == data.profile[x].user_id){
-         $('#recommended-res').append($('<a>').addClass('list-group-item recom-res').attr('data-val',data.jobs[i].job_id)
-                        .append($('<div>').addClass('cont-feeds')
-                        .append($('<img>').addClass('img-rounded pull-left').attr('src',''))
-                        .append($('<h4>').addClass('list-group-item-heading ellipsis meta-title').text(data.jobs[i].title))
-                        .append($('<p>').addClass('list-group-item-text meta meta-employer').text('by '+data.profile[x].fname + ' ' + data.profile[x].lname))
-                        .append($('<i>').addClass('meta-loc meta-marker fa-1x fa fa-map-marker'))
-                        .append($('<p>').addClass('list-group-item-text meta meta-loc meta-locality').text(data.jobadd[z].locality))));
-        }
-      }
-      }
-      }
-    }}
-    }
 
+  for(i = 0; i< data.jobs.length; i++){
+    for(z = 0; z< data.add.length; z++){
+      if(data.jobs[i].job_id == data.add[z].jobid){
+        for(y = 0; y< data.jobskills.length; y++){
+          if(data.jobs[i].job_id == data.jobskills[y].job_id){
+            for(x = 0; x< data.profile.length; x++){
+              if(data.jobs[i].user_id == data.profile[x].user_id){
+                
+                  if(jobids.indexOf(data.jobs[i].job_id) < 0){
+                    jobids.push(data.jobs[i].job_id);
+                    console.log(jobids);
+                    $('#recommended-res').append($('<a>').addClass('list-group-item recom-res').attr('data-val',data.jobs[i].job_id)
+                  .append($('<div>').addClass('cont-feeds')
+                  .append($('<img>').addClass('img-rounded pull-left').attr('src',''))
+                  .append($('<h4>').addClass('list-group-item-heading ellipsis meta-title').text(data.jobs[i].title))
+                  .append($('<p>').addClass('list-group-item-text meta meta-employer').text('by '+data.profile[x].fname + ' ' + data.profile[x].lname))
+                  .append($('<i>').addClass('meta-loc meta-marker fa-1x fa fa-map-marker'))
+                  .append($('<p>').addClass('list-group-item-text meta meta-loc meta-locality').text(data.add[z].locality))));
+                }
+              }
+            }
+          }
+        }
+      } 
+    }
+  }
     });
 
 });
 
 //--------Job Onclick  --------//
     $(document).on('click','.recom-res',function(e){
-       e.preventDefault();
+ $('#feed-body').attr('hidden',true);
+  e.preventDefault();
+        $('#rec-result-sched').empty();
+      $('#rec-result-skill').empty();
+      $('#rec-body').attr('hidden',false);
       $.ajaxSetup({
       headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -274,9 +328,6 @@ $(document).on('click','#tab-recommended',function(e){
     });
 
     request.done(function(data){
-      $('#rec-body').attr('hidden',false);
-      $('#rec-result-sched').empty();
-      $('#rec-result-skill').empty();
       console.log(data);
       var meos = [];
       var locs;
@@ -288,29 +339,31 @@ $(document).on('click','#tab-recommended',function(e){
                 locs = results[0].formatted_address;
                 $('#rec-result-add').text(locs);
               }
-             
-             $('#rec-result-title').text("(" +data.job.job_id + ") "+ data.job.title);
+            $('#rec-res-jobid').text(data.job.job_id).attr('hidden',true);
+              $('#rec-result-title').text("(" +data.job.job_id + ") "+ data.job.title);
              for(i = 0; i<data.sched.length; i++){
                 $('#rec-result-sched').append($('<li>')
                   .append($('<p>').text(data.sched[i].start + " until " + data.sched[i].end)));
              }
              for(i = 0; i<data.skill.length; i++){
-                $('#rec-result-skill').append($('<li>')
-                  .append($('<p>').text(data.skill[i].name)));
+                $('#rec-result-skill').append($('<p>').text(data.skill[i].name).addClass('mini-skill'));
              }
-            $('#rec-res-jobid').text(data.job.job_id).attr('hidden',true);
-        // $('#res-filtering').append('<li> '+data.skill.name+'</li>'+'<li>'+locs+'</li>'+'<li>'+data.category.name+'</li>'+'<li>'+data.paytype.name+'</li>'+'<li>'+data.job.salary+'</li>'+'<li>'+dateposted.fromNow()+'</li>');
+             $('#rec-desc').text(data.job.description);
+             $('.meta-sal').text('$' + data.job.salary);
+             $('.meta-slot').text(data.job.slot);
+             $('.meta-ptype').text(data.paytype.name);
+
       });
 
        var marker = new google.maps.Marker({
-          map: map,
+          map: maps,
           position: meos[0],
           title: 'Hello World!'
         });
        
       $('#rec-gmap').attr('hidden',false);
-      setTimeout(google.maps.event.trigger(map, 'resize'),300);
-      map.setCenter(centers);
+      setTimeout(google.maps.event.trigger(maps, 'resize'),300);
+      maps.setCenter(centers);
 
       // var dateposted = moment(data.job.date_posted);
       //   $('#result-sched').empty();
@@ -326,13 +379,19 @@ $(document).on('click','#tab-recommended',function(e){
       //   $('#result-sched').append('<p>' + start +' - '+ end +'</p>');
       // });
 
+      $('#rec-t').text(data.job.title);
+      $('#rec-p').text('by ' +data.user.fname + ' ' + data.user.lname);
+
     });
-    }); 
+    });
 
 
 $(document).on('click','#tab-feeds',function(e){
        e.preventDefault();
       $('#rec-body').attr('hidden',true);
+      $('#feed-body').attr('hidden',true);
+      $('.feed-panel').attr('hidden',false);
+
      });
 
 //--------Job Onclick  --------//
@@ -340,6 +399,7 @@ $(document).on('click','#tab-feeds',function(e){
        e.preventDefault();
         $('#feed-result-sched').empty();
       $('#feed-result-skill').empty();
+      $('#feed-body').attr('hidden',false);
       $.ajaxSetup({
       headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -355,7 +415,6 @@ $(document).on('click','#tab-feeds',function(e){
     });
 
     request.done(function(data){
-      $('#feed-body').attr('hidden',false);
       console.log(data);
       var meo = [];
       var locs;
@@ -374,9 +433,14 @@ $(document).on('click','#tab-feeds',function(e){
                   .append($('<p>').text(data.sched[i].start + " until " + data.sched[i].end)));
              }
              for(i = 0; i<data.skill.length; i++){
-                $('#feed-result-skill').append($('<li>')
-                  .append($('<p>').text(data.skill[i].name)));
+                $('#feed-result-skill').append($('<p>').text(data.skill[i].name).addClass('mini-skill'));
              }
+             $('#feed-desc').text(data.job.description);
+             $('.meta-sal').text('$' + data.job.salary);
+             $('.meta-slot').text(data.job.slot);
+             $('.meta-ptype').text(data.paytype.name);
+
+
 
 
         // $('#res-filtering').append('<li> '+data.skill.name+'</li>'+'<li>'+locs+'</li>'+'<li>'+data.category.name+'</li>'+'<li>'+data.paytype.name+'</li>'+'<li>'+data.job.salary+'</li>'+'<li>'+dateposted.fromNow()+'</li>');
@@ -406,9 +470,14 @@ $(document).on('click','#tab-feeds',function(e){
       //   $('#result-sched').append('<p>' + start +' - '+ end +'</p>');
       // });
 
+      $('#feed-t').text(data.job.title);
+      $('#feed-p').text('by ' +data.user.fname + ' ' + data.user.lname);
+
     });
     }); 
-
+function loadAlert(){
+swal("Thank You!", "Application sent!", "success");
+}
 //-------- Job Application --------//
     $(document).on('click','#feed-apply-btn',function(e){
       
@@ -423,14 +492,11 @@ $(document).on('click','#tab-feeds',function(e){
         var apply = $.ajax({
           url: '/app/apply',
           method: 'GET',
+          complete: loadAlert,
           data:{'jobid':jobid},
         });
 
-        apply.done(function(data){
-          console.log(data);
-         alert(data.success);
-
-        });
+       
     });
 
     $(document).on('click','#rec-apply-btn',function(e){
@@ -446,17 +512,15 @@ $(document).on('click','#tab-feeds',function(e){
         var apply = $.ajax({
           url: '/app/apply',
           method: 'GET',
+           complete: loadAlert,
           data:{'jobid':jobid},
         });
-
-        apply.done(function(data){
-          console.log(data);
-          alert(data.success);
-        });
+       
     });
 
   $(document).on('change','#search-sel',function(e){
       e.preventDefault();
+      console.log($('#s-skill option:selected').val());
            $.ajaxSetup({
       headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -469,13 +533,18 @@ $(document).on('click','#tab-feeds',function(e){
           data:{
             'cat':$('#search-sel option:selected').val(),
           },
-        });   
+        });
+
         sel.done(function(data){
-          $('#skills').empty();
+          console.log(data);
+          $('#s-skill').empty();
           $.each(data.skills,function(key,val){
-             $('#skills').append($('<option>').text(val.name))
+            console.log(val.name);
+             $('#s-skill').append($('<option>').text(val.name).attr('value',val.skill_id).addClass('selectoption'))
           });
-         
+
+          $('#s-skill').selectpicker('refresh');
+          $('#s-skill').selectpicker('toggle');
         });
   });
 
