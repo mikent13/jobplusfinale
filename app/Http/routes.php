@@ -112,13 +112,14 @@ Route::get('/app/job/getskill','ApplicantController@getSkills');
 Route::get('/app/jobsearch', 'ApplicantController@getJobSearch');
 Route::get('/get/jobpagedata','ApplicantController@getJobPageData');
 Route::get('/get/job/recommended','ApplicantController@getJobRecommended');
+Route::get('/get/job/nearby','ApplicantController@getJobNearby');
 Route::get('/get/job','ApplicantController@getResult');
 Route::get('/app/apply','ApplicantController@Apply');
 
 Route::get('/app/upcomingJob','ApplicantController@getUpcoming');
 Route::get('/app/ongoingJob','ApplicantController@getOngoing');
 Route::get('/app/activeJob','ApplicantController@getActive');
-
+Route::get('/admin/applicant','ApplicantController@getAdmin');
 
 Route::get('/applicant/job/start',[
 	'uses' => 'ApplicantController@StartJob',

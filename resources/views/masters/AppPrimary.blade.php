@@ -49,25 +49,25 @@
           <div class="container">
               <ul class="nav navbar-nav navbar-left sub-nav-header">
                 <li>
-                    <a href="{{route('app/dashboard')}}"><p><i class="fa fa-lg fa-clock-o" aria-hidden="true"></i> Schedule</p></a>
+                    <a href="{{route('app/dashboard')}}"><i class="fa fa-lg fa-clock-o" aria-hidden="true"></i> Schedule</a>
                 </li>
                  <li>
-                  <a  href="{{route('app/job/result')}}"><p><i class="fa fa-lg fa-briefcase" aria-hidden="true"></i> Find Job</p></i></a>
+                  <a  href="{{route('app/job/result')}}"><i class="fa fa-lg fa-briefcase" aria-hidden="true"></i> Find Job</i></a>
                 </li>
                 <li>
-                    <a href="#"><p><i class="fa fa-handshake-o" aria-hidden="true"></i> Job Offers</p></a>
+                    <a href="#"><i class="fa fa-handshake-o" aria-hidden="true"></i> Job Offers</a>
                 </li>
                 <li>
-                    <a href="#"><p><i class="fa fa-lg fa-bookmark-o" aria-hidden="true"></i> Saved Jobs</p></a>
+                    <a href="#"><i class="fa fa-lg fa-bookmark-o" aria-hidden="true"></i> Saved Jobs</a>
                 </li>
                 <li>
-                    <a href="#"><p><i class="fa fa-lg fa-credit-card" aria-hidden="true"></i> Wallet</p></a>
+                    <a href="#"><i class="fa fa-lg fa-credit-card" aria-hidden="true"></i> Wallet</a>
                 </li>
                 <li>
-                    <a href="#"><p><i class="fa fa-lg fa-history" aria-hidden="true"></i> Logs</p></a>
+                    <a href="#"><i class="fa fa-lg fa-history" aria-hidden="true"></i> Logs</a>
                 </li>
                 <li>
-                    <a href="{{url('/get/user/profile')}}"><p><i class="fa fa-lg fa-user-circle" aria-hidden="true"></i> Profile</p></a>
+                    <a href="{{url('/get/user/profile')}}"><i class="fa fa-lg fa-user-circle" aria-hidden="true"></i> Profile</a>
                 </li>                              
               </ul>
           </div>
@@ -125,6 +125,7 @@
 </body>
 <script src="/js/jquery-1.11.1.min.js"></script>
 <script src="/bootstrap/js/bootstrap.min.js"></script>
+<script src="/bootcard/js/bootcards.min.js"></script>
 <script src="/js/scripts.js"></script>
  @yield('js')
 </html>

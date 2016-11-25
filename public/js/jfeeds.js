@@ -1,14 +1,16 @@
 //----------------------------Initialize Datas------------------------------------//
-var map;
-var maps;
+var feedmap;
+var recmap;
+var nearmap;
 var input;
 var searchBox;
 var place;
-
+var nearbs;
 //----------------------------Initialization------------------------------------//
 function initializeMap(){
 $('#feed-gmap').attr('hidden',true);
 $('#rec-gmap').attr('hidden',true);
+$('#near-gmap').attr('hidden',true);
 
      if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(function(position) {
@@ -18,14 +20,36 @@ $('#rec-gmap').attr('hidden',true);
             };
          
 
-             maps = new google.maps.Map(document.getElementById('feed-gmap'), {
+             feedmap = new google.maps.Map(document.getElementById('feed-gmap'), {
           center: {lat: geolocations.lat, lng: geolocations.lng},
           zoom: 18
         });
 
-         map = new google.maps.Map(document.getElementById('rec-gmap'), {
+         recmap = new google.maps.Map(document.getElementById('rec-gmap'), {
           center: {lat: geolocations.lat, lng: geolocations.lng},
           zoom: 18
+        });
+
+         nearmap = new google.maps.Map(document.getElementById('near-gmap'), {
+          center: {lat: geolocations.lat, lng: geolocations.lng},
+          zoom: 18
+        });
+
+    var meos = [];
+    var locs;
+    var centers = { lat:geolocations.lat , lng:geolocations.lng };
+    meos.push(centers);
+    var geocoder = new google.maps.Geocoder();
+        geocoder.geocode({ 'latLng': meos[0] }, function (results, status) {
+          if (status == google.maps.GeocoderStatus.OK) {
+            var res = results[0].address_components;
+            for(var i=0; i<res.length; i++){
+              if(res[i].types[0] =="locality"){
+               $('#search-loc').val(res[i].long_name);
+               nearbs = res[i].long_name;
+              }
+            }
+          }
         });
 
         });
@@ -34,6 +58,7 @@ $('#rec-gmap').attr('hidden',true);
 }
 
 function initializeData(){
+ 
  
  $('#feed-body').attr('hidden',true);
      $.ajaxSetup({
@@ -71,8 +96,6 @@ function initializeData(){
 
       $('#fil-ptype').selectpicker('refresh');
 
-       
-
         
   //----------------Job Feeds------------//
 for(i = 0; i< data.jobs.length; i++){
@@ -80,7 +103,7 @@ for(i = 0; i< data.jobs.length; i++){
     if(data.jobs[i].job_id == data.jobadd[z].jobid){
     for(x = 0; x< data.profile.length; x++){
       if(data.jobs[i].user_id == data.profile[x].user_id){
-         $('#jobfeed-res').append($('<a>').addClass('list-group-item item-res').attr('data-val',data.jobs[i].job_id)
+         $('#jobfeed-res').append($('<a>').addClass('list-group-item item-res').attr('data-val',data.jobs[i].job_id).attr('id','item')
                         .append($('<div>').addClass('cont-feeds')
                         .append($('<img>').addClass('img-rounded pull-left').attr('src',''))
                         .append($('<h4>').addClass('list-group-item-heading ellipsis meta-title').text(data.jobs[i].title))
@@ -91,9 +114,13 @@ for(i = 0; i< data.jobs.length; i++){
       }
     }}
     }
-   
+   $('.item-res ').click(function(e) {
+        e.preventDefault();
+        $('.item-res').removeClass('item-active');
+        $(this).addClass('item-active')
+    });
 
-
+ 
       //   for(z = 0; z< data.jobadd.length; z++){
       //   if(data.jobs[i].job_id == data.jobadd[z].jobid){
       //     $('#side-res').append($('<p>').addClass('list-group-item-text meta meta-loc').text(data.jobadd[z].locality));
@@ -132,6 +159,8 @@ for(i = 0; i< data.jobs.length; i++){
 
 $(document).ready(function(){
 
+
+ 
 var stickyNavTop = $('.sub-nav').offset().top;
  
 var stickyNav = function(){
@@ -149,9 +178,9 @@ stickyNav();
 $(window).scroll(function() {
   stickyNav();
 });
-
- initializeData();
  initializeMap();
+ initializeData();
+
 
 $('a[href*=#scrolled]:not([href=#])').click(function() {
     if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') 
@@ -170,6 +199,8 @@ $('a[href*=#scrolled]:not([href=#])').click(function() {
 
    $('.feed-panel').attr('hidden',false);
 
+
+
   
 //----------------------------Requests------------------------------------//
 function loadStart(){
@@ -185,13 +216,10 @@ $('#loading').fadeOut(200);
   var loc;
   $(document).on('click','#btn-search',function(e){
     e.preventDefault();
-
-  console.log($('#s-skill').val());
-   console.log($('#search-loc').val());
+  $('#tab-feeds').click();
    var json = $('#s-skill').val();
-   console.log(json);
-     var zips = [];
-      var geocode = new google.maps.Geocoder();
+   var zips = [];
+   var geocode = new google.maps.Geocoder();
    
            $.ajaxSetup({
       headers: {
@@ -226,9 +254,11 @@ $('#loading').fadeOut(200);
           console.log(data);
           $('#jobfeed-res').empty();
     if(data.jobs.length == 0){
-      $('#result-count').text(' No result found. ');  
+      $('.feed-panel').attr('hidden',true);
+      $('#result-count').text('Sorry, no results were found. ');  
     }
     else{
+      $('.feed-panel').attr('hidden',false);
    $('#result-count').text(data.jobs.length + ' Job(s) found in ' + data.loc);  
     }
 
@@ -261,6 +291,7 @@ $(document).on('click','#tab-recommended',function(e){
   e.preventDefault();
   $('#feed-body').attr('hidden',true);
   $('#rec-body').attr('hidden',true);
+  $('.item-res').removeClass('item-active');
   $.ajaxSetup({
       headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -302,6 +333,12 @@ var jobids = [];
       } 
     }
   }
+
+  $('.recom-res ').click(function(e) {
+        e.preventDefault();
+        $('.recom-res').removeClass('item-active');
+        $(this).addClass('item-active')
+    });
     });
 
 });
@@ -356,28 +393,14 @@ var jobids = [];
       });
 
        var marker = new google.maps.Marker({
-          map: maps,
+          map: recmap,
           position: meos[0],
           title: 'Hello World!'
         });
        
       $('#rec-gmap').attr('hidden',false);
-      setTimeout(google.maps.event.trigger(maps, 'resize'),300);
-      maps.setCenter(centers);
-
-      // var dateposted = moment(data.job.date_posted);
-      //   $('#result-sched').empty();
-      //   $('#key').empty();
-      //   $('#res-filtering').empty();  
-      //   $('#result-title').text(data.job.title);
-      //   $('#result-postby').text(data.user.fname + data.user.lname + dateposted.fromNow());
-      //   $('#res-jobid').text(data.job.job_id).attr('hidden',true);
-        
-      //   $.each(data.sched, function(key,value){
-      //   var start = moment(value.start).format('lll');
-      //   var end = moment(value.end).format('lll');
-      //   $('#result-sched').append('<p>' + start +' - '+ end +'</p>');
-      // });
+      setTimeout(google.maps.event.trigger(recmap, 'resize'),300);
+      recmap.setCenter(centers);
 
       $('#rec-t').text(data.job.title);
       $('#rec-p').text('by ' +data.user.fname + ' ' + data.user.lname);
@@ -440,23 +463,32 @@ $(document).on('click','#tab-feeds',function(e){
              $('.meta-slot').text(data.job.slot);
              $('.meta-ptype').text(data.paytype.name);
 
-
-
-
-        // $('#res-filtering').append('<li> '+data.skill.name+'</li>'+'<li>'+locs+'</li>'+'<li>'+data.category.name+'</li>'+'<li>'+data.paytype.name+'</li>'+'<li>'+data.job.salary+'</li>'+'<li>'+dateposted.fromNow()+'</li>');
-      });
+     });
 
        var marker = new google.maps.Marker({
-          map: maps,
+          map: feedmap,
           position: meo[0],
           title: 'Hello World!'
         });
        
       $('#feed-gmap').attr('hidden',false);
-      setTimeout(google.maps.event.trigger(maps, 'resize'),300);
-      maps.setCenter(centers);
+      setTimeout(google.maps.event.trigger(feedmap, 'resize'),300);
+      feedmap.setCenter(centers);
 
-      // var dateposted = moment(data.job.date_posted);
+      var dateposted = moment(data.job.date_posted);
+      $('#postedago').text('Posted ' +dateposted.fromNow());
+      $('.sched-start').empty();
+      $('.sched-end').empty();
+      $('.sched-start').append($('<h3>').text('From'));
+      $('.sched-end').append($('<h3>').text('Until'));
+      for(i=0; i<data.sched.length; i++){
+        var start = moment(data.sched[i].start).format('MMMM Do YYYY, h:mm a');
+        var end = moment(data.sched[i].end).format('MMMM Do YYYY, h:mm a');
+        $('.sched-start').append($('<p>').text(start));
+        $('.sched-end').append($('<p>').text(end));
+      }
+
+
       //   $('#result-sched').empty();
       //   $('#key').empty();
       //   $('#res-filtering').empty();  
@@ -475,6 +507,122 @@ $(document).on('click','#tab-feeds',function(e){
 
     });
     }); 
+
+$(document).on('click','#tab-nearby',function(e){
+  e.preventDefault();
+  $('#near-body').attr('hidden',true);
+  $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
+
+var jobids = [];
+  var search = $.ajax({
+          url: '/get/job/nearby',
+          method: 'GET',
+          data:{
+            'loc' :nearbs
+          }
+        });
+
+    search.done(function(data){
+      console.log(data);
+      $('#nearby-res').empty();
+
+  for(i = 0; i< data.jobs.length; i++){
+    for(z = 0; z< data.add.length; z++){
+      if(data.jobs[i].job_id == data.add[z].jobid){
+        for(y = 0; y< data.jobskills.length; y++){
+          if(data.jobs[i].job_id == data.jobskills[y].job_id){
+            for(x = 0; x< data.profile.length; x++){
+              if(data.jobs[i].user_id == data.profile[x].user_id){
+                  if(jobids.indexOf(data.jobs[i].job_id) < 0){
+                    jobids.push(data.jobs[i].job_id);
+                    console.log(jobids);
+                    $('#nearby-res').append($('<a>').addClass('list-group-item near-res').attr('data-val',data.jobs[i].job_id)
+                  .append($('<div>').addClass('cont-feeds')
+                  .append($('<img>').addClass('img-rounded pull-left').attr('src',''))
+                  .append($('<h4>').addClass('list-group-item-heading ellipsis meta-title').text(data.jobs[i].title))
+                  .append($('<p>').addClass('list-group-item-text meta meta-employer').text('by '+data.profile[x].fname + ' ' + data.profile[x].lname))
+                  .append($('<i>').addClass('meta-loc meta-marker fa-1x fa fa-map-marker'))
+                  .append($('<p>').addClass('list-group-item-text meta meta-loc meta-locality').text(data.add[z].locality))));
+                }
+              }
+            }
+          }
+        }
+      } 
+    }
+  }
+    });
+
+});
+    $(document).on('click','.near-res',function(e){
+ $('#near-body').attr('hidden',true);
+  e.preventDefault();
+        $('#near-result-sched').empty();
+      $('#near-result-skill').empty();
+      $('#near-body').attr('hidden',false);
+      $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
+
+    var request = $.ajax({
+      url:'/get/job',
+      method:'GET',
+      data:{
+        'jobid': $(this).data('val'),
+      }
+    });
+
+    request.done(function(data){
+      console.log(data);
+      var meos = [];
+      var locs;
+      var centers = { lat: parseFloat(data.address.lat), lng: parseFloat(data.address.lng) };
+      meos.push(centers);
+      var geocoder = new google.maps.Geocoder();
+        geocoder.geocode({ 'latLng': meos[0] }, function (results, status) {
+          if (status == google.maps.GeocoderStatus.OK) {
+                locs = results[0].formatted_address;
+                $('#near-result-add').text(locs);
+              }
+            $('#near-res-jobid').text(data.job.job_id).attr('hidden',true);
+              $('#near-result-title').text("(" +data.job.job_id + ") "+ data.job.title);
+             for(i = 0; i<data.sched.length; i++){
+                $('#near-result-sched').append($('<li>')
+                  .append($('<p>').text(data.sched[i].start + " until " + data.sched[i].end)));
+             }
+             for(i = 0; i<data.skill.length; i++){
+                $('#near-result-skill').append($('<p>').text(data.skill[i].name).addClass('mini-skill'));
+             }
+             $('#near-desc').text(data.job.description);
+             $('.meta-sal').text('$' + data.job.salary);
+             $('.meta-slot').text(data.job.slot);
+             $('.meta-ptype').text(data.paytype.name);
+
+      });
+
+       var marker = new google.maps.Marker({
+          map: nearmap,
+          position: meos[0],
+          title: 'Hello World!'
+        });
+       
+      $('#near-gmap').attr('hidden',false);
+      setTimeout(google.maps.event.trigger(nearmap, 'resize'),300);
+      nearmap.setCenter(centers);
+
+      $('#near-t').text(data.job.title);
+      $('#near-p').text('by ' +data.user.fname + ' ' + data.user.lname);
+
+    });
+    });
+
+
 function loadAlert(){
 swal("Thank You!", "Application sent!", "success");
 }
@@ -498,7 +646,25 @@ swal("Thank You!", "Application sent!", "success");
 
        
     });
+   $(document).on('click','#near-apply-btn',function(e){
+      
+       e.preventDefault();
 
+       var jobid = $('#near-res-jobid').text();
+          $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
+        var apply = $.ajax({
+          url: '/app/apply',
+          method: 'GET',
+          complete: loadAlert,
+          data:{'jobid':jobid},
+        });
+
+       
+    });
     $(document).on('click','#rec-apply-btn',function(e){
       
        e.preventDefault();

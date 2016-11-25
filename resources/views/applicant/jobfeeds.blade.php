@@ -15,7 +15,9 @@
 			</div>
 			<div class="form-group form-group-md col-md-3">
 			<h1>Skills</h1>
-			<select class="selectpicker jpinput" data-style="selectp" id="s-skill" multiple="multiple"></select>
+			<select class="selectpicker jpinput" data-style="selectp" id="s-skill" multiple="multiple">
+				<option value="0" class="selectoption" selected="selected"><p>Any Skills</p></option>
+			</select>
 			</div>
 			<div class="form-group form-group-md col-md-4">
 			<h1>City</h1>
@@ -57,12 +59,12 @@
 </div>
  <div class="container" id="scrolled">
    	<div class="row">
+
         <!-- Nav tabs --><div class="card">
-        <ul class="nav nav-tabs" role="tablist" >
+        <ul class="nav nav-tabs " role="tablist" >
             <li role="presentation" class="active"><a href="#feeds" id="tab-feeds" aria-controls="feeds" role="tab" data-toggle="tab"><h3>Job Feeds</h3></a></li>
             <li role="presentation"><a href="#recommended" id="tab-recommended" aria-controls="recommended" role="tab" data-toggle="tab"><h3>Recommended Jobs</h3></a></li>
             <li role="presentation"><a href="#nearby" id="tab-nearby" aria-controls="nearby" role="tab" data-toggle="tab"><h3>Nearby Jobs</h3></a></li>
-            <li role="presentation"><a href="#category" id="tab-category" aria-controls="category" role="tab" data-toggle="tab"><h3>Search by Category</h3></a></li>
         </ul>
         <!-- Tab panes -->
         <div class="tab-content">
@@ -87,7 +89,7 @@
             			<div class=" pull-right feed-tool">
             				<button class="btn btn-md btn-apply" id="feed-apply-btn">Apply</button>
             				<button class="btn btn-md btn-bookmark"><i class="fa fa-heart-o" aria-hidden="true"></i>Save</button>
-            				<p><i class="fa fa-clock-o" aria-hidden="true"></i>1 day ago</p>
+            				<p id="postedago"></p>
             			</div>
 					</div>
         			<div id="feed-gmap" style="height:250px;"></div>
@@ -98,31 +100,25 @@
 						<h1 id="feed-result-add" class="meta-address"></h1>
 						</div>
 					<div class="col-md-4 mini-meta">
-						<p class="mini-m meta-sal"></p>
-						<p>Salary</p>
+						<p class=" meta-sal"></p>
+						<p class="mini-m">Salary</p>
 					</div>
 					<div class="col-md-4 mini-meta">
-					<p class="mini-m meta-ptype"></p>
-						<p>Paytype</p>
+					<p class=" meta-ptype"></p>
+						<p class="mini-m">Paytype</p>
 					</div>
 					<div class="col-md-4 mini-meta">
-					<p class="mini-m meta-slot"></p>
-						<p>Slot</p>
+					<p class=" meta-slot"></p>
+						<p class="mini-m">Slot</p>
 					</div>
         			</div>
         			<div class="feed-content">
         			<h2>Description</h2>
         			<p id="feed-desc"></p>
 						<h2>Schedule</h2>						
-						<div class="col-md-6 sched">
-							<b><p><i class="fa fa-calendar-o" aria-hidden="true"></i> March 13, 2016 </p>
-							<p><i class="fa fa-calendar-o" aria-hidden="true"></i> March 13, 2016 </p>
-							<p><i class="fa fa-calendar-o" aria-hidden="true"></i> March 13, 2016 </p></b>
+						<div class="col-md-6 sched sched-start">
 						</div>
-						<div class="col-md-6 sched">
-							<b><p><i class="fa fa-clock-o" aria-hidden="true"></i> 5:00 PM until 7:00 PM</p>
-							<p><i class="fa fa-clock-o" aria-hidden="true"></i> 5:00 PM until 7:00 PM</p>
-							<p><i class="fa fa-clock-o" aria-hidden="true"></i> 5:00 PM until 7:00 PM</p></b>
+						<div class="col-md-6 sched sched-end">
 						</div>
 						<div id="key"></div>
 						<h2>Skills</h2>
@@ -188,14 +184,10 @@
         			<p id="rec-desc"></p>
 						<h2>Schedule</h2>						
 						<div class="col-md-6 sched">
-							<b><p><i class="fa fa-calendar-o" aria-hidden="true"></i> March 13, 2016 </p>
 							<p><i class="fa fa-calendar-o" aria-hidden="true"></i> March 13, 2016 </p>
-							<p><i class="fa fa-calendar-o" aria-hidden="true"></i> March 13, 2016 </p></b>
 						</div>
 						<div class="col-md-6 sched">
-							<b><p><i class="fa fa-clock-o" aria-hidden="true"></i> 5:00 PM until 7:00 PM</p>
 							<p><i class="fa fa-clock-o" aria-hidden="true"></i> 5:00 PM until 7:00 PM</p>
-							<p><i class="fa fa-clock-o" aria-hidden="true"></i> 5:00 PM until 7:00 PM</p></b>
 						</div>
 						<div id="key"></div>
 						<h2>Skills</h2>
@@ -209,8 +201,76 @@
             	</div>
             </div>
             </div>
-            <div role="tabpanel" class="tab-pane" id="nearby"></div>
-            <div role="tabpanel" class="tab-pane" id="category"></div>
+            <div role="tabpanel" class="tab-pane" id="nearby">
+            	<div class="col-md-12">
+			<h2 id="result-count"></h2>
+			</div>
+            <div class="col-md-5 jp-content feed-panel">
+            <div class="panel panel-default jp-tabpanel ">
+				<!-- Job list-->
+				<div class="list-group" id="nearby-res">
+				</div>
+			</div>
+            </div>
+            <div id="near-body" class="col-md-7 jp-content">
+            	<div class="panel feed-panel">
+            	<div class="row feed-top">
+            		<div class="col-md-6 feed-title">
+        				<h1 id="near-t"></h1>
+            			<p id="near-p"></p>
+            		</div>
+            			<div class=" pull-right feed-tool">
+            				<button class="btn btn-md btn-apply" id="near-apply-btn">Apply</button>
+            				<button class="btn btn-md btn-bookmark"><i class="fa fa-heart-o" aria-hidden="true"></i>Save</button>
+            				<p><i class="fa fa-clock-o" aria-hidden="true"></i>1 day ago</p>
+            			</div>
+					</div>
+        			<div id="near-gmap" style="height:250px;"></div>
+        			<div class="feed-meta">
+        			<div class="feed-loc">
+        				<p id="near-res-jobid"></p>
+        				<i class="fa fa-4x fa-map-marker" aria-hidden="true"></i>
+						<h1 id="near-result-add" class="meta-address"></h1>
+						</div>
+					<div class="col-md-4 mini-meta">
+						<p class="mini-m meta-sal"></p>
+						<p>Salary</p>
+					</div>
+					<div class="col-md-4 mini-meta meta-center">
+					<p class="mini-m meta-ptype"></p>
+						<p>Paytype</p>
+					</div>
+					<div class="col-md-4 mini-meta">
+					<p class="mini-m meta-slot"></p>
+						<p>Slot</p>
+					</div>
+        			</div>
+        			<div class="feed-content">
+        			<h2>Description</h2>
+        			<p id="near-desc"></p>
+						<h2>Schedule</h2>						
+						<div class="col-md-6 sched">
+							<b><p><i class="fa fa-calendar-o" aria-hidden="true"></i> March 13, 2016 </p>
+							<p><i class="fa fa-calendar-o" aria-hidden="true"></i> March 13, 2016 </p>
+							<p><i class="fa fa-calendar-o" aria-hidden="true"></i> March 13, 2016 </p></b>
+						</div>
+						<div class="col-md-6 sched">
+							<b><p><i class="fa fa-clock-o" aria-hidden="true"></i> 5:00 PM until 7:00 PM</p>
+							<p><i class="fa fa-clock-o" aria-hidden="true"></i> 5:00 PM until 7:00 PM</p>
+							<p><i class="fa fa-clock-o" aria-hidden="true"></i> 5:00 PM until 7:00 PM</p></b>
+						</div>
+						<div id="key"></div>
+						<h2>Skills</h2>
+						<div id="near-result-skill"></div>
+					</div>
+					<hr>
+					<div class="feed-footer">
+						<h2>Interested in this Job?</h2>
+						<button class="btn btn-md btn-apply" id="near-apply-btn">Apply</button>
+					</div>
+            	</div>
+            </div>
+            </div>
         </div>
 		</div>
 	</div>
@@ -224,6 +284,5 @@
 <script src="/bootstrap/bootstrap-select.js"></script>
 <script src="/sweetalert/sweetalert.min.js"></script>
 <script src="/js/jfeeds.js"></script>
-
 <script src="/calendar/moment.min.js"></script>
 @endsection

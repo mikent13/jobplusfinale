@@ -32,6 +32,9 @@ class ApplicantController extends Controller
         $this->calendarJob = $jobs;
     }
 
+public function getAdmin(){
+  return view('masters.appPrimary');
+}
 
     public function getDashboard()
     {
@@ -257,6 +260,47 @@ class ApplicantController extends Controller
     
     }
 
+    public function getJobNearby(Request $req){
+      $loc = $req->loc;
+      $id = Auth::user()->id;
+      $outputprofile = Profiles::all();
+      $jobs = Jobs::all();
+
+      $profile  = Profiles::where('user_id',$id)->first();
+      $skill    = Prof_Skill::where('profile_id',$profile->profile_id)->get();
+
+      foreach($skill as $sk){
+        $skids[] = $sk->skill_id;
+      }
+     
+      $jobskills = Job_Skill::whereIn('skill_id',$skids)
+                              ->get();
+      $jskid = [];
+
+      foreach($jobskills as $jsk){
+        $jskid[] = $jsk->job_id;
+      } 
+
+      $jobadd   = Job_Address::where('locality',$loc)
+                              ->whereIn('jobid',$jskid)->get();
+
+      $jaddids =[];
+      foreach($jobadd as $jadd){
+        $jaddids[] = $jadd->jobid;
+      }
+
+      $jobs = Jobs::WhereIn('job_id',$jaddids)->get();
+
+
+      $data['jobs'] = $jobs;
+      $data['jobskills'] = $jobskills;
+      $data['add'] = $jobadd;
+      $data['profile'] = $outputprofile;
+      $data['message'] = 'success';
+
+      return response()->json($data);    
+    }
+
     public function getJobSearch(Request $req){
       
       $skill = [];
@@ -293,15 +337,15 @@ class ApplicantController extends Controller
         $data['jobskill'] = $jskid;
       
         $firsts = Jobs::whereIn('job_id',$jskid)->get();
-    }
+      }
       
       elseif( $cat != 0 && $skill == null ){
         $firsts = Jobs::where('category_id',$cat)->get();
       }
 
-      // // elseif( $cat == 0 && $skill == null ){
-      // //   $firsts = Jobs::all()->sortBy('date_posted');
-      // // }
+      elseif( $cat == 0 && $skill == null ){
+        $firsts = all();
+      }
 
       foreach($firsts as $first){
         $firstids[] = $first->job_id;
@@ -404,6 +448,8 @@ class ApplicantController extends Controller
 
       return response()->json($data);
     }
+
+
 
     public function getJobRecommended(){
       $id = Auth::user()->id;
@@ -547,5 +593,7 @@ class ApplicantController extends Controller
     $job = Jobs::where('job_id',$id)->first();
     return view('applicant.jobinfo',compact('job','skills','profile'));
   }
+
+
 
 }
