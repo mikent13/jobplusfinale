@@ -116,10 +116,8 @@
         			<h2>Description</h2>
         			<p id="feed-desc"></p>
 						<h2>Schedule</h2>						
-						<div class="col-md-6 sched sched-start">
-						</div>
-						<div class="col-md-6 sched sched-end">
-						</div>
+						<div class="col-md-6 sched sched-start"></div>
+						<div class="col-md-6 sched sched-end"></div>
 						<div id="key"></div>
 						<h2>Skills</h2>
 						<div id="feed-result-skill"></div>
@@ -170,7 +168,7 @@
 						<p class="mini-m meta-sal"></p>
 						<p>Salary</p>
 					</div>
-					<div class="col-md-4 mini-meta">
+					<div class="col-md-4 mini-meta meta-mid">
 					<p class="mini-m meta-ptype"></p>
 						<p>Paytype</p>
 					</div>
@@ -183,12 +181,8 @@
         			<h2>Description</h2>
         			<p id="rec-desc"></p>
 						<h2>Schedule</h2>						
-						<div class="col-md-6 sched">
-							<p><i class="fa fa-calendar-o" aria-hidden="true"></i> March 13, 2016 </p>
-						</div>
-						<div class="col-md-6 sched">
-							<p><i class="fa fa-clock-o" aria-hidden="true"></i> 5:00 PM until 7:00 PM</p>
-						</div>
+						<div class="col-md-6 sched sched-start"></div>
+						<div class="col-md-6 sched sched-end"></div>
 						<div id="key"></div>
 						<h2>Skills</h2>
 						<div id="rec-result-skill"></div>
@@ -249,16 +243,8 @@
         			<h2>Description</h2>
         			<p id="near-desc"></p>
 						<h2>Schedule</h2>						
-						<div class="col-md-6 sched">
-							<b><p><i class="fa fa-calendar-o" aria-hidden="true"></i> March 13, 2016 </p>
-							<p><i class="fa fa-calendar-o" aria-hidden="true"></i> March 13, 2016 </p>
-							<p><i class="fa fa-calendar-o" aria-hidden="true"></i> March 13, 2016 </p></b>
-						</div>
-						<div class="col-md-6 sched">
-							<b><p><i class="fa fa-clock-o" aria-hidden="true"></i> 5:00 PM until 7:00 PM</p>
-							<p><i class="fa fa-clock-o" aria-hidden="true"></i> 5:00 PM until 7:00 PM</p>
-							<p><i class="fa fa-clock-o" aria-hidden="true"></i> 5:00 PM until 7:00 PM</p></b>
-						</div>
+						<div class="col-md-6 sched sched-start"></div>
+						<div class="col-md-6 sched sched-end"></div>
 						<div id="key"></div>
 						<h2>Skills</h2>
 						<div id="near-result-skill"></div>

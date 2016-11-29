@@ -401,6 +401,18 @@ var jobids = [];
       $('#rec-gmap').attr('hidden',false);
       setTimeout(google.maps.event.trigger(recmap, 'resize'),300);
       recmap.setCenter(centers);
+      var dateposted = moment(data.job.date_posted);
+      $('#postedago').text('Posted ' +dateposted.fromNow());
+      $('.sched-start').empty();
+      $('.sched-end').empty();
+      $('.sched-start').append($('<h3>').text('From'));
+      $('.sched-end').append($('<h3>').text('Until'));
+      for(i=0; i<data.sched.length; i++){
+        var start = moment(data.sched[i].start).format('MMMM Do YYYY, h:mm a');
+        var end = moment(data.sched[i].end).format('MMMM Do YYYY, h:mm a');
+        $('.sched-start').append($('<p>').text(start));
+        $('.sched-end').append($('<p>').text(end));
+      }
 
       $('#rec-t').text(data.job.title);
       $('#rec-p').text('by ' +data.user.fname + ' ' + data.user.lname);
@@ -603,7 +615,6 @@ var jobids = [];
              $('.meta-sal').text('$' + data.job.salary);
              $('.meta-slot').text(data.job.slot);
              $('.meta-ptype').text(data.paytype.name);
-
       });
 
        var marker = new google.maps.Marker({
@@ -615,7 +626,20 @@ var jobids = [];
       $('#near-gmap').attr('hidden',false);
       setTimeout(google.maps.event.trigger(nearmap, 'resize'),300);
       nearmap.setCenter(centers);
+      var dateposted = moment(data.job.date_posted);
+      $('#postedago').text('Posted ' +dateposted.fromNow());
+      $('.sched-start').empty();
+      $('.sched-end').empty();
+      $('.sched-start').append($('<h3>').text('From'));
+      $('.sched-end').append($('<h3>').text('Until'));
+      for(i=0; i<data.sched.length; i++){
+        var start = moment(data.sched[i].start).format('MMMM Do YYYY, h:mm a');
+        var end = moment(data.sched[i].end).format('MMMM Do YYYY, h:mm a');
+        $('.sched-start').append($('<p>').text(start));
+        $('.sched-end').append($('<p>').text(end));
+      }
 
+      
       $('#near-t').text(data.job.title);
       $('#near-p').text('by ' +data.user.fname + ' ' + data.user.lname);
 

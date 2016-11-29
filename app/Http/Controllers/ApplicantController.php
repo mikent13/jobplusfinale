@@ -138,44 +138,51 @@ public function getAdmin(){
       $userid = Auth::user()->id;
       $jobid = array();
       $wkid = [];
-      $work = Works::where('user_id', $userid)
-                      ->whereNotIn('status', [1,4])
-                      ->get();
 
-      $data['work'] = $work; 
+      $work = Works::where('user_id', $userid)
+                      ->whereIn('status', [0,2,3])
+                      ->get();
 
       if(!empty($work)){
 
         foreach($work as $wk){
           $wkid[] = $wk->job_id;
         }
-        $data['wkid'] = $wkid;
-        $sched = Schedules::whereIn('job_id',$wkid)->get();
 
+        $data['wkid'] = $wkid;
+
+        $sched = Schedules::whereIn('job_id',$wkid)->get();
           foreach($sched as $sch){
 
             $current   = new DateTime('now');
             $start     = new DateTime($sch->start);
-
             $currdate  = $current->format('Ymd');
             $startdate = $start->format('Ymd');
-           
+            
             $result    = $start->diff($current);  
             
             if($startdate === $currdate){
-              $data['m1'] = 'same day and hour.';
-
+              
               if($result->format('%h') == 0){
+                $data['result'] = $result;
+                $data['schedid'] = $sch->schedule_id;
+                $data['sameday'] = $result->format('Year:%y Month:%m Day:%d  Hour:%h Minute:%i Seconds:%s');
                 
+                $data['difference'] = $result; 
+                $data['current'] = $current->format('Ymd H:i:s');
                 $werk = Works::where('job_id',$sch->job_id)->first();
                 $werk->status = 2;
                 $werk->save();
-
                 $data['status'] = 1;
                 $data['sched'] = Schedules::where('schedule_id',$sch->schedule_id)->first();
-                $data['active job'] =  $sch->job_id;
-                $data['job'] = Jobs::where('job_id',$sch->job_id)->first();
+                $data['active jobid'] =  $sch->job_id;
+                $job = Jobs::where('job_id',$sch->job_id)->first();
+                $data['job'] = $job;
                 $data['work'] = $werk;
+                $data['address'] = Job_Address::where('jobid',$job->job_id)->first();
+                $data['employer'] = Profiles::where('user_id',$job->user_id)->first();
+
+                // $data['work'] = $werk;
               } 
             }
           }

@@ -16,187 +16,110 @@
 </div>
         <div class="container">
         <h1>Schedule</h1>
-		<hr>
-        	<div class="col-md-12">
-          <h1>Upcoming Jobs</h1>
-    <ul class="timeline">
-        <li class="timeline-inverted">
-          <div class="timeline-badge danger"></div>
-          <div class="timeline-panel">
+		    <hr>
+        	<div class="col-md-12 time-body ">
+          <h1>Active Job</h1>
+          <p>No items to display.</p>
+            <div class="active-body">
             <div class="timeline-heading">
-            <div class="row">
-            <div class="col-md-3">
-            <div class="header-body">
-              <h1>7</h1>
-              <p>March 2016</p>
-              </div>
-            </div>
-            <div class="col-md-6 ">
-            <div class="header-body  header-center">
-              <h1>09:00 AM until 12:00 NN <br>today</h1>
-              <p>Schedule</p>
-              </div>
-            </div>
-            <div class="col-md-3 ">
-            <div class="header-body">
-              <h1>0hr 30min</h1>
-              <p>From now</p>
-              </div>
-            </div>
-            </div> 
+                  <h1 id="actitle"></h1>
+                  <p id="actemp"></p>
+                  <div class="head-button pull-right">
+                  <select class="selectpicker " data-width="170px" data-style="actselect" multiple title="Set actions">
+                  <option  class="actoption" data-icon="fa fa-envelope"> Send a message</option>
+                  <option class="actoption" data-icon="fa fa-calendar"> Request a reschedule</option>
+                  <option class="actoption" data-icon="fa fa-times"> Dismiss this job</option>
+                  </select>
+                  <button class="btn btn-md btn-apply" id="actstart">Start this job</button>
+                  </div>
             </div>
             <div class="timeline-body">
-            <div class="col-md-5 jtitle">
-              <h1>Your work as Labandera</h1>
-              <p>by Kent Michael Baguion</p>
-            </div>
-            <div class="col-md-7">
-            <div class="timeline-buttons">
-              <button class="btn btn-md"><i class="fa fa-envelope" aria-hidden="true"></i> Send a message</button>
-              <button class="btn btn-md"><i class="fa fa-calendar" aria-hidden="true"></i> Request a reschedule</button>
-              <button class="btn btn-md btn-danger"><i class="fa fa-times" aria-hidden="true"></i> Dismiss this job</button>
-              </div>
-            </div>
-            </div>
-            <div class="col-md-12 timeline-desc">
-              <p>
-                Mussum ipsum cacilds, vidis litro abertis. Consetis adipiscings elitis. Pra lá , depois divoltis porris, paradis. Paisis, filhis, espiritis santis. Mé faiz elementum girarzis, nisi eros vermeio, in elementis mé pra quem é amistosis quis leo. Manduma pindureta quium dia nois paga. Sapien in monti palavris qui num significa nadis i pareci latim. Interessantiss quisso pudia ce receita de bolis, mais bolis eu num gostis.
+            <div class="jtitle">
+               <p id="actdesc">
               </p>
             </div>
-            <div class="col-md-9 header-foot loc">
-              <h1>Guadalupe, Tandang Sora, Dalang Karaan, Cebu City</h1>
-              <p>Located at</p>
+            <div class="row contents">
+            <div class="col-md-6">
+            <div class="sched">
+               <p id="startDay"></p>
+              <h1 id="startTime"></h1>
+              <p>Starts at</p>
             </div>
-            <div class="col-md-3 header-foot">
-              <h1>$50</h1>
-              <p>You will receive </p>
+            <div class="sched head-center">
+            <h1><i class="fa fa-long-arrow-right" aria-hidden="true"></i></h1>
             </div>
+            <div class="sched">
+              <p id="endDay"></p>
+              <h1 id="endTime"></h1>
+              <p>Ends at</p>
+            </div>
+            </div>
+            <div class="row contents">
+        <div class="col-md-6 cont-col">
+          <div class="head-time">
+            <h1 id="actsal"></h1>
+            <p>You will receive</p>
           </div>
-        </li>
-        <li class="timeline-inverted">
-          <div class="timeline-badge danger"></div>
-          <div class="timeline-panel">
-            <div class="timeline-heading">
-            <div class="row">
-              <div class="col-md-10">
-                <h1></h1>
-              </div>
-            </div>
-            <div class="row">
-            <div class="col-md-3">
-            <div class="header-body">
-              <h1>7</h1>
-              <p>March 2016</p>
-              </div>
-            </div>
-            <div class="col-md-6 ">
-            <div class="header-body  header-center">
-              <h1>09:00 AM until 12:00 NN tommorrow</h1>
-              <p>Schedule</p>
-              </div>
-            </div>
-            <div class="col-md-3 ">
-            <div class="header-body">
-              <h1>0hr 30min</h1>
-              <p>From now</p>
-              </div>
-            </div>
-            </div> 
-            </div>
-            <div class="timeline-body">
-            <div class="col-md-5 jtitle">
-              <h1>Your work as Labandera</h1>
-              <p>by Kent Michael Baguion</p>
-            </div>
-            <div class="col-md-7">
-            <div class="timeline-buttons">
-              <button class="btn btn-md"><i class="fa fa-envelope" aria-hidden="true"></i> Send a message</button>
-              <button class="btn btn-md"><i class="fa fa-calendar" aria-hidden="true"></i> Request a reschedule</button>
-              <button class="btn btn-md btn-danger"><i class="fa fa-times" aria-hidden="true"></i> Dismiss this job</button>
-              </div>
-            </div>
-            </div>
-            <div class="col-md-12 timeline-desc">
-              <p>
-                Mussum ipsum cacilds, vidis litro abertis. Consetis adipiscings elitis. Pra lá , depois divoltis porris, paradis. Paisis, filhis, espiritis santis. Mé faiz elementum girarzis, nisi eros vermeio, in elementis mé pra quem é amistosis quis leo. Manduma pindureta quium dia nois paga. Sapien in monti palavris qui num significa nadis i pareci latim. Interessantiss quisso pudia ce receita de bolis, mais bolis eu num gostis.
-              </p>
-            </div>
-            <div class="col-md-6 header-foot">
-              <h1>Guadalupe, Tandang Sora, Dalang Karaan, Cebu City</h1>
-              <p>Located at</p>
-            </div>
-            <div class="col-md-6 header-foot">
-              <h1>$50</h1>
-              <p>You will receive </p>
-            </div>
-          </div>
-        </li>
-        <li class="timeline-inverted">
-          <div class="timeline-badge danger"></div>
-          <div class="timeline-panel">
-            <div class="timeline-heading">
-            <div class="row">
-              <div class="col-md-10">
-                <h1></h1>
-              </div>
-            </div>
-            <div class="row">
-            <div class="col-md-3">
-            <div class="header-body">
-              <h1>7</h1>
-              <p>March 2016</p>
-              </div>
-            </div>
-            <div class="col-md-6 ">
-            <div class="header-body  header-center">
-              <h1>9:00 AM until 12:00 NN</h1>
-              <p>Schedule</p>
-              </div>
-            </div>
-            <div class="col-md-3 ">
-            <div class="header-body">
-              <h1>0hr 30min</h1>
-              <p>From now</p>
-              </div>
-            </div>
-            </div> 
-            </div>
-            <div class="timeline-body">
-            <div class="col-md-5 jtitle">
-              <h1>Your work as Labandera</h1>
-              <p>by Kent Michael Baguion</p>
-            </div>
-            <div class="col-md-7">
-            <div class="timeline-buttons">
-              <button class="btn btn-md"><i class="fa fa-envelope" aria-hidden="true"></i> Send a message</button>
-              <button class="btn btn-md"><i class="fa fa-calendar" aria-hidden="true"></i> Request a reschedule</button>
-              <button class="btn btn-md btn-danger"><i class="fa fa-times" aria-hidden="true"></i> Dismiss this job</button>
-              </div>
-            </div>
-            </div>
-            <div class="col-md-12 timeline-desc">
-              <p>
-                Mussum ipsum cacilds, vidis litro abertis. Consetis adipiscings elitis. Pra lá , depois divoltis porris, paradis. Paisis, filhis, espiritis santis. Mé faiz elementum girarzis, nisi eros vermeio, in elementis mé pra quem é amistosis quis leo. Manduma pindureta quium dia nois paga. Sapien in monti palavris qui num significa nadis i pareci latim. Interessantiss quisso pudia ce receita de bolis, mais bolis eu num gostis.
-              </p>
-            </div>
-            <div class="col-md-6 header-foot">
-              <h1>Guadalupe, Tandang Sora, Dalang Karaan, Cebu City</h1>
-              <p>Located at</p>
-            </div>
-            <div class="col-md-6 header-foot">
-              <h1>$50</h1>
-              <p>You will receive </p>
-            </div>
-          </div>
-        </li>
-        
-    </ul>
-        	</div>
         </div>
+        </div>
+          <div class="col-md-12">
+            <div id="actgmap" style="height:300px;"></div>
+          </div>
+        <div class="col-md-6 cont-col">
+          <h1 id="actaddress"></h1>
+          <p>Located at</p>
+        </div>
+        <div class="col-md-3 cont-col cont-col-center ">
+          <h1 id="actdistance"></h1>
+          <p>Distance from current location</p>
+        </div>
+        <div class="col-md-3 cont-col">
+          <h1 id="acttime"></h1>
+          <p>Approximate travel time</p>
+        </div>
+        </div>
+      </div>
+      </div>
+      </div>
+      
+        <div class="modal fade" id="myModal" role="dialog">
+      <div class="modal-dialog modal-md">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h3 class="modal-title">How's your experience working with 
+            <p>?</p></h3>
+          </div>
+          <div class="modal-body">
+            <input id="rating-system" name="rate" type="number" class="rating" min="1" max="5" step="1">
+            <hr>
+             <div class="form-group ">
+               <textarea style="width:100%;height:130px;" name="review"  form="review" placeholder="Kindly give a short review."></textarea>
+            </div>
+            <input type="hidden" name="workid" id="actworkid">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-default">Submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
+          <h1>Upcoming Jobs</h1>
+          <p>No items to display.</p>
+          <ul class="timeline"></ul>
+        </div>
 @endsection
 
 @section('js')
- <script src="/js/app-dashboard.js"></script>
+<script src="/js/jquery-1.11.1.min.js"></script>
+<script src="/js/jquery-ui.min.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDBJJH4SL6eCDPu7N5C-2XcBt8jpZJeMyQ&libraries=places"></script>
+<script src="/sweetalert/sweetalert.min.js"></script>
+ <script src="/calendar/moment.min.js"></script>
  <script src="/js/star-rating.js" type="text/javascript"></script>
+ <script src="/bootstrap/js/bootstrap.min.js"></script>
+<script src="/bootstrap/bootstrap-select.js"></script>
+ <script src="/js/app-dashboard.js"></script>
 @endsection

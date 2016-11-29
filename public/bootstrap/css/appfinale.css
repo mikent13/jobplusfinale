@@ -174,6 +174,9 @@ margin-bottom: 30px;
 	color: red;
 
 }
+.list-group-items{
+	border:none;
+}
 
 .pac-container, .pac-item, .pac-item-query {
     width: 100%;
@@ -214,7 +217,7 @@ margin-bottom: 30px;
 	margin-left: 40px;
 	color: black;
 }
-.item-res{
+.item-res, .recom-res, .near-res{
 	border: none;
 }
 
@@ -358,9 +361,6 @@ input[type=text] {
 	font-size: 19px;
 	font-family: 'Lato-Light';
 }
-.filter-option{
-	color:#fff;
-}
 
 input[type=text]::-webkit-input-placeholder{ color:#fff; }
 input[type=text]::-moz-placeholder  { color:#fff; } /* firefox 19+ */
@@ -393,7 +393,7 @@ input:-moz-placeholder  { color:#fff; }
 	border:1px solid rgba(207,216,220 ,1);
 }
 .btn-bookmark:hover{
-	border:1px solid #3c3c3c;
+	border:1px solid border:1px solid rgba(191,54,12 ,0.8);
 }
 .feed-title > h1{
 	font-weight: bold;
@@ -423,7 +423,6 @@ input:-moz-placeholder  { color:#fff; }
 }
 .panel{
 	border:1px solid rgba(144,164,174 ,1);
-	
 }
 
 .feed-meta {
@@ -445,13 +444,15 @@ a.list-group-item:focus,a.list-group-item:active{
 .mini-meta > p{
 	text-align: center;
 }
-.mini-meta > .mini-m{
-	font-weight: normal;
+.meta-sal , .meta-ptype, .meta-slot{
 	color: #d35400;
 }
-.meta-center{
-	border-left: 1px solid #dddbdb;
-	border-right: 1px solid #dddbdb;
+.mini-meta{
+	border-right: 1px solid #BDBDBD;
+}
+
+.mini-meta > .mini-m{
+	font-weight: normal;
 }
 
 .mini-skill{
