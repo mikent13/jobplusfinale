@@ -215,10 +215,7 @@
     transform: rotate(360deg);
   }
 }
-body.stop-scrolling {
-  height: 100%;
-  overflow: hidden;
-}
+
 .sweet-overlay {
   background-color: rgba(0, 0, 0, 0.4);
   position: fixed;
@@ -231,12 +228,12 @@ body.stop-scrolling {
 }
 .sweet-alert {
   background-color: #ffffff;
-  width: 478px;
+  width: 800px;
   padding: 17px;
   border-radius: 5px;
   text-align: center;
   position: fixed;
-  left: 50%;
+  left: 42%;
   top: 50%;
   margin-left: -256px;
   margin-top: -200px;

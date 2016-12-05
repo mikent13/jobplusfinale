@@ -8,7 +8,7 @@
     <!-- CSS -->
     <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
-    <link rel="stylesheet" href="/bootstrap/css/appfinale.css">
+    <link rel="stylesheet" href="/bootstrap/css/empfinale.css">
     <link rel="stylesheet" href="/bootcard/css/bootcards-desktop.min.css">
     <link rel="stylesheet" href="/bootstrap/bootstrap-select.min.css">
     <link rel="stylesheet" href="/sweetalert/sweetalert.css">
@@ -24,7 +24,7 @@
             <a href="{{route('app/dashboard')}}" class="brand"><p>Job+</p></a>
         </li>
         <li>
-            <a href="{{route('app/dashboard')}}" class="active"><p>Candidate</p></a>
+            <a href="#"><p>Employer</p></a>
         </li>
     </ul>
     <ul class="nav navbar-nav navbar-right">
@@ -49,13 +49,13 @@
             <a href="{{route('app/dashboard')}}"><i class="fa fa-lg fa-clock-o" aria-hidden="true"></i> Schedule</a>
         </li>
         <li>
-          <a  href="{{route('app/job/result')}}"><i class="fa fa-lg fa-briefcase" aria-hidden="true"></i> Find Job</i></a>
+          <a  href="{{route('app/job/result')}}"><i class="fa fa-lg fa-pencil" aria-hidden="true"></i> Postings</i></a>
       </li>
       <li>
-        <a href="#"><i class="fa fa-handshake-o" aria-hidden="true"></i> Job Offers</a>
+        <a href="{{route('emp/applications')}}"><i class="fa fa-handshake-o" aria-hidden="true"></i> Applications</a>
     </li>
     <li>
-        <a href="#"><i class="fa fa-lg fa-bookmark-o" aria-hidden="true"></i> Saved Jobs</a>
+        <a href="#"><i class="fa fa-lg fa-bookmark-o" aria-hidden="true"></i> Saved Applicants</a>
     </li>
     <li>
         <a href="#"><i class="fa fa-lg fa-credit-card" aria-hidden="true"></i> Job+ Wallet</a>
@@ -121,7 +121,8 @@
 </footer>
 </body>
 <script src="/js/jquery-1.11.1.min.js"></script>
-
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+<script src="/bootcard/js/bootcards.min.js"></script>
 <script src="/js/scripts.js"></script>
 @yield('js')
 </html>

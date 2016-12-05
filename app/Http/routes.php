@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return view('login.login');
+	return view('login.login');
 });
 
 Route::get('register', ['as' => 'login.register', 'uses' => 'Auth\AuthController@showRegistrationForm']);
@@ -71,25 +71,28 @@ Route::get('/employer',[
 	'as' => 'employer'
 	])->middleware('auth');
 
-	Route::get('/employer/test/{$id}', [
+Route::get('/employer/test/{$id}', [
 	'uses' => 'EmployerController@test',
 	'as' => 'test'
 	])->middleware('auth');
 
-	Route::get('/employer/dashboard', [
+Route::get('/employer/dashboard', [
 	'uses' => 'EmployerController@getDashboard',
 	'as' => 'emp/dashboard'
 	])->middleware('auth');
 
-	Route::get('/employer/jobpost', [
+Route::get('/employer/jobpost', [
 	'uses' => 'EmployerController@getJobPost',
 	'as' => 'emp/job/post'
 	])->middleware('auth');
 
-	Route::get('employer/profile', [
-	'uses' => 'EmployerController@getProfile',
-	'as' => 'emp/profile'
+Route::get('employer/applications', [
+	'uses' => 'EmployerController@getApplications',
+	'as' => 'emp/applications'
 	])->middleware('auth');
+
+Route::get('/employer/application/response','EmployerController@ApplicationResponse');
+
 
 /*
 |--------------------------------------------------------------------------
@@ -120,6 +123,8 @@ Route::get('/app/upcomingJob','ApplicantController@getUpcoming');
 Route::get('/app/ongoingJob','ApplicantController@getOngoing');
 Route::get('/app/activeJob','ApplicantController@getActive');
 Route::get('/admin/applicant','ApplicantController@getAdmin');
+Route::get('/app/dashboard/seemore','ApplicantController@getSeemore');
+
 
 Route::get('/applicant/job/start',[
 	'uses' => 'ApplicantController@StartJob',

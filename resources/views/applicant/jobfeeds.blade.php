@@ -267,6 +267,7 @@
 <script src="/js/jquery-1.11.1.min.js"></script>
 <script src="/js/jquery-ui.min.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDBJJH4SL6eCDPu7N5C-2XcBt8jpZJeMyQ&libraries=places"></script>
+ <script src="/bootstrap/js/bootstrap.min.js"></script>
 <script src="/bootstrap/bootstrap-select.js"></script>
 <script src="/sweetalert/sweetalert.min.js"></script>
 <script src="/js/jfeeds.js"></script>

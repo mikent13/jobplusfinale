@@ -1,5 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `jobplusfinale` /*!40100 DEFAULT CHARACTER SET latin1 */;
-USE `jobplusfinale`;
 -- MySQL dump 10.13  Distrib 5.7.9, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: jobplusfinale
@@ -479,7 +477,7 @@ CREATE TABLE `profiles` (
 
 LOCK TABLES `profiles` WRITE;
 /*!40000 ALTER TABLE `profiles` DISABLE KEYS */;
-INSERT INTO `profiles` VALUES (1,1,'Baguion s','Kent Michael','',0,0,11.0384,124.619,'Ormoc','','/avatar/1x1.png'),(84,2,'baguion','kent michael','09329520016',20131015,102103,10.3148,123.901,'Cebu City','this is a good description about myself.','upload\\1x1.png');
+INSERT INTO `profiles` VALUES (1,1,'Baguion s','Kent Michael','',0,0,11.0384,124.619,'Ormoc','','/avatar/kent.png'),(84,2,'Baguion','Kim Vincent','09329520016',20131015,102103,10.3148,123.901,'Cebu City','this is a good description about myself.','/avatar/kim.jpg');
 /*!40000 ALTER TABLE `profiles` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -533,7 +531,7 @@ CREATE TABLE `schedules` (
 
 LOCK TABLES `schedules` WRITE;
 /*!40000 ALTER TABLE `schedules` DISABLE KEYS */;
-INSERT INTO `schedules` VALUES (1,1,'2016-11-29 06:00:00','2016-11-29 13:00:00'),(4,2,'2016-11-29 06:00:00','2016-11-29 13:00:00'),(5,3,'2016-11-29 06:00:00','2016-11-29 13:00:00'),(6,4,'2016-11-29 10:37:00','2016-11-29 13:00:00'),(7,5,'2016-11-29 10:00:00','2016-11-29 12:00:00'),(8,7,'2016-11-29 15:10:00','2016-11-29 13:00:00'),(9,8,'2016-11-29 09:30:00','2016-11-29 13:00:00'),(10,9,'2016-11-29 10:37:00','2016-11-29 13:00:00'),(11,10,'2016-11-29 10:37:00','2016-11-29 13:00:00'),(12,11,'2016-11-29 10:37:00','2016-11-29 13:00:00'),(13,12,'2016-11-29 10:37:00','2016-11-29 13:00:00'),(14,13,'2016-11-29 10:37:00','2016-11-29 13:00:00'),(15,14,'2016-11-29 10:37:00','2016-11-29 13:00:00'),(16,15,'2016-11-29 10:37:00','2016-11-29 13:00:00'),(17,16,'2016-11-29 10:37:00','2016-11-29 13:00:00'),(18,3,'2016-11-29 10:37:00','2016-11-29 13:00:00');
+INSERT INTO `schedules` VALUES (1,1,'2016-12-05 15:52:00','2016-12-05 18:52:00'),(4,2,'2016-12-05 16:52:00','2016-12-05 18:52:00'),(5,3,'2016-12-05 16:52:00','2016-12-05 18:52:00'),(6,4,'2016-12-05 16:52:00','2016-12-05 18:52:00'),(7,5,'2016-12-05 15:52:00','2016-12-05 18:52:00'),(8,7,'2016-12-05 16:00:00','2016-12-05 18:52:00'),(9,8,'2016-12-05 15:52:00','2016-12-05 18:52:00'),(10,9,'2016-12-05 15:52:00','2016-12-05 18:52:00'),(11,10,'2016-12-05 16:52:00','2016-12-05 18:52:00'),(12,11,'2016-12-05 18:52:00','2016-12-05 19:52:00'),(13,12,'2016-12-05 16:52:00','2016-12-05 19:52:00'),(14,13,'2016-12-05 16:52:00','2016-12-05 20:52:00'),(15,14,'2016-12-05 16:52:00','2016-12-05 20:52:00'),(16,15,'2016-12-05 16:52:00','2016-12-05 19:52:00'),(17,16,'2016-12-05 16:52:00','2016-12-05 18:52:00'),(18,3,'2016-12-05 16:52:00','2016-12-05 17:52:00');
 /*!40000 ALTER TABLE `schedules` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -582,7 +580,7 @@ CREATE TABLE `status` (
 
 LOCK TABLES `status` WRITE;
 /*!40000 ALTER TABLE `status` DISABLE KEYS */;
-INSERT INTO `status` VALUES (1,'Pending'),(2,'Active'),(3,'Upcoming'),(4,'Ongoing'),(5,'Ended');
+INSERT INTO `status` VALUES (1,'Active'),(2,'Upcoming'),(3,'Ongoing'),(4,'Ended'),(5,'Pending');
 /*!40000 ALTER TABLE `status` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -611,7 +609,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'mocha','moch@gmail.com','$2y$10$u7hcDAzeFgPFbYXWNxVdweyGU9XtLWeqHxdScyuW.aZsTaz4d27uu','IewC95oNd00FjsBifpFWRxIinHM79AaFZLNqtn2lRKOibjrxIcIh5xAIVPik'),(2,'intel13','itnel13@gmail.com','$2y$10$E2PIeMbL68qZwELK3USQgO275CPJNjwJfAvoPHUVrLSa1kAryyws6','ACSz39a7Y7fk8uGG8OD4EhTkCrnPGbkCtCYJEzpp5lnVmGqJf4Z1hH2a9jEr');
+INSERT INTO `users` VALUES (1,'applicant','moch@gmail.com','$2y$10$u7hcDAzeFgPFbYXWNxVdweyGU9XtLWeqHxdScyuW.aZsTaz4d27uu','CbvCUcmlqqTK1IGrRWaucn3zrd4p6mZ16I62GuRlcc5xKhPstFozoim5hzvV'),(2,'employer','itnel13@gmail.com','$2y$10$E2PIeMbL68qZwELK3USQgO275CPJNjwJfAvoPHUVrLSa1kAryyws6','ACSz39a7Y7fk8uGG8OD4EhTkCrnPGbkCtCYJEzpp5lnVmGqJf4Z1hH2a9jEr');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -649,13 +647,13 @@ DROP TABLE IF EXISTS `works`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `works` (
   `work_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `job_id` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `user_id` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `sched_id` int(10) NOT NULL,
+  `applicant_id` int(10) NOT NULL,
   `status` int(11) NOT NULL,
   `date` datetime NOT NULL,
   `is_start` tinyint(1) NOT NULL,
   PRIMARY KEY (`work_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=128 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=146 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -664,7 +662,7 @@ CREATE TABLE `works` (
 
 LOCK TABLES `works` WRITE;
 /*!40000 ALTER TABLE `works` DISABLE KEYS */;
-INSERT INTO `works` VALUES (127,'7','1',2,'2016-11-29 10:41:03',0);
+INSERT INTO `works` VALUES (144,8,1,1,'2016-12-01 11:59:34',1),(145,12,1,2,'2016-12-01 12:02:01',0);
 /*!40000 ALTER TABLE `works` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -677,4 +675,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-29 15:09:35
+-- Dump completed on 2016-12-05 21:33:48

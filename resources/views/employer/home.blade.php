@@ -1,58 +1,34 @@
-@extends('masters.primary')
-
+@extends('masters.EmpPrimary')
 @section('css')
-  <link rel="stylesheet" href="/css/custom.css">
-  <link rel="stylesheet" href="/calendar/fullcalendar.min.css"/>
-  <link rel="stylesheet" href="/calendar/fullcalendar.print.css" media="print"/>
+<link rel="stylesheet" href="/bootstrap/css/dashboard.css">
 @endsection
 
 @section('body')
-  <div class="container">
-      <div class="row row-offcanvas row-offcanvas-left">
-        <!-- sidebar -->
-        <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
-            <ul class="nav nav-primary">
-              <li class="active"><a href="#"><i class="fa fa-calendar nav-icon" aria-hidden="true"></i> Job+ Schedule</a></li>
-              <hr>
-              <li><a href="{{ route('emp/job/post') }}"><i class="fa fa-suitcase nav-icon" aria-hidden="true"></i> Job+ Postings </a></li>
-              <hr>
-              <li><a href="#"><i class="fa fa-credit-card-alt nav-icon" aria-hidden="true"></i> Job+ Wallet </a></li>
-              <hr>
-              <li><a href="#"><i class="fa fa-bookmark nav-icon" aria-hidden="true"></i> Bookmarks</a></li> 
-              <hr>
-              <li><a href="#"><i class="fa fa-archive nav-icon" aria-hidden="true"></i> Logs</a></li>
-              <hr>
-              <li><a href="{{ route('emp/profile') }}"><i class="fa fa-user nav-icon" aria-hidden="true"></i> Profile</a></li>      
-            </ul>
-        </div>
+ <div id="loading">
+<div id="loading-center">
+<div id="loading-center-absolute">
+<div class="object" id="object_one"></div>
+<div class="object" id="object_two"></div>
+<div class="object" id="object_three"></div>
+<div class="object" id="object_four"></div>
+</div>
+</div>
+</div>
+        <div class="container">
+        <h1>Schedule</h1>
         <hr>
-        <!-- main area -->
-
-        <div class="col-xs-12 dash-content">
-          @foreach($applications as $app)
-              @foreach($profiles as $prof)
-                @if($app->user_id == $prof->user_id)
-                  @foreach($jobs as $job)
-                    @if($app->job_id == $job->job_id)
-                <h3>{{ $prof->fname }} {{ $prof->lname }}</h3>
-                <p>wants to work with you with the job <b>{{ $job->title }}.</b></p>
-                <a class="btn btn-primary btn-md">
-                  Accept
-                </a>
-                    @endif
-                  @endforeach
-                @endif
-              @endforeach
-          @endforeach
-           </div>
-
+        
         </div>
-    </div>
-  </div>
 @endsection
 
-@section('scripts')
-<script src="/calendar/jquery.min.js"></script>
-<script src="/calendar/moment.min.js"></script>
-<script src="/calendar/fullcalendar.min.js"></script>
+@section('js')
+<script src="/js/jquery-1.11.1.min.js"></script>
+<script src="/js/jquery-ui.min.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDBJJH4SL6eCDPu7N5C-2XcBt8jpZJeMyQ&libraries=places"></script>
+<script src="/sweetalert/sweetalert.min.js"></script>
+ <script src="/calendar/moment.min.js"></script>
+ <script src="/js/star-rating.js" type="text/javascript"></script>
+ <script src="/bootstrap/js/bootstrap.min.js"></script>
+<script src="/bootstrap/bootstrap-select.js"></script>
+ <script src="/js/emp-dashboard.js"></script>
 @endsection

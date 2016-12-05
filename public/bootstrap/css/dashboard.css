@@ -468,3 +468,34 @@ color: black;
     padding-right: 25px;
      z-index: 0; 
 }
+
+#modalgmap{
+	width: 100%;
+}
+.modalmap{
+	margin-left: -35px;
+	margin-right: -35px;
+}
+
+.head-tools > button{
+	margin-right: 20px;
+}
+.head-tools > button, .head-tools > h1, .head-tools >h2{
+	display: inline-block;
+}
+.head-tools > h1, .head-tools > h2{
+	vertical-align: middle;
+	margin-top: 10px;
+}
+.head-tools > h1{
+	color: #D35400;
+	margin-right: 5px;
+    border-left: 1px solid #dddbdb;
+    padding-left: 15px;
+}
+.head-tools > h2 {
+	margin-top: 15px;
+}
+.head-tools{
+	margin-top: -30px;
+}

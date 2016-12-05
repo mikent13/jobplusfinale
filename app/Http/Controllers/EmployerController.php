@@ -8,6 +8,7 @@ use App\User;
 use App\Jobs;
 use App\Works;
 use App\Profiles;
+
 use Auth;
 
 class EmployerController extends Controller
@@ -49,4 +50,32 @@ class EmployerController extends Controller
   		return view('users.emp-profile');
   	}
 
+    public function getApplications(){
+      
+      $myid = Auth::user()->id;
+      $jobs = Jobs::where('user_id',$myid)->get();
+      $jobids = [];
+      foreach($jobs as $j){
+        $jobids[] = $j->job_id;
+      }
+
+      $work = Works::whereIn('job_id',$jobids)
+                    ->where('status',0)->get();
+
+      $profiles = Profiles::all();
+                    
+      return view('employer.application',compact('profiles','jobs','work'));
+    }
+
+    public function ApplicationResponse(Request $req){
+      $id = $req->workid;
+      $work           = Works::where('work_id',$id)->first();
+      $work->status   = 4;
+      $work->save();
+
+      $data['success'] = $work->work_id + 'accepted!';
+
+      return response()->json($data);
+
+    }
 }
