@@ -150,12 +150,18 @@ class ApplicantController extends Controller
       $address = Job_Address::where('jobid',$job->job_id)->first();
       $employer = Profiles::where('user_id',$job->user_id)->first();
 
+      if($active->is_start == 1){
+        $data['started'] = 1;
+      }
+      else{
+        $data['started'] = 0;
+      }
+
       $data['sched'] = $sched;
       $data['job'] = $job;
       $data['work'] = $active;
       $data['address'] = $address;
       $data['employer'] = $employer;
-
     }  
     else{
 
@@ -600,15 +606,93 @@ public function getProfile(){
 }
 
 public function Apply(Request $req){
-  $work           = new Works;
-  $work->job_id   = $req->jobid;
-  $work->user_id  = Auth::user()->id;
-  $work->status   = 0;
-  $work->date     = Carbon::now();
-  $work->save();
+  $jobid = $req->jobid;
+  $today = new DateTime;
+  $userid = Auth::user()->id;
+  $havework = Works::where('applicant_id',$userid)
+  ->whereIn('status',[1,2,3])
+  ->get();
 
-  $data['success'] = 'Application sent!';
-  $data['id']      = $req->jobid;
+  $jobsched = Schedules::where('job_id',$jobid)
+  ->where('start', '>', $today)
+  ->get();
+  
+  if(count($havework) > 0){
+    $schedid = [];
+    foreach($havework as $hw){
+      $schedid[] = $hw->sched_id;
+    }
+
+    $mysched = Schedules::whereIn('schedule_id',$schedid)
+    ->where('start', '>',$today)
+    ->get();
+
+    $myid = [];
+    $jids = [];
+    foreach($mysched as $my){
+      foreach($jobsched as $j){
+        $mstart = new DateTime($my->start);
+        $mend = new DateTime($my->end);
+        $jstart = new DateTime($j->start);
+        $jend = new DateTime($j->end);
+
+        if($mstart >= $jstart && $mstart <= $jend){
+          $myid[] = $my->schedule_id;
+          $jids[] = $j->schedule_id;
+          $conflict = 1;
+          $data['conf'] = 1;
+          $data['prob'] = 'first try';
+          $data['status'] = 0;
+        }
+        elseif($mend >= $jstart && $mend <= $jend){
+          $myid[] = $my->schedule_id;
+          $jids[] = $j->schedule_id;
+          $conflict = 1;
+          $data['conf'] = 1;
+          $data['prob'] = 'second try';
+          $data['status'] = 0;
+        }
+        else{
+          $data['status'] = 1;
+        }
+      }
+    }
+
+    if(count($myid) < 1){
+      $data['cust'] = 'no conflict';
+      foreach($jobsched as $jsch){
+      $work = new Works;
+      $work->sched_id = $jsch->schedule_id;
+      $work->applicant_id = $userid;
+      $work->status = 5;
+      $work->date = $today;
+      $work->is_start = 0;
+      $work->save();
+     }
+    }
+    else{
+      $myconf = Schedules::whereIn('schedule_id',$myid)->first();
+      $jobconf = Schedules::whereIn('schedule_id',$jids)->first();
+      $myconfjob = Jobs::where('job_id',$myconf->job_id)->first();
+      $data['myconfjob'] = $myconfjob;
+      $data['myconf'] = $myconf;
+      $data['jobconf'] = $jobconf;
+      $data['status'] = 0;
+    }
+  }
+  else{
+    foreach($jobsched as $jsch){
+      $work = new Works;
+      $work->sched_id = $jsch->schedule_id;
+      $work->applicant_id = $userid;
+      $work->status = 5;
+      $work->date = $today;
+      $work->is_start = 0;
+      $work->save();
+    }
+    $data['status'] = 1; 
+  }
+
 
   return response()->json($data);
 }
@@ -616,7 +700,7 @@ public function Apply(Request $req){
 public function StartJob(Request $req){
   $workid = $req->workid;
 
-  $work = Works::where('work_id',$workid)->first();
+  $work = Works::where('work_id',$workid)->first();   
 
   if($work->is_start == 1){
     $data['status'] = 0;
@@ -632,11 +716,11 @@ public function StartJob(Request $req){
 
    if($difference->invert == 0){
     $data['late'] = 1;
-   }
-   else{
+  }
+  else{
     $data['late'] = 0;
-   }
-   
+  }
+
   $work->is_start = 1;
   $work->save();
   $data['status'] = 1;
@@ -660,10 +744,10 @@ return response()->json($data);
 
 public function EndJob(Request $req){
 
-  $rate   = $req->rating;
+  $rate   = $req->rate;
   $desc   = $req->review;
-  $workid  = $req->workid;
-  $employer = $req->reviewed;
+  $workid  = $req->work;
+  $employer = $req->emp;
   $reviewer = Auth::user()->id;
 
   $review               = new Reviews;
@@ -695,6 +779,7 @@ public function viewJob($id){
   $job = Jobs::where('job_id',$id)->first();
   return view('applicant.jobinfo',compact('job','skills','profile'));
 }
+
 
 
 }

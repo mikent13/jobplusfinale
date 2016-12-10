@@ -60,6 +60,25 @@
  <div class="container" id="scrolled">
    	<div class="row">
 
+<div class="modal fade" id="conflictModal" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content conf-modal">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h1 class="modal-title">It seems like you have some conflict schedule.</h1>
+        </div>
+        <div class="modal-body conf-body">
+       		<h1 id="confjtitle"></h1>
+       		<p id="myschedstart"></p>
+       		<p id="myschedend"></p>
+       		<h1>Applied job schedule</h1>
+       		<p id="appliedstart"></p>
+       		<p id="appliedend"></p>
+       </div>
+        <button type="button" class="btn btn-md" data-dismiss="modal">Close</button>
+    </div>
+  </div>
+</div>
         <!-- Nav tabs --><div class="card">
         <ul class="nav nav-tabs " role="tablist" >
             <li role="presentation" class="active"><a href="#feeds" id="tab-feeds" aria-controls="feeds" role="tab" data-toggle="tab"><h3>Job Feeds</h3></a></li>

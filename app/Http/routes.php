@@ -59,6 +59,9 @@ Route::get('user/profile', [
 Route::get('/get/profiledata', 'UserController@getProfileData');
 Route::get('/get/update/name', 'UserController@updateName');
 Route::get('/admin','UserController@getAdmin');
+Route::get('/sms','UserController@getSMSPage');
+Route::get('/sms/send','UserController@ChikkaSend');
+Route::get('/sms/receive','UserController@ChikkaReceive');
 
 /*
 |--------------------------------------------------------------------------
@@ -92,7 +95,6 @@ Route::get('employer/applications', [
 	])->middleware('auth');
 
 Route::get('/employer/application/response','EmployerController@ApplicationResponse');
-
 
 /*
 |--------------------------------------------------------------------------

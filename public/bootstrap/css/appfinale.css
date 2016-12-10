@@ -836,3 +836,15 @@ a.list-group-item:focus, a.list-group-item:hover, button.list-group-item:focus, 
     padding-bottom: 20px;
     padding-top: 20px;
 }
+
+.conf-body{
+	border-bottom: 1px solid #dddbdb;
+	margin-bottom: 20px;
+}
+.conf-modal{
+	padding-bottom: 50px;
+}
+.conf-modal > button{
+	position: fixed;
+	right: 10%;
+}

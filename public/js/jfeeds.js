@@ -7,34 +7,26 @@ var searchBox;
 var place;
 var nearbs;
 var markers = [];
+var geolocations;
 //----------------------------Initialization------------------------------------//
 function initializeMap(){
   $('#feed-gmap').attr('hidden',true);
   $('#rec-gmap').attr('hidden',true);
   $('#near-gmap').attr('hidden',true);
 
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function(position) {
-      var geolocations = {
-        lat: position.coords.latitude,
-        lng: position.coords.longitude
+  // if (navigator.geolocation) {
+  //   navigator.geolocation.getCurrentPosition(function(position) {
+    
+  //     console.log(geolocations.lat);
+
+
+  //   });
+  // }
+  
+  var geolocations = {
+        lat: 10.315699,
+        lng: 123.885437
       };
-      
-
-      feedmap = new google.maps.Map(document.getElementById('feed-gmap'), {
-        center: {lat: geolocations.lat, lng: geolocations.lng},
-        zoom: 18
-      });
-
-      recmap = new google.maps.Map(document.getElementById('rec-gmap'), {
-        center: {lat: geolocations.lat, lng: geolocations.lng},
-        zoom: 18
-      });
-
-      nearmap = new google.maps.Map(document.getElementById('near-gmap'), {
-        center: {lat: geolocations.lat, lng: geolocations.lng},
-        zoom: 18
-      });
 
       var meos = [];
       var locs;
@@ -53,8 +45,20 @@ function initializeMap(){
        }
      });
 
-    });
-  }
+  feedmap = new google.maps.Map(document.getElementById('feed-gmap'), {
+        center:centers,
+        zoom: 18
+      });
+
+      recmap = new google.maps.Map(document.getElementById('rec-gmap'), {
+        center: centers,
+        zoom: 18
+      });
+
+      nearmap = new google.maps.Map(document.getElementById('near-gmap'), {
+        center: centers,
+        zoom: 18
+      });
   $("#loading").fadeOut(300);
 }
 
@@ -660,12 +664,31 @@ $(document).on('click','#feed-apply-btn',function(e){
     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
   }
 });
+
  var apply = $.ajax({
   url: '/app/apply',
   method: 'GET',
-  complete: loadAlert,
   data:{'jobid':jobid},
 });
+
+ apply.done(function(data){
+  console.log(data);
+  if(data.status == 0){
+    var myconfstart = moment(data.myconf.start).format('MMMM Do YYYY, h:mm a');
+var myconfend = moment(data.myconf.end).format('MMMM Do YYYY, h:mm a');
+var jobconfstart = moment(data.jobconf.start).format('MMMM Do YYYY, h:mm a');
+var jobconfend = moment(data.jobconf.end).format('MMMM Do YYYY, h:mm a');
+      $('#confjtitle').text(data.myconfjob.title);
+      $('#myschedstart').text('Start: ' +myconfstart);
+      $('#myschedend').text('End: '+myconfend);
+      $('#appliedstart').text('Start: ' +jobconfstart);
+      $('#appliedend').text('End: ' +jobconfend);
+      $('#conflictModal').modal('show');
+  }
+  else{
+    loadAlert();
+  }
+ });
 
 });
 $(document).on('click','#near-apply-btn',function(e){
@@ -678,14 +701,32 @@ $(document).on('click','#near-apply-btn',function(e){
     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
   }
 });
+
  var apply = $.ajax({
   url: '/app/apply',
   method: 'GET',
-  complete: loadAlert,
   data:{'jobid':jobid},
 });
 
- 
+ apply.done(function(data){
+  console.log(data);
+  if(data.status == 0){
+    var myconfstart = moment(data.myconf.start).format('MMMM Do YYYY, h:mm a');
+var myconfend = moment(data.myconf.end).format('MMMM Do YYYY, h:mm a');
+var jobconfstart = moment(data.jobconf.start).format('MMMM Do YYYY, h:mm a');
+var jobconfend = moment(data.jobconf.end).format('MMMM Do YYYY, h:mm a');
+      $('#confjtitle').text(data.myconfjob.title);
+      $('#myschedstart').text('Start: ' +myconfstart);
+      $('#myschedend').text('End: '+myconfend);
+      $('#appliedstart').text('Start: ' +jobconfstart);
+      $('#appliedend').text('End: ' +jobconfend);
+      $('#conflictModal').modal('show');
+  }
+  else{
+    loadAlert();
+  }
+ });
+
 });
 $(document).on('click','#rec-apply-btn',function(e){
   
@@ -700,10 +741,26 @@ $(document).on('click','#rec-apply-btn',function(e){
  var apply = $.ajax({
   url: '/app/apply',
   method: 'GET',
-  complete: loadAlert,
   data:{'jobid':jobid},
 });
- 
+  apply.done(function(data){
+  console.log(data);
+  if(data.status == 0){
+    var myconfstart = moment(data.myconf.start).format('MMMM Do YYYY, h:mm a');
+var myconfend = moment(data.myconf.end).format('MMMM Do YYYY, h:mm a');
+var jobconfstart = moment(data.jobconf.start).format('MMMM Do YYYY, h:mm a');
+var jobconfend = moment(data.jobconf.end).format('MMMM Do YYYY, h:mm a');
+      $('#confjtitle').text(data.myconfjob.title);
+      $('#myschedstart').text('Start: ' +myconfstart);
+      $('#myschedend').text('End: '+myconfend);
+      $('#appliedstart').text('Start: ' +jobconfstart);
+      $('#appliedend').text('End: ' +jobconfend);
+      $('#conflictModal').modal('show');
+  }
+  else{
+    loadAlert();
+  }
+ });
 });
 
 $(document).on('change','#search-sel',function(e){

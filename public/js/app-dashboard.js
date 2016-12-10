@@ -28,11 +28,14 @@ function activeJob(){
   active.done(function(data){
     console.log(data);
     if(data.active == 1 || data.status == 1){
+
       $('#active-p').attr('hidden',true);
       $('#actitle').text(data.job.title);
-      $('#actemp').text('Hired by '+data.employer.fname + ' '+ data.employer.lname) ;
+      $('#actemp').text('Hired by '+data.employer.fname + ' '+ data.employer.lname);
       $('#actdesc').text(data.job.description);
-
+      $('#modalemp').text(data.employer.fname + ' '+ data.employer.lname +'?');
+      $('#empid').text(data.employer.user_id);
+      $('#workid').text(data.work.work_id);
       var start = moment(data.sched.start);
       var end = moment(data.sched.end);
 
@@ -48,6 +51,20 @@ function activeJob(){
       var endYear = end.format('YYYY');
       var endTime = end.format('LT');
 
+       if(data.started == 1){
+        $('#actstart').fadeOut(1000);
+        $('#actend').fadeIn(1200);
+        $('#actend').removeClass('hidden');
+        $('#head-min').text(end.fromNow(true));
+        $('#head-meta').text('until session ends');
+      }
+      else{
+         $('#head-min').text(start.fromNow(true));
+        $('#head-meta').text('until job starts');
+      }
+
+      $('#emp-pic').attr('src',data.employer.avatar);
+     
       $('#startDay').text(startDay1 + ', '+startMonth + '. '+startDay2 + ' '+startYear);
       $('#startTime').text(startTime);
       $('#endDay').text(endDay1 + ', '+endMonth + '. '+endDay2 + ' '+endYear);
@@ -318,35 +335,6 @@ function initializeMap(){
 
 });
 
- $(document).on('click','#rev-endbtn',function(e){
-  $('#endModal').modal('hide');
-
-  $.ajaxSetup({
-    headers: {
-      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    }
-  });
-
-  var endjob = $.ajax({
-    url: '/applicant/job/end',
-    method: 'GET',
-    data: {
-      'rating' : $('#rating-system').val(),
-      'review' : $('#review').val(),
-      'workid': $('#actworkid').text(),
-      'reviewed' : $('#actemployer').text()
-    }
-  });
-
-  endjob.done(function(data){
-    console.log(data);
-    if(data.status == 1){
-      alert('Thank you!, your feedback has been sent!');
-    }
-  });
-
-});
-
 
  $(document).on('click','.btn-seemore',function(){
   var workid = this.getAttribute('workid');
@@ -426,6 +414,43 @@ function initializeMap(){
 
 });
 
+ $(document).on('click','#actend',function(){
+  $('#rateModal').modal('show');
+ });
+
+$(document).on('click','#btn-rate',function(){
+  var review = $('#review').val();
+  var rate = $('#rating-system').val();
+  var emp = $('#empid').text();
+  var work = $('#workid').text();
+  $.ajaxSetup({
+    headers: {
+      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+  });
+
+   var endjob = $.ajax({
+    url: '/applicant/job/end',
+    method: 'GET',
+    data: {
+      'review' : review,
+      'rate' : rate,
+      'emp' : emp,
+      'work': work
+    }
+  });
+
+   endjob.done(function(data){
+    console.log(data);
+    if(data.status == 1){
+      $('#rateModal').modal('hide');
+      swal("Review sent!", " ", "success");
+    }
+   });
+
+
+ });
+
  $(document).on('click','#actstart',function(){
    $.ajaxSetup({
     headers: {
@@ -447,6 +472,11 @@ function initializeMap(){
     
     if(data.status == 1){
       swal("Job has started.", "Work Hard!", "info");
+       $('#actstart').fadeOut(1000);
+        $('#actend').fadeIn(2000);
+        $('#actend').removeClass('hidden');
+        $('#head-min').text(end.fromNow(true));
+        $('#head-meta').text('until session ends');
     }
     else{
     if(data.late == 1){

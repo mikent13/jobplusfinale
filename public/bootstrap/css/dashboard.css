@@ -499,3 +499,22 @@ color: black;
 .head-tools{
 	margin-top: -30px;
 }
+.modal-emp{
+	margin-top: 25px;
+}
+.modal-pic{
+	border-radius: 50%;
+	 height: 130px; 
+	 width: 130px;
+	 left:43%;
+	 position:fixed;
+	 margin-bottom: 30px;
+}
+.rate-header{
+	    padding-bottom: 70px;
+	    margin-bottom: 50px;
+}
+.rating-md{
+	text-align: center;
+	font-size: 40px;
+}

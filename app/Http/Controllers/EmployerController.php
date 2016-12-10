@@ -8,7 +8,7 @@ use App\User;
 use App\Jobs;
 use App\Works;
 use App\Profiles;
-
+use App\Schedules;
 use Auth;
 
 class EmployerController extends Controller
@@ -33,9 +33,7 @@ class EmployerController extends Controller
           $jobb[] = $job->job_id;
         };
 
-        $applications = Works::whereIn('job_id',$jobb)
-                              ->where('status',0)
-                              ->get();
+       
 
         $profiles = Profiles::all();
          return view('employer.home',compact('applications','profiles','jobs'));
@@ -59,18 +57,19 @@ class EmployerController extends Controller
         $jobids[] = $j->job_id;
       }
 
-      $work = Works::whereIn('job_id',$jobids)
-                    ->where('status',0)->get();
+      $sched = Schedules::whereIn('job_id',$jobids)->get();
+
+      $work = Works::where('status',5)->get();
 
       $profiles = Profiles::all();
                     
-      return view('employer.application',compact('profiles','jobs','work'));
+      return view('employer.application',compact('profiles','jobs','work','sched'));
     }
 
     public function ApplicationResponse(Request $req){
       $id = $req->workid;
       $work           = Works::where('work_id',$id)->first();
-      $work->status   = 4;
+      $work->status   = 3;
       $work->save();
 
       $data['success'] = $work->work_id + 'accepted!';

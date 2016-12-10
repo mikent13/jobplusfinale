@@ -1,17 +1,17 @@
 @extends('masters.EmpPrimary')
 
 @section('body')
- <div id="loading">
-<div id="loading-center">
-<div id="loading-center-absolute">
-<div class="object" id="object_one"></div>
-<div class="object" id="object_two"></div>
-<div class="object" id="object_three"></div>
-<div class="object" id="object_four"></div>
+<div id="loading">
+        <div id="loading-center">
+                <div id="loading-center-absolute">
+                        <div class="object" id="object_one"></div>
+                        <div class="object" id="object_two"></div>
+                        <div class="object" id="object_three"></div>
+                        <div class="object" id="object_four"></div>
+                </div>
+        </div>
 </div>
-</div>
-</div>
-        <div class="container">
+<div class="container">
         <h1>Pending Applications</h1>
         <hr>
         <table class="table">
@@ -24,29 +24,33 @@
         		</tr>
         	</thead>
         	<tbody>
-        	@foreach($work as $w)
-        		<tr>
-        			<td>{{$w->work_id}}</td>
-        			<td>
-        				@foreach($jobs as $j)
-        				@if($j->job_id == $w->job_id)
-        				{{$j->title}}
-        				@endif
-        				@endforeach
-        			</td>
-        			<td>
-        				@foreach($profiles as $p)
-        				@if($p->user_id == $w->user_id)
-        				{{$p->fname}} {{$p->lname}}
-        				@endif
-        				@endforeach
-        			</td>
-        			<td><a id="btnaccept" data-val="{{$w->work_id}}"><button class="btn btn-md">Accept</button></a>   <a id="btndecline" data-val="{{$w->work_id}}"><button class="btn btn-md">Decline</button></a></td>
-        		</tr>
-        	@endforeach
-        	</tbody>
-        </table>
-        </div>
+                 @foreach($work as $w)
+                @foreach($sched as $sch)
+                @if($sch->schedule_id == $w->sched_id)
+                 <tr>
+                   <td>{{$w->work_id}}</td>
+                   <td>
+                    @foreach($jobs as $j)
+                    @if($j->job_id == $sch->job_id)
+                    {{$j->title}}
+                    @endif
+                    @endforeach
+            </td>
+            <td>
+                    @foreach($profiles as $p)
+                    @if($p->user_id == $w->applicant_id)
+                    {{$p->fname}} {{$p->lname}}
+                    @endif
+                    @endforeach
+            </td>
+            <td><a id="btnaccept" data-val="{{$w->work_id}}"><button class="btn btn-md">Accept</button></a>   <a id="btndecline" data-val="{{$w->work_id}}"><button class="btn btn-md">Decline</button></a></td>
+    </tr>
+    @endif
+    @endforeach
+    @endforeach
+</tbody>
+</table>
+</div>
 @endsection
 
 @section('js')
