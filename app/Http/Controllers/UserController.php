@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
 use App\Profiles;
 use App\Skills;
@@ -16,7 +15,10 @@ use App\Job_Skill;
 use App\Job_Address;
 use App\Schedules;
 use App\Categories;
+use Borla\Chikka\Chikka;
 use Auth;
+use Session;
+
 class UserController extends Controller
 {
     public function getHome(){
@@ -26,70 +28,65 @@ class UserController extends Controller
     public function getProfile(){
       return view('users.app-profile');
   }
+
   public function ChikkaSend(Request $req){
-    $client = env('CHIKKA_CLIENT_ID');
-        $secret = env('CHIKKA_CLIENT_SECRET');
-        $shortcode = env('CHIKKA_CLIENT_SHORTCODE');
-       
-        $number =  $req->number;
-        $message = $req->message;
-
-        // Validate API
-        if ( (empty($client)) || (empty($secret)) || (empty($shortcode)) ) {
-            $request->session()->flash('error', 'You have incomplete Chikka SMS API credentials.');
-        }
-
-       
-        // Send
-        $arr_post_body = array(
-            "message_type"      =>      "SEND",
-            "mobile_number"     =>      $number,
-            "shortcode"         =>      $shortcode,
-            "message_id"        =>      str_random(32),
-            "message"           =>      urlencode($message),
-            "client_id"         =>      $client,
-            "secret_key"        =>      $secret
-        );
-    
-        $query_string = "";
-        foreach($arr_post_body as $key => $frow)
-        {
-            $query_string .= '&'.$key.'='.$frow;
-        }
-
-        $URL = "https://post.chikka.com/smsapi/request";
-
-        $curl_handler = curl_init();
-        curl_setopt($curl_handler, CURLOPT_URL, $URL);
-        curl_setopt($curl_handler, CURLOPT_POST, count($arr_post_body));
-        curl_setopt($curl_handler, CURLOPT_POSTFIELDS, $query_string);
-        curl_setopt($curl_handler, CURLOPT_RETURNTRANSFER, TRUE);
-        curl_setopt($curl_handler, CURLOPT_SSL_VERIFYPEER, FALSE);
-        $response = curl_exec($curl_handler);
+        $mobile = '09335532300';
+        $message = 'Hello world';
         
-        curl_close($curl_handler);
-        $resp = json_decode($response);
+        $config = [
+            'shortcode'=> '292902017',
+            'client_id'=> 'b00de5e0839604cdfe07a9e7b5e6c8127ef4bf36ab3b44c0b287ae0603a678c0',
+            'secret_key'=> 'aed7fabd8a0864f8c5a61b5f4dfb4fd3d1737e81d792ff22a3639748391d3612',
+        ];
 
-        if($resp->status == 200){
-            $data['status'] ='success';
-        }
-        else{
-             $data['status'] ='failed';
-        }
-
-        // // End of Send sms
-        $data['response'] = $resp;
-        // $data['number'] = $number;
-        // $data['message'] = $message;
+        $chikka = new Chikka($config);
+        $resp = $chikka->send($mobile, $message);
+        // $data['response'] = 'response';
+        // return view('masters.sms',compact('response'));
         return response()->json($data);
     }
 
     public function ChikkaReceive(Request $req){
-   
-        $data['message'] = $req->input('message');
-        $data['mobile'] = $req->input('mobile_number');
-      return response()->json($data);
+        $config = [
+            'shortcode'=> '292902017',
+            'client_id'=> 'b00de5e0839604cdfe07a9e7b5e6c8127ef4bf36ab3b44c0b287ae0603a678c0',
+            'secret_key'=> 'aed7fabd8a0864f8c5a61b5f4dfb4fd3d1737e81d792ff22a3639748391d3612',
+        ];
+    
+    dd(Input::all());
+
+
+    // Process message
+    // ->message(function($message) {
+    //     // Do whatever you want to do with the message
+    //     $content = $message->content;
+    //     Session::put('cont',$content);
+    //     $sender = $message->mobile;
+    //     // Return true to tell Chikka that you have successfully received the message
+    //     return true;
+    // });;
+    // $data['mes'] = $chikka->receive($_POST)->getMessage();    
+
     }
+
+      private function processMessage($message, $sender) {
+        // Get message content
+        $content = $message->content;
+
+        // Set new content for replying to message
+        $message->content = 'Hello to you, too';
+        // Set message id as null (to force the Message object to generate a new message id)
+        $message->id = null;
+        // Set cost
+        $message->cost = 2.50;
+        // Send reply
+        $response = $sender->reply($message);
+        // New message id
+        $messageId = $response->attachments->message->id;
+        // Return true to tell Chikka that you have successfully received the message
+        return true;
+    }
+
 
     public function getSMSPage(){
         return view('masters.sms');

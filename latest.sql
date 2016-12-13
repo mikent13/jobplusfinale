@@ -239,7 +239,7 @@ CREATE TABLE `job_address` (
 
 LOCK TABLES `job_address` WRITE;
 /*!40000 ALTER TABLE `job_address` DISABLE KEYS */;
-INSERT INTO `job_address` VALUES (1,1,10.3434,123.932,'Mandaue City'),(2,2,10.339,123.936,'Mandaue City'),(3,3,10.3441,123.939,'Mandaue City'),(4,4,10.3169,123.893,'Mandaue City'),(5,5,10.3333,123.937,'Mandaue City'),(7,7,10.3169,123.893,'Cebu City'),(8,8,10.308,123.89,'Cebu City'),(9,9,10.3169,123.893,'Cebu City'),(10,10,10.3113,123.9,'Cebu City'),(11,11,11.0384,124.619,'Ormoc'),(12,12,11.024,124.6,'Ormoc'),(13,13,11.0225,124.599,'Ormoc'),(14,14,11.0258,124.595,'Ormoc'),(15,15,11.0206,124.6,'Ormoc'),(16,16,11.0186,124.603,'Ormoc');
+INSERT INTO `job_address` VALUES (1,1,10.3434,123.932,'Mandaue City'),(2,2,10.339,123.936,'Mandaue City'),(3,3,10.3441,123.939,'Mandaue City'),(4,4,10.3169,123.893,'Mandaue City'),(5,5,10.3333,123.937,'Mandaue City'),(7,7,10.3169,123.893,'Cebu City'),(8,8,10.308,123.89,'Cebu City'),(9,9,10.3169,123.893,'Cebu City'),(10,10,10.3113,123.9,'Cebu City'),(11,11,11.024,124.6,'Ormoc'),(12,12,11.024,124.6,'Ormoc'),(13,13,11.0225,124.599,'Ormoc'),(14,14,11.0258,124.595,'Ormoc'),(15,15,11.0206,124.6,'Ormoc'),(16,16,11.0186,124.603,'Ormoc');
 /*!40000 ALTER TABLE `job_address` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -477,7 +477,7 @@ CREATE TABLE `profiles` (
 
 LOCK TABLES `profiles` WRITE;
 /*!40000 ALTER TABLE `profiles` DISABLE KEYS */;
-INSERT INTO `profiles` VALUES (1,1,'Baguion s','Kent Michael','',0,0,11.0384,124.619,'Ormoc','','/avatar/kent.png'),(84,2,'Baguion','Kim Vincent','09329520016',20131015,102103,10.3148,123.901,'Cebu City','this is a good description about myself.','/avatar/kim.jpg');
+INSERT INTO `profiles` VALUES (1,1,'Baguion','Kent Michael','',0,0,11.0384,124.619,'Ormoc','','/avatar/kent.png'),(84,2,'Baguion','Kim Vincent','09329520016',20131015,102103,10.3148,123.901,'Cebu City','this is a good description about myself.','/avatar/kim.jpg');
 /*!40000 ALTER TABLE `profiles` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -496,7 +496,7 @@ CREATE TABLE `reviews` (
   `reviewer_id` int(11) NOT NULL,
   `work_id` int(11) NOT NULL,
   PRIMARY KEY (`review_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -505,7 +505,7 @@ CREATE TABLE `reviews` (
 
 LOCK TABLES `reviews` WRITE;
 /*!40000 ALTER TABLE `reviews` DISABLE KEYS */;
-INSERT INTO `reviews` VALUES (13,'thank you',4,2,1,90),(14,'Thank you',4,2,1,103),(15,'',0,2,1,103),(16,'thank you',4,2,1,106),(17,'asdasd',4,2,1,107),(18,'asdasdas',4,2,1,108);
+INSERT INTO `reviews` VALUES (1,'Nice review',5,2,1,1);
 /*!40000 ALTER TABLE `reviews` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -522,7 +522,7 @@ CREATE TABLE `schedules` (
   `start` datetime NOT NULL,
   `end` datetime NOT NULL,
   PRIMARY KEY (`schedule_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -531,7 +531,7 @@ CREATE TABLE `schedules` (
 
 LOCK TABLES `schedules` WRITE;
 /*!40000 ALTER TABLE `schedules` DISABLE KEYS */;
-INSERT INTO `schedules` VALUES (1,1,'2016-12-05 15:52:00','2016-12-05 18:52:00'),(4,2,'2016-12-05 16:52:00','2016-12-05 18:52:00'),(5,3,'2016-12-05 16:52:00','2016-12-05 18:52:00'),(6,4,'2016-12-05 16:52:00','2016-12-05 18:52:00'),(7,5,'2016-12-05 15:52:00','2016-12-05 18:52:00'),(8,7,'2016-12-05 16:00:00','2016-12-05 18:52:00'),(9,8,'2016-12-05 15:52:00','2016-12-05 18:52:00'),(10,9,'2016-12-05 15:52:00','2016-12-05 18:52:00'),(11,10,'2016-12-05 16:52:00','2016-12-05 18:52:00'),(12,11,'2016-12-05 18:52:00','2016-12-05 19:52:00'),(13,12,'2016-12-05 16:52:00','2016-12-05 19:52:00'),(14,13,'2016-12-05 16:52:00','2016-12-05 20:52:00'),(15,14,'2016-12-05 16:52:00','2016-12-05 20:52:00'),(16,15,'2016-12-05 16:52:00','2016-12-05 19:52:00'),(17,16,'2016-12-05 16:52:00','2016-12-05 18:52:00'),(18,3,'2016-12-05 16:52:00','2016-12-05 17:52:00');
+INSERT INTO `schedules` VALUES (1,1,'2016-12-06 17:00:00','2016-12-06 18:00:00'),(4,2,'2016-12-06 23:00:00','2016-12-06 23:50:00'),(5,3,'2016-12-06 17:30:00','2016-12-06 18:30:00'),(6,4,'2016-12-06 17:00:00','2016-12-06 19:00:00'),(7,5,'2016-12-06 18:00:00','2016-12-06 20:00:00'),(8,7,'2016-12-06 19:00:00','2016-12-06 21:00:00'),(9,8,'2016-12-06 20:00:00','2016-12-06 21:00:00'),(10,9,'2016-12-06 20:00:00','2016-12-06 21:00:00'),(11,10,'2016-12-06 20:00:00','2016-12-06 23:00:00'),(12,11,'2016-12-06 21:00:00','2016-12-06 22:00:00'),(13,12,'2016-12-06 22:00:00','2016-12-06 23:00:00'),(14,13,'2016-12-06 20:00:00','2016-12-06 21:00:00'),(15,14,'2016-12-06 17:30:00','2016-12-06 19:30:00'),(16,15,'2016-12-06 18:30:00','2016-12-06 20:30:00'),(17,16,'2016-12-06 17:30:00','2016-12-06 18:30:00');
 /*!40000 ALTER TABLE `schedules` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -609,7 +609,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'applicant','moch@gmail.com','$2y$10$u7hcDAzeFgPFbYXWNxVdweyGU9XtLWeqHxdScyuW.aZsTaz4d27uu','CbvCUcmlqqTK1IGrRWaucn3zrd4p6mZ16I62GuRlcc5xKhPstFozoim5hzvV'),(2,'employer','itnel13@gmail.com','$2y$10$E2PIeMbL68qZwELK3USQgO275CPJNjwJfAvoPHUVrLSa1kAryyws6','ACSz39a7Y7fk8uGG8OD4EhTkCrnPGbkCtCYJEzpp5lnVmGqJf4Z1hH2a9jEr');
+INSERT INTO `users` VALUES (1,'applicant','moch@gmail.com','$2y$10$u7hcDAzeFgPFbYXWNxVdweyGU9XtLWeqHxdScyuW.aZsTaz4d27uu','hOyDvumAqindEtgx0zICYnxOQwG5J2TyCzsXpXlacQAtvnMshw5UUEwv8TKZ'),(2,'employer','itnel13@gmail.com','$2y$10$E2PIeMbL68qZwELK3USQgO275CPJNjwJfAvoPHUVrLSa1kAryyws6','ACSz39a7Y7fk8uGG8OD4EhTkCrnPGbkCtCYJEzpp5lnVmGqJf4Z1hH2a9jEr');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -625,7 +625,7 @@ CREATE TABLE `work_logs` (
   `work_id` int(11) NOT NULL,
   `date_ended` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -634,7 +634,7 @@ CREATE TABLE `work_logs` (
 
 LOCK TABLES `work_logs` WRITE;
 /*!40000 ALTER TABLE `work_logs` DISABLE KEYS */;
-INSERT INTO `work_logs` VALUES (11,103,'2016-11-24 09:15:02'),(12,106,'2016-11-24 10:57:45'),(13,107,'2016-11-24 10:59:51'),(14,108,'2016-11-24 11:10:13');
+INSERT INTO `work_logs` VALUES (15,144,'2016-12-06 06:48:28'),(16,144,'2016-12-06 06:51:56'),(17,182,'2016-12-06 16:43:31'),(18,182,'2016-12-06 16:44:45'),(19,182,'2016-12-06 16:46:28'),(20,185,'2016-12-06 16:33:15'),(21,1,'2016-12-06 18:28:19');
 /*!40000 ALTER TABLE `work_logs` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -653,7 +653,7 @@ CREATE TABLE `works` (
   `date` datetime NOT NULL,
   `is_start` tinyint(1) NOT NULL,
   PRIMARY KEY (`work_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=146 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -662,7 +662,7 @@ CREATE TABLE `works` (
 
 LOCK TABLES `works` WRITE;
 /*!40000 ALTER TABLE `works` DISABLE KEYS */;
-INSERT INTO `works` VALUES (144,8,1,1,'2016-12-01 11:59:34',1),(145,12,1,2,'2016-12-01 12:02:01',0);
+INSERT INTO `works` VALUES (1,8,1,4,'2016-12-06 17:16:21',0);
 /*!40000 ALTER TABLE `works` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -675,4 +675,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-12-05 21:33:48
+-- Dump completed on 2016-12-13 11:03:29

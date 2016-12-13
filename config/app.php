@@ -163,6 +163,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         'MaddHatter\LaravelFullcalendar\ServiceProvider',
         SKAgarwal\GoogleApi\ServiceProvider::class,
+        'Borla\Chikka\Service',
     ],
 
     /*
@@ -211,6 +212,7 @@ return [
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
         'Calendar' => 'MaddHatter\LaravelFullcalendar\Facades\Calendar',
+        'Chikka'=> 'Borla\Chikka\Support\Facades\Chikka',
         'GooglePlaces' => SKAgarwal\GoogleApi\Facade::class,
     ],
 
