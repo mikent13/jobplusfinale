@@ -6,9 +6,8 @@
 	<hr>
 	<form action="{{url('sms/send')}}" method="POST">
 	{{ csrf_field() }}
-	<h1><?php var_dump($response) ?></h1>
 	<h1>Recipient Number</h1>
-	<input type="text" id="mobile" placeholder="phone number">
+	<input type="text" id="mobile" name="mobile" placeholder="phone number">
 	<h1>Message</h1>
 	<textarea  style="width:100%;height:130px;" id="message" placeholder="Message to recipient"></textarea>
 	<hr>

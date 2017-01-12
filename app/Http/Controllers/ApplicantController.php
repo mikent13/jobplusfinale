@@ -38,84 +38,6 @@ class ApplicantController extends Controller
 
   public function getDashboard()
   {
-
-    // $jobid    = 1;
-    // $myid     = Auth::user()->id;
-
-    // // Getting Posted Job Schedule
-    // $postjob    = Jobs::where('job_id',$jobid)->first();
-    // $postsched  = Schedules::where('job_id', $postjob->job_id)
-    //             ->get();
-
-    // foreach($postsched as $sches)            
-    // {
-
-    //   $postsched->start = Carbon::parse($postsched->start);
-    //   $postsched->end = Carbon::parse($postsched->end);
-    // }
-    // //Getting my Schedule
-    // $yourwork = Works::where('user_id', $myid)
-    //             ->whereNotIn('status', [0,3])
-    //             ->first();
-
-    // if($yourwork){
-    //   $mysched = Schedules::where('job_id',$yourwork->job_id)
-    //              ->get();
-    //   foreach($mysched as $mysch){
-    //     $mysch->start = Carbon::parse($mysch->start);
-    //     $mysch->end   = Carbon::parse($mysch->end);
-
-    //   $result = $postsched->start->between($mysched->start,$mysched->end); 
-
-    //     dd($result);
-    //   }           
-
-    // }
-
-        // $userid = Auth::user()->id;
-        // $profile = Profiles::where('user_id',2)->first();
-        // $profid = $profile->profile_id;
-
-        // $pskill = Prof_Skill::where('profile_id',$profid)->get();
-        // $recskills = array();
-        // foreach($pskill as $ps){
-        //   $recskills[] = $ps->skill_id;
-        // }
-
-        // $recjobs = Jobs::whereIn('skill_id',$recskills)
-        //                 ->get();
-
-        // // foreach($recjobs as $rec){
-        // //   $ids[] = $rec->job_id;
-        // // }
-
-        // $findjob = new FindJobs();
-        // $skills  = Skills::all();
-
-        // $ongoing  = $findjob->ongoingJob();
-        // $active   = $findjob->activeJob();
-        // $work     = $findjob->calendarJob();
-
-        // if($active){
-        // $activesched  = Schedules::where('schedule_id',$active)->first();
-        // $activework   = Works::where('job_id',$activesched->job_id)->first();
-        // $active       = Jobs::where('job_id',$activesched->job_id)->first();
-
-        // $start = $activesched->start = Carbon::parse($activesched->start)->format('h:i A');
-        // $end   = $activesched->end   = Carbon::parse($activesched->end)->format('h:i A');
-        // }
-
-        // $jobids  = array(); 
-        //  if($work){
-        //     foreach($work as $w){
-        //       $jobids[] = $w->job_id;
-        //     } 
-        //   }
-
-        // $databaseEvents = $this->calendarJob->whereIn('job_id',$jobids)->get();
-        // $calendar       = \Calendar::addEvents($databaseEvents);
-
-        // return view('applicant.home',compact('calendar','databaseEvents','skills','active','start','end','activework','recjobs','profile'));
     return view('applicant.dashboard');
   }
 
@@ -208,9 +130,6 @@ class ApplicantController extends Controller
           $data['employer'] = $employer;
         }
 
-
-      // $work = Works::where('sched_id',$sched->schedule_id)
-      //               ->first();
         $data['result'] = $result;
 
       }
@@ -218,7 +137,6 @@ class ApplicantController extends Controller
         $data['status'] = 0;
       }
     }
-
     return response()->json($data);
   }
 
@@ -598,6 +516,8 @@ public function getJobPageData(){
  $data['skill']          = Skills::all();
  $data['paytypes']       = Paytypes::all();
  $data['categories']     = Categories::all();
+
+ $geocoder = new google.maps.Geocoder();
  return response()->json($data);
 }
 
@@ -661,14 +581,14 @@ public function Apply(Request $req){
     if(count($myid) < 1){
       $data['cust'] = 'no conflict';
       foreach($jobsched as $jsch){
-      $work = new Works;
-      $work->sched_id = $jsch->schedule_id;
-      $work->applicant_id = $userid;
-      $work->status = 5;
-      $work->date = $today;
-      $work->is_start = 0;
-      $work->save();
-     }
+        $work = new Works;
+        $work->sched_id = $jsch->schedule_id;
+        $work->applicant_id = $userid;
+        $work->status = 5;
+        $work->date = $today;
+        $work->is_start = 0;
+        $work->save();
+      }
     }
     else{
       $myconf = Schedules::whereIn('schedule_id',$myid)->first();
@@ -780,6 +700,23 @@ public function viewJob($id){
   return view('applicant.jobinfo',compact('job','skills','profile'));
 }
 
+public function setReschedule(Request $req){
+ 
+  $workid = $req->workid;
+  $st = Carbon::now()->toDateTimeString();
+  $work = Works::where('work_id',$workid)->first();
+  $sched = Schedules::where('schedule_id',$work->sched_id)->first();
+  $sched->start = $st;
+  $sched->end = $st;
+  $sched->save();
 
+  $data['sched']  = $sched;
+  $data['workid'] = $workid;
+  $data['start']  = $st;
+
+  $data['status'] = 1;
+
+  return response()->json($data);
+}
 
 }

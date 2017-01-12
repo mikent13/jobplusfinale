@@ -13,61 +13,89 @@
     <link rel="stylesheet" href="/bootstrap/bootstrap-select.min.css">
     <link rel="stylesheet" href="/sweetalert/sweetalert.css">
     <link href="/css/star-rating.css" media="all" rel="stylesheet" type="text/css" />
+    <link href="/css/fontawesome-stars.css" media="all" rel="stylesheet" type="text/css" />
     @yield('css')
 </head>
 <body>
- <div class="navbar main-nav">
-  <div class="container">
+
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
-    <ul class="nav navbar-nav navbar-left">
-        <li>
-            <a href="{{route('app/dashboard')}}" class="brand"><p>Job+</p></a>
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">for Job Seekers</a>
+    </div>
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li><a href="{{route('app/dashboard')}}"><i class="fa fa-lg fa-clock-o" aria-hidden="true"></i> Schedule</a></li>
+        <li><a href="{{route('app/job/result')}}"><i class="fa fa-lg fa-briefcase" aria-hidden="true"></i> Find Job</a></li>
+        <li><a href="#"><i class="fa fa-handshake-o" aria-hidden="true"></i> Job Offers</a></li>
+        <li><a href="#"><i class="fa fa-lg fa-bookmark-o" aria-hidden="true"></i> Saved Jobs</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"> <i class="fa fa-lg fa-bell-o" aria-hidden="true"></i> Notification</a>
+          <ul class="dropdown-menu dropdown-cart" role="menu">
+              <li>
+                  <span class="item">
+                    <span class="item-left">
+                        <!-- <img src="http://lorempixel.com/50/50/" alt="" /> -->
+                        <span class="item-info">
+                            <span>Item name</span>
+                            <span>23$</span>
+                        </span>
+                    </span>
+                    <span class="item-right">
+                        <button class="btn btn-xs btn-danger pull-right">x</button>
+                    </span>
+                </span>
+              </li>
+              <li class="divider"></li>
+              <li><a class="#" href="">See all</a></li>
+          </ul>
         </li>
-        <li>
-            <a href="{{route('app/dashboard')}}" class="active"><p>Candidate</p></a>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-lg fa-envelope-o" aria-hidden="true"></i> Messages</a>
+          <ul class="dropdown-menu dropdown-cart" role="menu">
+              <li>
+                  <span class="item">
+                    <span class="item-left">
+                        <!-- <img src="http://lorempixel.com/50/50/" alt="" /> -->
+                        <span class="item-info">
+                            <span>Item name</span>
+                            <span>23$</span>
+                        </span>
+                    </span>
+                    <span class="item-right">
+                        <button class="btn btn-xs btn-danger pull-right">x</button>
+                    </span>
+                </span>
+              </li>
+              <li class="divider"></li>
+              <li><a class="#" href="">See all</a></li>
+          </ul>
         </li>
-    </ul>
-    <ul class="nav navbar-nav navbar-right">
-        <li>
-            <a href="#"><p><i class="fa fa-envelope-o fa-lg fa-fw" aria-hidden="true"></i><span class="badge"></span></p></a>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"> <i class="fa fa-lg fa-user-circle" aria-hidden="true"></i>{{Auth::user()->username}}<span class="caret"></span></a>
+          <ul class="dropdown-menu dropdown-cart" role="menu">
+              <li>
+                <a href="{{url('/get/user/profile')}}"><span>Profile</span></a>
+                <a href="#"><span>Activity Logs</span></a>
+                <a href="#"><span>Job+ Wallet</span></a>
+              </li>
+              <li class="divider"></li>
+              <li><a class="#" href="">Signout</a></li>
+          </ul>
         </li>
-        <li>
-            <a href="#"><p><i class="fa fa-bell-o fa-lg fa-fw" aria-hidden="true"></i></p></a>
-        </li>
-        <li class="dopdown">
-          <a href="{{route('app/profile')}}" class="dropdown-toggle img-avatar" data-toggle="dropdown">
-            <img src="{{Auth::user()->profile->avatar}}" style="border-radius: 50%; height: 30px; width: 30px; margin-right:5px;">{{Auth::user()->profile->lname}}, {{Auth::user()->profile->fname}}  <i class="fa fa-angle-down fa-lg" aria-hidden="true"></i>
-        </a>
-    </li>               
-</ul>
-</div>
-</div>
-<nav class="navbar navbar-default sub-nav " role="navigation">
-  <div class="container">
-      <ul class="nav navbar-nav navbar-left sub-nav-header">
-        <li>
-            <a href="{{route('app/dashboard')}}"><i class="fa fa-lg fa-clock-o" aria-hidden="true"></i> Schedule</a>
-        </li>
-        <li>
-          <a  href="{{route('app/job/result')}}"><i class="fa fa-lg fa-briefcase" aria-hidden="true"></i> Find Job</i></a>
-      </li>
-      <li>
-        <a href="#"><i class="fa fa-handshake-o" aria-hidden="true"></i> Job Offers</a>
-    </li>
-    <li>
-        <a href="#"><i class="fa fa-lg fa-bookmark-o" aria-hidden="true"></i> Saved Jobs</a>
-    </li>
-    <li>
-        <a href="#"><i class="fa fa-lg fa-credit-card" aria-hidden="true"></i> Job+ Wallet</a>
-    </li>
-    <li>
-        <a href="#"><i class="fa fa-lg fa-history" aria-hidden="true"></i> Logs</a>
-    </li>
-    <li>
-        <a href="{{url('/get/user/profile')}}"><i class="fa fa-lg fa-user-circle" aria-hidden="true"></i> Profile</a>
-    </li>                              
-</ul>
-</div>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
 </nav>
 @yield('body')
 <footer>
@@ -121,7 +149,5 @@
 </footer>
 </body>
 <script src="/js/jquery-1.11.1.min.js"></script>
-
-<script src="/js/scripts.js"></script>
 @yield('js')
 </html>

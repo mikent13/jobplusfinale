@@ -2,15 +2,73 @@
 
 $(document).ready(function(){
 
+  $(document).on('change','#act-actions',function(){
+    var val = $('#act-actions option:selected').val();
+    if(val == 2){
+      $('#actResched-Modal').modal('show');
+      $('#active-datepicker1').datetimepicker({
+        inline: true,
+        sideBySide: true
+      });
+      $('#active-datepicker2').datetimepicker({
+        inline: true,
+        sideBySide: true
+      });
+    }
+  });
 
- $('.active-body').attr('hidden',true);
- initializeMap();
- activeJob();
- upcomingJob();
- loadEnd();
+  $(document).on('click','#btn-next',function(){
+    $('#resched-end').click();
+
+  });
+
+  $(document).on('click','#btn-active-resched',function(){
+    var start = $('#active-datepicker1').data('date');
+    var end = $('#active-datepicker2').data('date');
+    var workid = $('#act-workid').text();
+
+    $.ajaxSetup({
+    headers: {
+      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+  });
+
+  var resched = $.ajax({
+    url: '/get/dash/resched',
+    method: 'GET',
+    data:{
+      'start': start,
+      'end' : end,
+      'workid' : workid
+    }
+  });
+
+  resched.done(function(data){
+    console.log(data);
+  });
+
+  });
+
+  $(document).on('click','#btn-prev',function(){
+    $('#resched-start').click();
+  });
+
+  $('.active-body').attr('hidden',true);
+  initializeMap();
+  activeJob();
+  upcomingJob();
+  loadEnd();
 });
 // upcomingJob();
 // $('#late').hide();
+var options = {
+  enableHighAccuracy: true,
+  timeout: 5000,
+  maximumAge: 0
+};
+function error(err) {
+  console.warn('ERROR(' + err.code + '): ' + err.message);
+};
 
 function activeJob(){
   $('.actend').attr('hidden',true);
@@ -35,7 +93,7 @@ function activeJob(){
       $('#actdesc').text(data.job.description);
       $('#modalemp').text(data.employer.fname + ' '+ data.employer.lname +'?');
       $('#empid').text(data.employer.user_id);
-      $('#workid').text(data.work.work_id);
+      $('#act-workid').text(data.work.work_id);
       var start = moment(data.sched.start);
       var end = moment(data.sched.end);
 
@@ -51,7 +109,7 @@ function activeJob(){
       var endYear = end.format('YYYY');
       var endTime = end.format('LT');
 
-       if(data.started == 1){
+      if(data.started == 1){
         $('#actstart').fadeOut(1000);
         $('#actend').fadeIn(1200);
         $('#actend').removeClass('hidden');
@@ -59,90 +117,111 @@ function activeJob(){
         $('#head-meta').text('until session ends');
       }
       else{
-         $('#head-min').text(start.fromNow(true));
-        $('#head-meta').text('until job starts');
+       $('#head-min').text(start.fromNow(true));
+       $('#head-meta').text('until job starts');
+     }
+
+     $('#emp-pic').attr('src',data.employer.avatar);
+     
+     $('#startDay').text(startDay1 + ', '+startMonth + '. '+startDay2 + ' '+startYear);
+     $('#startTime').text(startTime);
+     $('#endDay').text(endDay1 + ', '+endMonth + '. '+endDay2 + ' '+endYear);
+     $('#endTime').text(endTime);
+
+     $('#actsal').text('PHP '+data.job.salary);
+     $('#actstart').attr('workid',data.work.work_id);
+
+
+     var meo = [];
+     var locs;
+     var centers = { lat: parseFloat(data.address.lat), lng: parseFloat(data.address.lng) };
+     meo.push(centers);
+     var geocoder = new google.maps.Geocoder();
+     geocoder.geocode({ 'latLng': meo[0] }, function (results, status) {
+      if (status == google.maps.GeocoderStatus.OK) {
+        locs = results[0].formatted_address;
+        $('#actaddress').text(locs);
+      }
+    });
+
+     var options = {
+      enableHighAccuracy: true,
+      timeout: 5000,
+      maximumAge: 0
+    };
+
+    function success(pos) {
+      var crd = pos.coords;
+
+      console.log('Your current position is:');
+      console.log('Latitude : ' + crd.latitude);
+      console.log('Longitude: ' + crd.longitude);
+      console.log('More or less ' + crd.accuracy + ' meters.');
+    };
+
+    function error(err) {
+      console.warn('ERROR(' + err.code + '): ' + err.message);
+    };
+
+    navigator.geolocation.getCurrentPosition(success, error, options);
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(position){
+        var geolocations = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+        var directionsDisplay = new google.maps.DirectionsRenderer;
+        var directionsService = new google.maps.DirectionsService;
+
+        var origin = new google.maps.LatLng(geolocations.lat, geolocations.lng),
+        destination = new google.maps.LatLng(data.address.lat, data.address.lng),
+        service = new google.maps.DistanceMatrixService();
+
+        $('#actgmap').attr('hidden',false);
+        setTimeout(google.maps.event.trigger(actmap, 'resize'),300);
+        actmap.setCenter(centers);
+        directionsDisplay.setMap(actmap);
+
+        calculateAndDisplayRoute(directionsService, directionsDisplay);
+
+        function calculateAndDisplayRoute(directionsService, directionsDisplay) {
+          directionsService.route({
+            origin: origin, 
+            destination: destination,  
+            travelMode: google.maps.TravelMode.DRIVING
+          }, function(response, status) {
+            if (status == 'OK') {
+              directionsDisplay.setDirections(response);
+            } else {
+              window.alert('Directions request failed due to ' + status);
+            }
+          });
+        }
+
+        service.getDistanceMatrix(
+        {
+          origins: [origin],
+          destinations: [destination],
+          travelMode: google.maps.TravelMode.DRIVING,
+          avoidHighways: false,
+          avoidTolls: false
+        }, 
+        callback
+        );
+      })};
+
+      function callback(response, status) {
+        console.log(response);
+        if(status=="OK") {
+          $('#actdistance').text(response.rows[0].elements[0].distance.text);
+          $('#acttime').text(response.rows[0].elements[0].duration.text);
+        } else {
+          alert("Error: " + status);
+        }
       }
 
-      $('#emp-pic').attr('src',data.employer.avatar);
-     
-      $('#startDay').text(startDay1 + ', '+startMonth + '. '+startDay2 + ' '+startYear);
-      $('#startTime').text(startTime);
-      $('#endDay').text(endDay1 + ', '+endMonth + '. '+endDay2 + ' '+endYear);
-      $('#endTime').text(endTime);
-
-      $('#actsal').text('PHP '+data.job.salary);
-      $('#actstart').attr('workid',data.work.work_id);
-
-
-      var meo = [];
-      var locs;
-      var centers = { lat: parseFloat(data.address.lat), lng: parseFloat(data.address.lng) };
-      meo.push(centers);
-      var geocoder = new google.maps.Geocoder();
-      geocoder.geocode({ 'latLng': meo[0] }, function (results, status) {
-        if (status == google.maps.GeocoderStatus.OK) {
-          locs = results[0].formatted_address;
-          $('#actaddress').text(locs);
-        }
-      });
-
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-          var geolocations = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude
-          };
-          var directionsDisplay = new google.maps.DirectionsRenderer;
-          var directionsService = new google.maps.DirectionsService;
-
-          var origin = new google.maps.LatLng(geolocations.lat, geolocations.lng),
-          destination = new google.maps.LatLng(data.address.lat, data.address.lng),
-          service = new google.maps.DistanceMatrixService();
-
-          $('#actgmap').attr('hidden',false);
-          setTimeout(google.maps.event.trigger(actmap, 'resize'),300);
-          actmap.setCenter(centers);
-          directionsDisplay.setMap(actmap);
-
-          calculateAndDisplayRoute(directionsService, directionsDisplay);
-
-          function calculateAndDisplayRoute(directionsService, directionsDisplay) {
-            directionsService.route({
-              origin: origin, 
-              destination: destination,  
-              travelMode: google.maps.TravelMode.DRIVING
-            }, function(response, status) {
-              if (status == 'OK') {
-                directionsDisplay.setDirections(response);
-              } else {
-                window.alert('Directions request failed due to ' + status);
-              }
-            });
-          }
-
-          service.getDistanceMatrix(
-          {
-            origins: [origin],
-            destinations: [destination],
-            travelMode: google.maps.TravelMode.DRIVING,
-            avoidHighways: false,
-            avoidTolls: false
-          }, 
-          callback
-          );
-        })};
-
-        function callback(response, status) {
-          console.log(response);
-          if(status=="OK") {
-            $('#actdistance').text(response.rows[0].elements[0].distance.text);
-            $('#acttime').text(response.rows[0].elements[0].duration.text);
-          } else {
-            alert("Error: " + status);
-          }
-        }
-
-        $('.active-body').attr('hidden',false);
+      $('.active-body').attr('hidden',false);
 
             // if(data.work.is_start == 1){
             //   $('#act-endbtn').attr('disabled',false);
@@ -323,8 +402,6 @@ function initializeMap(){
    $("#loading").fadeOut(300);
  }
 
-
-
  $(document).on('click','#act-endbtn',function(e){
   if($('#act-endbtn').is('[disabled]')){
 
@@ -416,20 +493,20 @@ function initializeMap(){
 
  $(document).on('click','#actend',function(){
   $('#rateModal').modal('show');
- });
+});
 
-$(document).on('click','#btn-rate',function(){
+ $(document).on('click','#btn-rate',function(){
   var review = $('#review').val();
   var rate = $('#rating-system').val();
   var emp = $('#empid').text();
-  var work = $('#workid').text();
+  var work = $('#act-workid').text();
   $.ajaxSetup({
     headers: {
       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     }
   });
 
-   var endjob = $.ajax({
+  var endjob = $.ajax({
     url: '/applicant/job/end',
     method: 'GET',
     data: {
@@ -440,16 +517,16 @@ $(document).on('click','#btn-rate',function(){
     }
   });
 
-   endjob.done(function(data){
+  endjob.done(function(data){
     console.log(data);
     if(data.status == 1){
       $('#rateModal').modal('hide');
       swal("Review sent!", " ", "success");
     }
-   });
+  });
 
 
- });
+});
 
  $(document).on('click','#actstart',function(){
    $.ajaxSetup({
@@ -472,14 +549,14 @@ $(document).on('click','#btn-rate',function(){
     
     if(data.status == 1){
       swal("Job has started.", "Work Hard!", "info");
-       $('#actstart').fadeOut(1000);
-        $('#actend').fadeIn(2000);
-        $('#actend').removeClass('hidden');
-        $('#head-min').text(end.fromNow(true));
-        $('#head-meta').text('until session ends');
+      $('#actstart').fadeOut(1000);
+      $('#actend').fadeIn(2000);
+      $('#actend').removeClass('hidden');
+      $('#head-min').text(end.fromNow(true));
+      $('#head-meta').text('until session ends');
     }
     else{
-    if(data.late == 1){
+      if(data.late == 1){
         swal("Oops.. It looks like you have exceed the 30 mins late allowance, we will deduct the penalty on your salary. ", " ", "warning");
       }
     }

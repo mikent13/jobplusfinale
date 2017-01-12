@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Experiences extends Model
 {
  
-	protected $primaryKey = 'id';
+	protected $primaryKey = 'experience_id';
     protected $table= 'experiences';
     public $timestamps = false;
 
@@ -18,5 +18,4 @@ class Experiences extends Model
 	    'year'
     ];
  		
-
 }

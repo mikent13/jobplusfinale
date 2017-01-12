@@ -1,6 +1,7 @@
 @extends('masters.AppPrimary')
 @section('css')
 <link rel="stylesheet" href="/bootstrap/css/dashboard.css">
+<link rel="stylesheet" href="/css/datetimepicker.min.css">
 @endsection
 
 @section('body')
@@ -22,21 +23,21 @@
     <p id="active-p">No items to display.</p>
     <div class="active-body">
       <div class="timeline-heading">
-      <div class="col-md-12 head-tools">
+        <div class="col-md-12 head-tools">
           <button class="btn btn-md btn-apply hidden" id="actend">End job </button>
           <button class="btn btn-md btn-apply" id="actstart">Start job</button>
           <h1 id="head-min"></h1>
           <h2 id="head-meta"></h2>
-      <hr>
-      </div>
-      <p class="hidden" id="workid"></p>
+          <hr>
+        </div>
+        <p class="hidden" id="act-workid"></p>
         <h1 id="actitle"></h1>
         <p id="actemp"></p>
         <div class="head-button pull-right">
-          <select class="selectpicker " data-width="170px" data-style="actselect" title="Set actions">
-            <option  class="actoption" data-icon="fa fa-envelope"> Send a message</option>
-            <option class="actoption" data-icon="fa fa-calendar"> Request a reschedule</option>
-            <option class="actoption" data-icon="fa fa-times"> Dismiss this job</option>
+          <select class="selectpicker " data-width="170px" data-style="actselect" title="Set actions" id="act-actions">
+            <option  class="actoption" data-icon="fa fa-envelope" value="1"> Send a message</option>
+            <option class="actoption" data-icon="fa fa-calendar" value="2"> Request a reschedule</option>
+            <option class="actoption" data-icon="fa fa-times" value="3"> Dismiss this job</option>
           </select>
         </div>
       </div>
@@ -97,22 +98,22 @@
         <p class="hidden" id="empid"></p>
         <h1 class="modal-title">How's your experience working with</h1>
         <img id="emp-pic" class="modal-pic">
-        </div>
-        <div class="modal-body">
-        <h1 class="modal-title modalemp" id="modalemp"></h1>
-          <input id="rating-system" name="rate" type="number" class="rating" min="1" max="5" step="1">
-          <hr>
-          <div class="form-group ">
-           <textarea style="width:100%;height:130px;font-size:19px;padding:15px;" name="review" id="review" placeholder="Write a short review."></textarea>
-         </div>
-         <input type="hidden" name="workid" id="actworkid">
-       </div>
-       <div class="modal-footer">
-        <button type="button" class="btn btn-md " data-dismiss="modal">Cancel</button>
-        <button type="submit" id="btn-rate" class="btn btn-md btn-primary">Rate</button>
       </div>
+      <div class="modal-body">
+        <h1 class="modal-title modalemp" id="modalemp"></h1>
+        <input id="rating-system" name="rate" type="number" class="rating" min="1" max="5" step="1">
+        <hr>
+        <div class="form-group ">
+         <textarea style="width:100%;height:130px;font-size:19px;padding:15px;" name="review" id="review" placeholder="Write a short review."></textarea>
+       </div>
+       <input type="hidden" name="act-workid" id="actworkid">
+     </div>
+     <div class="modal-footer">
+      <button type="button" class="btn btn-md " data-dismiss="modal">Cancel</button>
+      <button type="submit" id="btn-rate" class="btn btn-md btn-primary">Rate</button>
     </div>
   </div>
+</div>
 </div>
 
 <h1>Upcoming Jobs</h1>
@@ -189,6 +190,52 @@
 </div>
 </div>
 </div>
+
+<div class="modal fade" id="actResched-Modal" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header edu-header">
+        <h1 class="modal-title">Request for reschedule</h1>
+        <p>Select the date and time below.</p>
+      </div>
+
+      <div class="modal-body">
+        <div class="row">
+          <ul class="nav nav-tabs resched-head" role="tablist">
+          <li role="presentation" class="active"><a href="#start" aria-controls="start" role="tab" data-toggle="tab" id="resched-start">Start</a></li>
+            <li role="presentation"><a href="#end" aria-controls="end" role="tab" data-toggle="tab" id="resched-end">End</a></li>
+          </ul>
+
+          <!-- Tab panes -->
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="start">
+             <div style="overflow:hidden;">
+              <div class="form-group">
+                <div id="active-datepicker1"></div>
+              </div>
+            </div>
+              <button class="btn  btn-cancel" id="btn-next">Next   <i class="fa fa-arrow-right" aria-hidden="true"></i></button>
+          </div>
+          <div role="tabpanel" class="tab-pane" id="end">
+            <div style="overflow:hidden;">
+              <div class="form-group">
+                <div id="active-datepicker2"></div>
+              </div>
+            </div>
+            <button class="btn btn-cancel " id="btn-prev">Previous   <i class="fa fa-arrow-left" aria-hidden="true"></i></button>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="submit" id="btn-active-resched" class="btn btn-save btn-primary btn-req" data-dismiss="modal">Submit Request</button>
+        <button type="button" class="btn btn-cancel " data-dismiss="modal">Cancel</button>
+      </div>
+    </div> 
+  </div>
+</div>
+
+
 </div>
 </div>
 @endsection
@@ -202,5 +249,7 @@
 <script src="/js/star-rating.js" type="text/javascript"></script>
 <script src="/bootstrap/js/bootstrap.min.js"></script>
 <script src="/bootstrap/bootstrap-select.js"></script>
+<script type="text/javascript" src="/js/datetimepicker.min.js"></script>
 <script src="/js/app-dashboard.js"></script>
+
 @endsection

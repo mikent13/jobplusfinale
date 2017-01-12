@@ -7,9 +7,4 @@ use Illuminate\Database\Eloquent\Model;
 class Degrees extends Model
 {
     	protected $table = 'degrees';
-
-      public function education()
-    {
-        return $this->belongsTo('App\Education');   
-    }
 }

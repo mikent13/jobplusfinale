@@ -85,7 +85,7 @@ a,p{
 	color: #d35400;
 	background-color: #fff;
 	 transition: all 0.2s ease;
-}
+}transition: all 0.2s ease;
 
 
 
@@ -149,18 +149,6 @@ a,p{
 	margin-top: -5px;
 }
 
-.nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover { border-width: 0; }
-.nav-tabs > li > a { border: none; color: #666; }
-.nav-tabs > li.active > a, .nav-tabs > li > a:hover { border: none; color: #4285F4 !important; background: transparent; }
-.nav-tabs > li > a::after { content: ""; background:  #d35400; height: 3px; position: absolute; width: 100%; left: 0px; bottom: -1px; transition: all 250ms ease 0s; transform: scale(0); }
-.nav-tabs > li.active > a::after, .nav-tabs > li:hover > a::after { transform: scale(1); }
-.tab-nav  > li > a::after { background: #21527d none repeat scroll 0% 0%; color: #fff; }
-
-.tab-pane { 
-margin-left:-15px;
-padding-top: 15px;
-margin-bottom: 30px;
-}
 
 
 .ellipsis {
@@ -320,7 +308,7 @@ transition: all 0.3s ease;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-	margin-top: -20px;
+	margin-top: -28px;
 	z-index: -2;
 }
 
@@ -826,10 +814,6 @@ a.list-group-item:focus, a.list-group-item:hover, button.list-group-item:focus, 
     background-color: #e1e1e0;
      transition: all 0.2s ease;
 }
- .nav-tabs {
-	padding-left: 350px;
-}
-
 .modal-body{
     padding-left: 30px;
     padding-right: 30px;
@@ -847,4 +831,54 @@ a.list-group-item:focus, a.list-group-item:hover, button.list-group-item:focus, 
 .conf-modal > button{
 	position: fixed;
 	right: 10%;
+}
+
+ul.dropdown-cart{
+    min-width:350px;
+}
+ul.dropdown-cart li .item{
+    display:block;
+    padding:3px 10px;
+    margin: 3px 0;
+}
+ul.dropdown-cart li .item:hover{
+    background-color:#f3f3f3;
+    transition: 0.5 ease;
+}
+ul.dropdown-cart li .item:after{
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: " ";
+    clear: both;
+    height: 0;
+    transition: 0.5 ease;
+}
+
+ul.dropdown-cart li .item-left{
+    float:left;
+}
+ul.dropdown-cart li .item-left img,
+ul.dropdown-cart li .item-left span.item-info{
+    float:left;
+}
+ul.dropdown-cart li .item-left span.item-info{
+    margin-left:10px;   
+}
+ul.dropdown-cart li .item-left span.item-info span{
+    display:block;
+}
+ul.dropdown-cart li .item-right{
+    float:right;
+}
+ul.dropdown-cart li .item-right button{
+    margin-top:14px;
+}
+
+.navbar-brand{
+	text-align: center;
+}
+
+.navbar-default .navbar-collapse, .navbar-default .navbar-form {
+    box-shadow: 0 1.5px 0 #B4B3B3;
 }

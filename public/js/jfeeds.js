@@ -9,23 +9,17 @@ var nearbs;
 var markers = [];
 var geolocations;
 //----------------------------Initialization------------------------------------//
+
 function initializeMap(){
   $('#feed-gmap').attr('hidden',true);
   $('#rec-gmap').attr('hidden',true);
   $('#near-gmap').attr('hidden',true);
 
-  // if (navigator.geolocation) {
-  //   navigator.geolocation.getCurrentPosition(function(position) {
-    
-  //     console.log(geolocations.lat);
-
-
-  //   });
-  // }
-  
-  var geolocations = {
-        lat: 10.315699,
-        lng: 123.885437
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+    var geolocations = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
       };
 
       var meos = [];
@@ -35,11 +29,13 @@ function initializeMap(){
       var geocoder = new google.maps.Geocoder();
       geocoder.geocode({ 'latLng': meos[0] }, function (results, status) {
         if (status == google.maps.GeocoderStatus.OK) {
+             console.log(results);
           var res = results[0].address_components;
           for(var i=0; i<res.length; i++){
             if(res[i].types[0] =="locality"){
              $('#search-loc').val(res[i].long_name);
              nearbs = res[i].long_name;
+             console.log(nearbs);
            }
          }
        }
@@ -60,10 +56,12 @@ function initializeMap(){
         zoom: 18
       });
   $("#loading").fadeOut(300);
-}
+})
+    }
+  }
+  
 
 function initializeData(){
- 
  
  $('#feed-body').attr('hidden',true);
  $.ajaxSetup({
@@ -79,7 +77,7 @@ function initializeData(){
 
  jobdatas.done(function(data){
   console.log(data);
-  var index = 0;$
+  var index = 0;
 
   $.each(data.categories,function(key,val){
    $('#search-sel').append($('<option>').text(val.name).attr('value',val.category_id).addClass('selectoption'))
@@ -163,28 +161,9 @@ function initializeData(){
 };
 
 $(document).ready(function(){
-
  
-  var stickyNavTop = $('.sub-nav').offset().top;
-  
-  var stickyNav = function(){
-    var scrollTop = $(window).scrollTop();
-    
-    if (scrollTop > stickyNavTop) { 
-      $('.sub-nav').addClass('sticky sub-nav-header');
-    } else {
-      $('.sub-nav').removeClass('sticky'); 
-    }
-  };
-  
-  stickyNav();
-  
-  $(window).scroll(function() {
-    stickyNav();
-  });
   initializeMap();
   initializeData();
-
 
   $('a[href*=#scrolled]:not([href=#])').click(function() {
     if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') 
@@ -230,6 +209,7 @@ $(document).on('click','#btn-search',function(e){
       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     }
   });
+  
   geocode.geocode({ 'address': $('#search-loc').val() }, function (results, status) {
     if (status == google.maps.GeocoderStatus.OK) {
       console.log(results);
@@ -439,6 +419,7 @@ $(document).on('click','.item-res',function(e){
  $('#feed-result-sched').empty();
  $('#feed-result-skill').empty();
  $('#feed-body').attr('hidden',false);
+
  $.ajaxSetup({
   headers: {
     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -545,7 +526,6 @@ $(document).on('click','#tab-nearby',function(e){
   search.done(function(data){
     console.log(data);
     $('#nearby-res').empty();
-
     for(i = 0; i< data.jobs.length; i++){
       for(z = 0; z< data.add.length; z++){
         if(data.jobs[i].job_id == data.add[z].jobid){
@@ -558,7 +538,7 @@ $(document).on('click','#tab-nearby',function(e){
                     console.log(jobids);
                     $('#nearby-res').append($('<a>').addClass('list-group-item near-res').attr('data-val',data.jobs[i].job_id)
                       .append($('<div>').addClass('cont-feeds')
-                        .append($('<img>').addClass('img-rounded pull-left').attr('src',''))
+                        .append($('<img>').addClass('img-rounded pull-left').attr('src',data.profile[x].avatar))
                         .append($('<h4>').addClass('list-group-item-heading ellipsis meta-title').text(data.jobs[i].title))
                         .append($('<p>').addClass('list-group-item-text meta meta-employer').text('by '+data.profile[x].fname + ' ' + data.profile[x].lname))
                         .append($('<i>').addClass('meta-loc meta-marker fa-1x fa fa-map-marker'))
@@ -572,8 +552,8 @@ $(document).on('click','#tab-nearby',function(e){
       }
     }
   });
-
 });
+
 $(document).on('click','.near-res',function(e){
  $('#near-body').attr('hidden',true);
  e.preventDefault();
@@ -615,16 +595,20 @@ $(document).on('click','.near-res',function(e){
     for(i = 0; i<data.skill.length; i++){
       $('#near-result-skill').append($('<p>').text(data.skill[i].name).addClass('mini-skill'));
     }
+    
     $('#near-desc').text(data.job.description);
     $('.meta-sal').text('PHP ' + data.job.salary);
     $('.meta-slot').text(data.job.slot);
     $('.meta-ptype').text(data.paytype.name);
   });
 
-  var marker = new google.maps.Marker({
+  if(markers.length !== 0){
+    markers.setMap(null);
+  }
+
+  markers = new google.maps.Marker({
     map: nearmap,
     position: meos[0],
-    title: 'Hello World!'
   });
   
   $('#near-gmap').attr('hidden',false);
