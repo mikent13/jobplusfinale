@@ -14,11 +14,10 @@ class CreateExperiencesTable extends Migration
     {
         Schema::create('experiences', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('skill_id')->nullable();
+            $table->integer('skill_id');
             $table->string('jobname')->nullable();
             $table->string('employer')->nullable();
             $table->integer('year');
-            $table->timestamps();
         });
     }
 

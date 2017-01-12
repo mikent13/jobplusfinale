@@ -13,17 +13,21 @@ class CreateJobsTable extends Migration
     public function up()
     {
         Schema::create('jobs', function (Blueprint $table) {
-            $table->increments('id');
+            $table->increments('job_id');
             $table->integer('user_id');
-            $table->integer('category_id');            
-            $table->string('title');
+            $table->string('category_id');            
+            $table->integer('skill_id');
             $table->string('description');
-            $table->date('start_date');
-            $table->date('end_date');
-            $table->integer('paytype_id');
+            $table->string('lat');
+            $table->string('long');
+            $table->dateTime('start_date');
+            $table->dateTime('end_date');
+            $table->string('paytype');
             $table->float('salary');
             $table->boolean('is_all_day');
-            $table->timestamps();   
+            $table->integer('slot');
+            $table->date('date_posted');
+        
         });
     }
 

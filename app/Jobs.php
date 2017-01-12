@@ -7,103 +7,68 @@ use MaddHatter\LaravelFullcalendar\Event;
 
 class Jobs extends Model implements Event
 {
-
     protected $table = 'jobs';
     protected $dates = ['start', 'end'];
 
-
+ public function getId()
+    {
+        return $this->job_id;
+    }
     public function getUser(){
         return $this->user_id;
     }
+    
     public function getCategory(){
         return $this->category_id;
     }
+     
+    public function getTitle()
+    {
+        return $this->skill_id;
+    }
+
     public function getDescription(){
         return $this->description;
     }
-    public function getSchedule(){
-        return $this->schedule_id;
+    public function getLat(){
+        return $this->lat;
+    }
+    public function getLong(){
+        return $this->long;
+    }
+      public function getStart()
+    {
+        return $this->start_date;
+    }
+    public function getEnd()
+    {
+        return $this->end_date;
     }
     public function getPaytype(){
-        return $this->paytype_id;
+        return $this->paytype;
     }
     public function getSalary(){
         return $this->salary;
     }
-    public function getId()
+    public function isAllDay()
     {
-        return $this->id;
+        return $this->is_all_day;
     }
-   public function isAllDay()
-    {
-        return $this->isAllDay;
-    }
-    /**
-     * Get the event's title
-     *
-     * @return string
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
-
-    /**
-     * Is it an all day event?
-     *
-     * @return bool
-     */
- 
-
-    /**
-     * Get the start time
-     *
-     * @return DateTime
-     */
-    public function getStart()
-    {
-        return $this->start;
-    }
-
-    /**
-     * Get the end time
-     *
-     * @return DateTime
-     */
-    public function getEnd()
-    {
-        return $this->end;
-    }
-
-    /**
-     * Get the optional event options
-     *
-     * @return array
-     */
-    public function getEventOptions()
+  
+  public function getEventOptions()
     {
         return $this->options;
     }
-
-    public function user()
-    {
-        return $this->belongsTo('App\User');
+    public function getSlot(){
+        return $this->slot;
+    }
+    public function getDatePosted(){
+        return $this->date_posted;
     }
 
-    public function category()
+    public function skills()
     {
-        return $this->belongsTo('App\Categories');
+    	return $this->hasMany('App\Skills','skill_id','skill_id');
     }
 
-    public function payType()
-    {
-    	return $this->belongsTo('Paytypes');
-    }
-
-    public function skill()
-    {
-    	return $this->hasMany('Skills');
-    }
-
-    
 }

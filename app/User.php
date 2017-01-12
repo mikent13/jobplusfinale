@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Model;
-class User extends Model
+class User extends Authenticatable
 {
     /**
      * The attributes that are mass assignable.
@@ -13,7 +13,7 @@ class User extends Model
      */
 
     protected $table ='users';
-
+    public $timestamps = false;
     protected $fillable = [
         'username', 'email', 'password',
     ];
@@ -23,65 +23,13 @@ class User extends Model
      *
      * @var array
      */
+
     protected $hidden = [
         'password', 'remember_token',
     ];
 
-    public function job()
-    {
-        return $this->hasMany('App\Jobs');
-    }
-
-    public function appCal()
-    {
-        return $this->belongsTo('AppCal');
-    }
-
-    public function empCal()
-    {
-        return $this->belongsTo('EmpCal');
-    }
-
-    public function profile()
-    {
-        return $this->belongsTo('Profiles');
-    }
-
-    public function appNoti()
-    {
-        return $this->hasMany('AppNoti');
-    }
-
-    public function empNoti()
-    {
-        return $this->hasMany('EmpNoti');
-    }
-  
-
-/*    public function skill()
-    {
-        return $this->hasMany('Skills');   
-    }
-
-    public function experience()
-    {
-        return $this->hasMany('Experiences');
-    }*/
-
- 
-     public function work()
-    {
-        return $this->hasMany('Works');
-    }
-
-    public function reviews()
-    {
-        return $this->morphMany('Reviews','reviews');
-    }
-
-    public function education()
-    {
-        return $this->belongsTo('Education');
+    public function profile(){
+        return $this->hasOne('App\Profiles');
     }
 
 }

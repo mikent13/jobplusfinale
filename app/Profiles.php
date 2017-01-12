@@ -7,26 +7,25 @@ use Illuminate\Database\Eloquent\Model;
 class Profiles extends Model
 {
         protected $table = 'profiles';
-
+        public $timestamps = false;
+        protected $primaryKey = 'profile_id';
+    protected $fillable =[
+        'user_id',
+        'lname',
+        'fname',
+        'mobile',
+        'account_no',
+        'key',
+        'lat',
+        'long',
+        'biography'
+    ];
 
     public function user()
     {
-    	return $this->belongTo('User');
-    }
-    public function experience()
-    {
-        return $this->belongsToMany('App\Experiences','prof_experiences','profile_id','experience_id');
+    	return $this->belongsTo('App\User');
     }
 
-     public function education()
-    {
-        return $this->belongsToMany('App\Education','prof_educations','profile_id','education_id');
-    }
-
-      public function skill()
-    {
-        return $this->belongsToMany('Skills','prof_skills');   
-    }
 
 }
  

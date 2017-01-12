@@ -39,7 +39,6 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://localhost'),
 
     /*
     |--------------------------------------------------------------------------
@@ -51,8 +50,7 @@ return [
     | ahead and set this to a sensible default for you out of the box.
     |
     */
-
-    'timezone' => 'UTC',
+    'timezone' => 'Asia/Singapore',
 
     /*
     |--------------------------------------------------------------------------
@@ -164,6 +162,8 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         'MaddHatter\LaravelFullcalendar\ServiceProvider',
+        SKAgarwal\GoogleApi\ServiceProvider::class,
+        'Borla\Chikka\Service',
     ],
 
     /*
@@ -212,7 +212,8 @@ return [
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
         'Calendar' => 'MaddHatter\LaravelFullcalendar\Facades\Calendar',
-
+        'Chikka'=> 'Borla\Chikka\Support\Facades\Chikka',
+        'GooglePlaces' => SKAgarwal\GoogleApi\Facade::class,
     ],
 
 ];

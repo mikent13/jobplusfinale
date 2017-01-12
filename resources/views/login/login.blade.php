@@ -4,20 +4,8 @@
         <div class="top-content">
             <div class="inner-bg">
                 <div class="container">
-                    <div class="row">
-                    <div class="col-md-4 hero">
-                    	   <h1>JobPlus</h1>
-                    	    <p class="tagline">Great Career.Great Life</p>
-                    	    <hr>
-                    	   <p>Dont have an account yet?</p>
-                    	   <a href="{{ url('/register')}}">
-                    	   <div class="signup">
-                    	  	 <h3>Create account</h3>
-                    	   </div>
-                    	   </a>
-
-                    </div>
-                        <div class="col-sm-6 col-md-offset-1">
+                    <div class="row cont-body">
+                        <div class="col-sm-6 col-md-offset-1" style="margin-top: 200px;">
 
                         	<div class="form-box">
 	                        	<div class="form-top">
@@ -25,9 +13,7 @@
 	                        			<h3>Login to our site</h3>
 	                           	 		<p>Enter username and password to log on:</p>
 	                        		</div>
-	                        		<div class="form-top-right">
-	                        			<i class="fa fa-key"></i>
-	                        		</div>
+	                        		
 	                            </div>
 	                            <div class="form-bottom">
 				                    <form role="form" action="{{ url('/login') }}" method="post" class="login-form">
@@ -47,29 +33,13 @@
 				                        	<label class="sr-only" for="password">Password</label>
 				                        	<input type="password" name="password" placeholder="Password..." class="form-password form-control" id="password">
 				                        </div>
-
-				                            <div class="form-group">
-					                            <div class="col-md-6 ">
-					                                <div class="checkbox">
-					                                    <label>
-					                                        <input type="checkbox" name="remember"> Remember Me
-					                                    </label>
-					                                </div>
-					                            </div>
-					                        </div>
-					                 
-					                        <hr>
 				                        <button type="submit" class="btn">Sign in!</button>
 				                    </form>
 
 			                    </div>
 		                    </div>
-		                
-		        
                         </div>
-                       
                     </div>
-                    
                 </div>
             </div>
         </div>

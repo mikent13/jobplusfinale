@@ -16,7 +16,6 @@ class CreateProfEducationsTable extends Migration
             $table->increments('id');
             $table->integer('profile_id');
             $table->integer('education_id');
-            $table->timestamps();
         });
     }
 

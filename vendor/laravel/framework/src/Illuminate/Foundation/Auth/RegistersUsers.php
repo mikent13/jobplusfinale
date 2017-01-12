@@ -50,8 +50,10 @@ trait RegistersUsers
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
     public function register(Request $request)
     {
+  
         $validator = $this->validator($request->all());
 
         if ($validator->fails()) {
@@ -61,7 +63,7 @@ trait RegistersUsers
         }
 
         Auth::guard($this->getGuard())->login($this->create($request->all()));
-
+        $this->redirectPath = 'user/setup';
         return redirect($this->redirectPath());
     }
 
@@ -70,6 +72,7 @@ trait RegistersUsers
      *
      * @return string|null
      */
+
     protected function getGuard()
     {
         return property_exists($this, 'guard') ? $this->guard : null;

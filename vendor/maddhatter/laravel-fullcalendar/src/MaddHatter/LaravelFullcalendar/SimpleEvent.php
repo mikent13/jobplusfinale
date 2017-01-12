@@ -9,145 +9,99 @@ use DateTime;
  *
  * @package MaddHatter\LaravelFullcalendar
  */
+
 class SimpleEvent implements IdentifiableEvent
 {
-
-    /**
-     * @var string|int|null
-     */
-    public $id;
-
-    /**
-     * @var string
-     */
-    public $title;
-
-    /**
-     * @var bool
-     */
-    public $isAllDay;
-
-    /**
-     * @var DateTime
-     */
+    public $job_id;
+    public $skill_id;
+    public $is_all_day;
     public $start_date;
     public $end_date;
-    /**
-     * @var DateTime
-     */
-
     public $user_id;
     public $category_id;
     public $description;
-    public $schedule_id;
-    public $paytype_id;
+    public $lat;
+    public $long;
+    public $paytype;
     public $salary;
-
-    /**
-     * @var array
-     */
     private $options;
+    public $slot;
+    public $date_posted;
 
-    /**
-     * @param string          $title
-     * @param bool            $isAllDay
-     * @param string|DateTime $start If string, must be valid datetime format: http://bit.ly/1z7QWbg
-     * @param string|DateTime $end   If string, must be valid datetime format: http://bit.ly/1z7QWbg
-     * @param int|string|null $id
-     * @param array           $options
-     */
-    public function __construct($title, $isAllDay, $start_date, $end_date, $id = null, $options = [],$userid,$categoryid,$description,$scheduleid,$paytypeid,$salary)
+    public function __construct($id = null,$user,$category,$skill,$description,$lat,$long,$start, $end,$paytype,$salary,$isAllDay,$slot,$date_posted,$options = [])
     {
-        $this->id       = $id;
-         $this->user_id = $userid;
-          $this->category_id = $categoryid;
-          $this->title    = $title;
-          $this->description = $description;
-           $this->start_date    = $start_date instanceof DateTime ? $start_date : new DateTime($start_date);
-        $this->end_date      = $start_date instanceof DateTime ? $end_date : new DateTime($end_date);
-           $this->schedule_id = $scheduleid;
-           $this->paytype_id = $paytypeid;
+        $this->job_id       = $id;
+        $this->user_id = $user;
+        $this->category_id = $category;
+        $this->skill_id    = $skill;
+        $this->description = $description;
+        $this->lat = $lat;
+        $this->long = $long;
+        $this->start_date    = $start instanceof DateTime ? $start : new DateTime($start);
+        $this->end_date     = $end instanceof DateTime ? $end : new DateTime($end);
+        $this->paytype = $paytype;
         $this->salary = $salary;
-          $this->isAllDay = $isAllDay;
+        $this->is_all_day = $isAllDay;
         $this->options  = $options;
+        $this->slot = $slot;
+        $this->date_posted = $date_posted;
     }
 
-    /**
-     * Get the event's id number
-     *
-     * @return int
-     */
-
+     public function getId()
+    {
+        return $this->job_id;
+    }
     public function getUser(){
         return $this->user_id;
     }
+    
     public function getCategory(){
         return $this->category_id;
     }
+     
+    public function getTitle()
+    {
+        return $this->skill_id;
+    }
+
     public function getDescription(){
         return $this->description;
     }
-    public function getSchedule(){
-        return $this->schedule_id;
+    public function getLat(){
+        return $this->lat;
     }
-    public function getPaytype(){
-        return $this->paytype_id;
+    public function getLong(){
+        return $this->long;
     }
-    public function getSalary(){
-        return $this->salary;
-    }
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Get the event's title
-     *
-     * @return string
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
-
-    /**
-     * Is it an all day event?
-     *
-     * @return bool
-     */
-    public function isAllDay()
-    {
-        return $this->isAllDay;
-    }
-
-    /**
-     * Get the start time
-     *
-     * @return DateTime
-     */
-    public function getStart()
+      public function getStart()
     {
         return $this->start_date;
     }
-
-    /**
-     * Get the end time
-     *
-     * @return DateTime
-     */
     public function getEnd()
     {
         return $this->end_date;
     }
-
-    /**
-     * Get the optional event options
-     *
-     * @return array
-     */
-    public function getEventOptions()
+    public function getPaytype(){
+        return $this->paytype;
+    }
+    public function getSalary(){
+        return $this->salary;
+    }
+  
+    public function isAllDay()
+    {
+        return $this->is_all_day;
+    }
+  
+  public function getEventOptions()
     {
         return $this->options;
     }
+    public function getSlot(){
+        return $this->slot;
+    }
+    public function getDatePosted(){
+        return $this->date_posted;
+    }
+
 }

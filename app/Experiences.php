@@ -7,15 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 class Experiences extends Model
 {
  
+	protected $primaryKey = 'experience_id';
+    protected $table= 'experiences';
+    public $timestamps = false;
 
- 		protected $table = 'experiences';
-  
-    	public function user()
-    	{
-    		return $this->belongsTo('App\User');
-    	}
-
-    	public function profile(){
-    		return $this->belongsToMany('App\Profile');
-    	}
+    protected $fillable =[
+	    'jobname',
+	    'skill_id',
+	    'employer',
+	    'year'
+    ];
+ 		
 }

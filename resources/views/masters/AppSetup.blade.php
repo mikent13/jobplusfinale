@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>JobPlus</title>
+    <!-- CSS -->
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/bootstrap/css/appfinale.css">
+    <link rel="stylesheet" href="/bootcard/css/bootcards-desktop.min.css">
+     <link rel="stylesheet" href="/sweetalert/sweetalert.css">
+    <link rel="stylesheet" href="/bootstrap/bootstrap-select.min.css">
+    <link href="/css/star-rating.css" media="all" rel="stylesheet" type="text/css" />
+    @yield('css')
+</head>
+<body>
+
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Profile Setup</a>
+    </div>
+    <!-- Collect the nav links, forms, and other content for toggling -->
+
+  </div><!-- /.container-fluid -->
+</nav>
+@yield('body')
+<footer>
+    <div class="footer" id="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-5 foot ">
+                    <h1> JobPlus </h1>
+                    <ul>
+                        <li> <a href="#"><h1>#<b>Road To Graduation March 2017</b></h1></a> </li>
+                    </ul>
+                </div>
+                <div class="col-lg-2  col-md-2 col-sm-4 col-xs-6 foot ">
+                 
+                </div>
+                <div class="col-lg-3  col-md-2 col-sm-4 col-xs-6 foot foot-social">
+                   <ul class="social">
+                    <li> <a href="#"> <i class=" fa fa-facebook">   </i> </a> </li>
+                    <li> <a href="#"> <i class="fa fa-twitter">   </i> </a> </li>
+                    <li> <a href="#"> <i class="fa fa-google-plus">   </i> </a> </li>
+                    <li> <a href="#"> <i class="fa fa-pinterest">   </i> </a> </li>
+                    <li> <a href="#"> <i class="fa fa-youtube">   </i> </a> </li>
+                </ul>
+            </div>
+            <div class="col-lg-2  col-md-2 col-sm-4 col-xs-6 foot">
+            </div>
+            <div class="col-lg-2  col-md-3 col-sm-6 col-xs-12 ">
+              
+            </div>
+        </div>
+        <!--/.row--> 
+    </div>
+    <!--/.container--> 
+</div>
+<!--/.footer-->
+
+<div class="footer-bottom">
+    <div class="container">
+        <p class="pull-left"> JobPlus. All right reserved. </p>
+        <div class="pull-right">
+            <ul class="nav nav-pills payments">
+                <li><i class="fa fa-cc-visa"></i></li>
+                <li><i class="fa fa-cc-mastercard"></i></li>
+                <li><i class="fa fa-cc-amex"></i></li>
+                <li><i class="fa fa-cc-paypal"></i></li>
+            </ul> 
+        </div>
+    </div>
+</div>
+<!--/.footer-bottom--> 
+</footer>
+</body>
+@yield('js')
+</html>

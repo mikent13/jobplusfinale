@@ -1,10 +1,9 @@
 <?php namespace MaddHatter\LaravelFullcalendar;
 
 use Illuminate\Support\Collection;
-
+use Carbon\Carbon;
 class EventCollection
 {
-
     /**
      * @var Collection
      */
@@ -33,25 +32,20 @@ class EventCollection
 
     private function convertToArray(Event $event, array $customAttributes = [])
     {
+        $start = Carbon::parse($event->getStart());
         $eventArray = [
-            'id' => $this->getEventId($event),
-            'user_id' => $event->getUser(),
-             'category_id' => $event->getCategory(),
+         'id' => $this->getEventId($event),
              'title' => $event->getTitle(),
-             'description' => $event->getDescription(),
-             'start_date' => $event->getStart()->format('c'),
-            'end_date' => $event->getEnd()->format('c'),
-            'schedule_id' => $event->getSchedule(),
-            'paytype_id' => $event->getPaytype(),
-            'salary' => $event->getSalary(),
-            'allDay' => $event->isAllDay()
+             'start' => $start->format('Y-m-d'),
+            'end' => $event->getEnd(),
+            
         ];
 
-        $eventOptions = method_exists($event, 'getEventOptions') ? $event->getEventOptions() : [];
+        $eventOptions = [];
 
         return array_merge($eventArray, $eventOptions, $customAttributes);
     }
-
+    
     private function getEventId(Event $event)
     {
         if ($event instanceof IdentifiableEvent) {
