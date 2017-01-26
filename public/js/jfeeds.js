@@ -8,6 +8,7 @@ var place;
 var nearbs;
 var markers = [];
 var geolocations;
+
 //----------------------------Initialization------------------------------------//
 
 function initializeMap(){
@@ -17,7 +18,7 @@ function initializeMap(){
 
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position) {
-    var geolocations = {
+    geolocations = {
         lat: position.coords.latitude,
         lng: position.coords.longitude
       };
@@ -29,13 +30,13 @@ function initializeMap(){
       var geocoder = new google.maps.Geocoder();
       geocoder.geocode({ 'latLng': meos[0] }, function (results, status) {
         if (status == google.maps.GeocoderStatus.OK) {
-             console.log(results);
+             // console.log(results);
           var res = results[0].address_components;
           for(var i=0; i<res.length; i++){
             if(res[i].types[0] =="locality"){
              $('#search-loc').val(res[i].long_name);
              nearbs = res[i].long_name;
-             console.log(nearbs);
+             // console.log(nearbs);
            }
          }
        }
@@ -519,7 +520,8 @@ $(document).on('click','#tab-nearby',function(e){
     url: '/get/job/nearby',
     method: 'GET',
     data:{
-      'loc' :nearbs
+      'loc' :nearbs,
+      'origin':geolocations
     }
   });
 

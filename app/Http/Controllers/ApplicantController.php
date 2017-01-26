@@ -137,6 +137,19 @@ class ApplicantController extends Controller
         $data['status'] = 0;
       }
     }
+    $lat = 14.5512;
+    $lng = 121.023;
+    $url = 'http://maps.googleapis.com/maps/api/geocode/json?latlng='.$lat.','.$lng.'&sensor=false';
+    $json = @file_get_contents($url);
+    $datas = json_decode($json);
+    $data['gmap'] = $datas;
+
+    $disturl = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=Washington,DC&destinations=New+York+City,NY&key=AIzaSyDBJJH4SL6eCDPu7N5C-2XcBt8jpZJeMyQ&libraries=places
+    ';
+    $distjson = @file_get_contents($disturl);
+    $distdata = json_decode($distjson);
+    $data['distance'] = $distdata;
+
     return response()->json($data);
   }
 
@@ -150,9 +163,11 @@ class ApplicantController extends Controller
     if(count($work) > 0){
       $data['ongoing'] = 'success';
       $schedid = [];
+      
       foreach($work as $w){
         $schedid[] = $w->sched_id;
       }
+
 
       //--------------Converting Ongoing Jobs to Upcoming --------------//
 
@@ -250,6 +265,10 @@ public function getNotification(){
 
 public function getJobNearby(Request $req){
   $loc = $req->loc;
+  $origin_lat = $req->origin['lat'];
+  $origin_lng = $req->origin['lng'];
+
+  $data['origin'] = $req->loc;
   $id = Auth::user()->id;
   $outputprofile = Profiles::all();
   $jobs = Jobs::all();
@@ -261,8 +280,7 @@ public function getJobNearby(Request $req){
     $skids[] = $sk->skill_id;
   }
 
-  $jobskills = Job_Skill::whereIn('skill_id',$skids)
-  ->get();
+  $jobskills = Job_Skill::whereIn('skill_id',$skids)->get();
   $jskid = [];
 
   foreach($jobskills as $jsk){
@@ -305,6 +323,10 @@ public function getSeemore(Request $req){
   $data['work'] = $work;
   $data['job'] = $job;
   $data['sched'] = $sched;
+
+
+
+
   return response()->json($data); 
 }
 
@@ -701,7 +723,7 @@ public function viewJob($id){
 }
 
 public function setReschedule(Request $req){
- 
+
   $workid = $req->workid;
   $st = Carbon::now()->toDateTimeString();
   $work = Works::where('work_id',$workid)->first();

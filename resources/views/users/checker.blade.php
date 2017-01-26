@@ -14,8 +14,10 @@
 <h1>Job Checker Page</h1>
 <div id="map"></div>
 <hr>
-<h1>Radius: 1 KM</h1>
-<p>Jobs Covered:</p>
+<div id="result">
+  <h1 id="jobid"></h1>
+  <p id="j-title"></p>
+</div>
 </div>
 
 @section('js')
@@ -49,13 +51,11 @@ function initialize(){
       var geocoder = new google.maps.Geocoder();
       geocoder.geocode({ 'latLng': meos[0] }, function (results, status) {
         if (status == google.maps.GeocoderStatus.OK) {
-             console.log(results);
           var res = results[0].address_components;
           for(var i=0; i<res.length; i++){
             if(res[i].types[0] =="locality"){
              $('#search-loc').val(res[i].long_name);
              nearbs = res[i].long_name;
-             console.log(nearbs);
            }
          }
        }
@@ -88,7 +88,7 @@ function initialize(){
     // attach circle to marker
     circle.bindTo('center', marker, 'position');
 })
-    }
+}
 
  $.ajaxSetup({
   headers: {
@@ -103,16 +103,14 @@ function initialize(){
   
   request.done(function(data){
   	console.log(data);
-  	var arr = [];
-  	for(var i=0; i<data.address.length;i++){
-	var centers = { lat: parseFloat(data.address[i].lat), lng: parseFloat(data.address[i].lng) };
-    arr.push(centers);
-  	var m;
-  	m = new google.maps.Marker({
-    map: map,
-    position: arr[i],
-    draggable: true
-  });
+  
+  for(var i =0; i< data.final.length; i++){
+    for(var y=0; y < data.jobs.length; y++){
+    if(data.final[i] == data.jobs[y].job_id){
+      $('#result').append($('<h1>').text(data.jobs[y].job_id))
+                  .append($('<p>').text(data.jobs[y].title));
+    }
+  }
 }
   });
   }

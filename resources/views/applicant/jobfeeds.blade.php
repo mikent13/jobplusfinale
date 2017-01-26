@@ -8,7 +8,6 @@
 	<div class="container">
 		<h1 class="jbtext">Boost your Job with a <b>Plus!</b></h1>
 		<div class="jbcontents">
-			<form></form>
 			<div class="form-group form-group-md col-md-3">
 				<h1>Category</h1>
 				<select class="selectpicker jpinput" data-style="selectp" id="search-sel">

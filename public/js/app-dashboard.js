@@ -198,17 +198,15 @@ function activeJob(){
             }
           });
         }
-
+          
         service.getDistanceMatrix(
         {
           origins: [origin],
           destinations: [destination],
           travelMode: google.maps.TravelMode.DRIVING,
           avoidHighways: false,
-          avoidTolls: false
-        }, 
-        callback
-        );
+          avoidTolls: false,
+        },callback);
       })};
 
       function callback(response, status) {
@@ -560,8 +558,7 @@ function initializeMap(){
         swal("Oops.. It looks like you have exceed the 30 mins late allowance, we will deduct the penalty on your salary. ", " ", "warning");
       }
     }
-    
-  });
-
+   
+   });
 
  });

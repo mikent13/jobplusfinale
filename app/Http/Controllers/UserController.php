@@ -17,6 +17,8 @@ use App\Jobs;
 use App\Job_Skill;
 use App\Job_Address;
 use App\Schedules;
+use App\Works;
+use App\Work_Logs;
 use App\Categories;
 use App\Prof_mobile;
 use Borla\Chikka\Chikka;
@@ -36,21 +38,235 @@ class UserController extends Controller
     public function checkJob(){
         $data['status'] = 1;
         return response()->json($data);
-   }
-   public function checkPage(){
+    }
+    public function checkPage(){
         return view('users.checker');
-   }
-   public function getJob(){
-    $address = Job_Address::where('locality','Makati')->get();
-    $data['address'] = $address;
-   return response()->json($data);
-   }
+    }
 
-    public function getProfile(){
-      return view('users.app-profile');
+    public function getJob(){
+      
+
+        function array_push_assoc($array, $key, $value){
+            $array[$key] = $value;
+            return $array;
+        }
+        
+        function getLocationPoints($distance){
+            $points = 0;
+
+            if($distance < 1000){
+              return  $points  = 100;
+          }
+          else if($distance >= 1000 && $distance < 1500){
+              return  $points = 90;
+          }
+          else if($distance >= 1500 && $distance < 2000){
+             return   $points = 85;
+         }
+         else if($distance >= 2000 && $distance < 2500){
+          return  $points = 80;
+      }
+      else if($distance >= 2500 && $distance < 3000){
+          return  $points = 75;
+      }
+      else if($distance >= 3000 && $distance < 3500){
+          return  $points = 70;
+      }
+      else if($distance >= 3500 && $distance < 4000){
+          return  $points = 65;
+      }
+      else if($distance >= 4000 && $distance < 4500){
+          return  $points = 60;
+      }
+      else if($distance >= 4500 && $distance < 5000){
+          return  $points = 55;
+      }
+      else if($distance >= 5000){
+          return  $points = 50;
+      }
   }
 
-  public function UploadImage(){
+  function getSkillPoints(&$userskill,$jobid){
+    $points = 0;
+    $jskill = [];
+    $job_skill = Job_Skill::where('job_id',$jobid)->get();
+    foreach($job_skill as $jsk){
+        $jskill[] = $jsk->skill_id;
+    }
+    $counter = count($jskill);
+    $lack = 0;
+    for($i = 0; $i<$counter; $i++){
+        if(!in_array($jskill[$i],$userskill)){
+            $lack++;
+        }
+    }
+    if($lack == 0){
+        $points = 100;
+    }
+    else if($lack == 1){
+        $points = 90;
+    }
+    else if($lack == 2){
+        $points = 85;
+    }
+    else if($lack == 3){
+        $points = 80;
+    }
+    else if($lack > 3){
+        $points = 75;
+    }
+    return $points;
+}
+
+function getHistoryPoints($workhistoryID,$jobid){
+    $work_history = Work_Logs::where('work_id',$workhistoryID)->first();
+    if(count($work_history) < 1){
+        $points = 0;
+        return $points;
+    }
+    $history_job = Jobs::where('job_id',$work_history->job_id)->first();
+    $history_job_skill = Job_Skill::where('job_id',$work_history->job_id)->get();
+
+    $current_job = Jobs::where('job_id',$jobid)->first();
+    $current_job_skill = Job_Skill::where('job_id',$current_job->job_id)->get();
+    
+    $ctrEmployer = 0;
+    $ctrSkills = 0;
+    $points = 0;
+
+    if($history_job->user_id == $current_job->user_id){
+        $ctrEmployer = 1;
+    }
+    
+    $historySkill = [];
+    $currentSkill = [];
+
+    foreach($history_job_skill as $hjs){
+        $historySkill[] = $hjs->skill_id;
+    }
+    foreach($current_job_skill as $cjs){
+        $currentSkill[] = $cjs->skill_id;
+    }
+
+    $intersect = array_intersect($historySkill, $currentSkill);
+    if(count($intersect) > 0){
+        $ctrSkills = 1;
+    }
+
+    if($ctrSkills == 1 && $ctrEmployer == 1){
+        $points = 1;
+    }   
+    else{
+        $points = 0;
+    }
+    return $points;
+
+}
+
+function getHistory($jobid,$userid){
+    $histwork = Works::where('applicant_id',$userid)->where('status',4)->get();
+
+    if(count($histwork) < 1){
+        $points = 80;
+        return $points;
+    }
+
+    $flag = 0;
+    foreach($histwork as $hw){
+        if($flag == 0){
+            $flag = getHistoryPoints($hw->work_id,$jobid);
+        }
+    }
+
+    if($flag == 0){
+        $points = 80;
+    }
+    else{
+        $points = 100;
+    }
+    return $points;
+}
+
+  $userid = Auth::user()->id;
+        $address = Job_Address::where('locality','Cebu City')->get();
+        $profile = Profiles::where('user_id',$userid)->first();
+
+        $userskills = Prof_Skill::where('profile_id',$profile->profile_id)->get();
+        $userskill = [];
+        if(count($userskills) > 0){
+            foreach($userskills as $usk){
+                $userskill[] = $usk->skill_id; 
+            }
+        }
+
+$lat = 14.5512;
+$lng = 121.023;
+$url = 'http://maps.googleapis.com/maps/api/geocode/json?latlng='.$lat.','.$lng.'&sensor=false';
+$json = @file_get_contents($url);
+$datas = json_decode($json);
+      //  Get distance on jobs with same locality
+$lat1 = 10.310617;
+$long1 =  123.892872;
+
+$criteria_Loc = 0.5;
+$criteria_skill = 0.3;
+$criteria_history = 0.2;
+$location_arr = [];
+$loc_points = [];
+$skill_points = [];
+$history_arr = [];
+$history_points = [];
+$addressID = [];
+foreach($address as $add){
+    $addressID[] = $add->jobid;
+    $url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=".$lat1.",".$long1."&destinations=".$add->lat.",".$add->lng."&mode=transit&key=AIzaSyDBJJH4SL6eCDPu7N5C-2XcBt8jpZJeMyQ&libraries=places";
+    $json = @file_get_contents($url);
+    $location_datas = json_decode($json);
+
+    $location_arr = array_push_assoc($location_arr, $add->jobid,$location_datas->rows[0]->elements[0]->distance->value);
+    $loc_points = array_push_assoc($loc_points, $add->jobid,getLocationPoints($location_datas->rows[0]->elements[0]->distance->value) * $criteria_Loc);
+    $skill_points = array_push_assoc($skill_points,$add->jobid,getSkillPoints($userskill,$add->jobid) * $criteria_skill);
+    $history_points = array_push_assoc($history_points,$add->jobid,getHistory($add->jobid,$userid) * $criteria_history);
+}
+
+$addCount = count($addressID);
+$result = [];
+for($i = 0; $i< $addCount; $i++){
+    $result[$addressID[$i]] = ( $loc_points[$addressID[$i]] + $skill_points[$addressID[$i]] + $history_points[$addressID[$i]] ) / 3;
+}
+
+function cmps($a, $b)
+{
+    if ($a == $b) {
+        return 0;
+    }
+    return ($a < $b) ? -1 : 1;
+}
+
+uasort($result,"App\Http\Controllers\cmps");
+$finalres = [];
+
+foreach($result as $key => $res){
+    $finalres[] = $key;
+}
+
+$finaljobs = Jobs::whereIn('job_id',$finalres)->get();
+$data['history_points'] = $history_points;
+$data['location_arr'] = $location_arr;
+$data['loc_points'] = $loc_points;
+$data['skill_points'] = $skill_points;
+$data['addressID'] = $addressID;
+$data['result'] = $result;
+$data['final'] = $finalres;
+$data['jobs'] = $finaljobs;
+return response()->json($data);
+}
+
+public function getProfile(){
+  return view('users.app-profile');
+}
+
+public function UploadImage(){
     if(Input::hasFile('file')) {
         $id = Auth::user()->id;
         $profile = Profiles::where('user_id',$id)->first();
@@ -610,8 +826,5 @@ public function setStep1(Request $req){
     $data['saved'] = 1;
     return response()->json($data);
 }
-
-
-
 
 }
