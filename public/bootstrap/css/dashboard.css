@@ -503,11 +503,10 @@ color: black;
 	 width: 130px;
 	 left:43%;
 	 position:fixed;
-	 margin-bottom: 30px;
+	     margin-top: 40px;
 }
 .rate-header{
-	    padding-bottom: 70px;
-	    margin-bottom: 50px;
+	       margin-bottom: 150px;
 }
 .rating-md{
 	text-align: center;

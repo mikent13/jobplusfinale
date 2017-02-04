@@ -361,7 +361,6 @@ function initializeData(){
 
 	input = document.getElementById('modal-address');
 	var options = {
-		types: ['(cities)'],
 		componentRestrictions: {country: "ph"}
 	};
 

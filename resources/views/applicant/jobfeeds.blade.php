@@ -86,16 +86,31 @@
 			<li role="presentation"><a href="#recommended" id="tab-recommended" aria-controls="recommended" role="tab" data-toggle="tab"><h3>Recommended Jobs</h3></a></li>
 			<li role="presentation"><a href="#nearby" id="tab-nearby" aria-controls="nearby" role="tab" data-toggle="tab"><h3>Nearby Jobs</h3></a></li>
 		</ul>
+		<div class="windows8">
+								<div class="wBall" id="wBall_1">
+									<div class="wInnerBall"></div>
+								</div>
+								<div class="wBall" id="wBall_2">
+									<div class="wInnerBall"></div>
+								</div>
+								<div class="wBall" id="wBall_3">
+									<div class="wInnerBall"></div>
+								</div>
+								<div class="wBall" id="wBall_4">
+									<div class="wInnerBall"></div>
+								</div>
+								<div class="wBall" id="wBall_5">
+									<div class="wInnerBall"></div>
+								</div>
+							</div>
 		<!-- Tab panes -->
 		<div class="tab-content">
 			<div role="tabpanel" class="tab-pane active" id="feeds">
-				<div class="col-md-12">
-					<h2 id="result-count"></h2>
-				</div>
-				<div class="col-md-5 jp-content feed-panel">
+				<div class="col-md-5 ">
 					<div class="panel panel-default jp-tabpanel ">
 						<!-- Job list-->
 						<div class="list-group" id="jobfeed-res">
+
 						</div>
 					</div>
 				</div>
@@ -154,9 +169,6 @@
 			<!-- Recommended Job list-->
 			
 			<div role="tabpanel" class="tab-pane" id="recommended">
-				<div class="col-md-12">
-					<h2 id="result-count"></h2>
-				</div>
 				<div class="col-md-5 jp-content feed-panel">
 					<div class="panel panel-default jp-tabpanel ">
 						<!-- Job list-->
@@ -216,9 +228,6 @@
 				</div>
 			</div>
 			<div role="tabpanel" class="tab-pane" id="nearby">
-				<div class="col-md-12">
-					<h2 id="result-count"></h2>
-				</div>
 				<div class="col-md-5 jp-content feed-panel">
 					<div class="panel panel-default jp-tabpanel ">
 						<!-- Job list-->

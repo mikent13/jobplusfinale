@@ -44,7 +44,7 @@ class UserController extends Controller
     }
 
     public function getJob(){
-      
+
 
         function array_push_assoc($array, $key, $value){
             $array[$key] = $value;
@@ -52,7 +52,7 @@ class UserController extends Controller
         }
         
         function getLocationPoints($distance){
-            $points = 0;
+            $points =   0;
 
             if($distance < 1000){
               return  $points  = 100;
@@ -61,9 +61,9 @@ class UserController extends Controller
               return  $points = 90;
           }
           else if($distance >= 1500 && $distance < 2000){
-             return   $points = 85;
-         }
-         else if($distance >= 2000 && $distance < 2500){
+           return   $points = 85;
+       }
+       else if($distance >= 2000 && $distance < 2500){
           return  $points = 80;
       }
       else if($distance >= 2500 && $distance < 3000){
@@ -187,23 +187,19 @@ function getHistory($jobid,$userid){
     return $points;
 }
 
-  $userid = Auth::user()->id;
-        $address = Job_Address::where('locality','Cebu City')->get();
-        $profile = Profiles::where('user_id',$userid)->first();
+$userid = Auth::user()->id;
+$address = Job_Address::where('locality','Cebu City')->get();
+$profile = Profiles::where('user_id',$userid)->first();
 
-        $userskills = Prof_Skill::where('profile_id',$profile->profile_id)->get();
-        $userskill = [];
-        if(count($userskills) > 0){
-            foreach($userskills as $usk){
-                $userskill[] = $usk->skill_id; 
-            }
-        }
+$userskills = Prof_Skill::where('profile_id',$profile->profile_id)->get();
+$userskill = [];
+if(count($userskills) > 0){
+    foreach($userskills as $usk){
+        $userskill[] = $usk->skill_id; 
+    }
+}
 
-$lat = 14.5512;
-$lng = 121.023;
-$url = 'http://maps.googleapis.com/maps/api/geocode/json?latlng='.$lat.','.$lng.'&sensor=false';
-$json = @file_get_contents($url);
-$datas = json_decode($json);
+
       //  Get distance on jobs with same locality
 $lat1 = 10.310617;
 $long1 =  123.892872;
@@ -217,6 +213,7 @@ $skill_points = [];
 $history_arr = [];
 $history_points = [];
 $addressID = [];
+
 foreach($address as $add){
     $addressID[] = $add->jobid;
     $url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=".$lat1.",".$long1."&destinations=".$add->lat.",".$add->lng."&mode=transit&key=AIzaSyDBJJH4SL6eCDPu7N5C-2XcBt8jpZJeMyQ&libraries=places";
@@ -240,7 +237,7 @@ function cmps($a, $b)
     if ($a == $b) {
         return 0;
     }
-    return ($a < $b) ? -1 : 1;
+    return ($a > $b) ? -1 : 1;
 }
 
 uasort($result,"App\Http\Controllers\cmps");
@@ -430,7 +427,7 @@ public function saveProfile(Request $request){
 
     $housekeep = Input::get('housekeeping');
     if(isset($housekeep[0])) {     
-       foreach($housekeep as $hk){
+     foreach($housekeep as $hk){
         $house = new Prof_Skill;
         $house->profile_id = $profid;
         $house->skill_id = $hk;
@@ -450,7 +447,7 @@ if(isset($construction[0])){
 
 $personel = $request['personel'];
 if(isset($personel[0])){     
-   foreach($personel as $ps){
+ foreach($personel as $ps){
     $person = new Prof_Skill;
     $person->profile_id = $profid;
     $person->skill_id = $ps;
@@ -460,7 +457,7 @@ if(isset($personel[0])){
 
 $maintenance = $request['maintenance'];
 if(isset($maintenance[0])){     
-   foreach($maintenance as $mt){
+ foreach($maintenance as $mt){
     $mainte = new Prof_Skill;
     $mainte->profile_id = $profid;
     $mainte->skill_id = $mt;
@@ -522,34 +519,34 @@ public function setEducation(Request $req){
     $prof_edu = new Prof_Edu;
     if($attainment == 1) //If Highschool
     {
-     $education->attainment = $attainment;
-     $education->school = $school;
-     $education->start = $start;
-     $education->end = $end;
-     $education->save();
-     $prof_edu->profile_id = $profile->user_id;
-     $prof_edu->education_id = $education->education_id;
-     $prof_edu->save();
-     $data['saved'] = 'highschool';
- }
- else
- {
-     $education->attainment = $attainment;
-     $education->school = $school;
-     $education->start = $start;
-     $education->end = $end;
-     $education->degree_id = $degree;
-     $education->field_study = $field;    
-     $education->save();
-     $prof_edu->profile_id = $profile->user_id;
-     $prof_edu->education_id = $education->education_id;
-     $prof_edu->save();
-     $data['saved'] = 'college';
- }
- $data['id'] = $education->education_id;
- $data['status'] = 'successful';
+       $education->attainment = $attainment;
+       $education->school = $school;
+       $education->start = $start;
+       $education->end = $end;
+       $education->save();
+       $prof_edu->profile_id = $profile->user_id;
+       $prof_edu->education_id = $education->education_id;
+       $prof_edu->save();
+       $data['saved'] = 'highschool';
+   }
+   else
+   {
+       $education->attainment = $attainment;
+       $education->school = $school;
+       $education->start = $start;
+       $education->end = $end;
+       $education->degree_id = $degree;
+       $education->field_study = $field;    
+       $education->save();
+       $prof_edu->profile_id = $profile->user_id;
+       $prof_edu->education_id = $education->education_id;
+       $prof_edu->save();
+       $data['saved'] = 'college';
+   }
+   $data['id'] = $education->education_id;
+   $data['status'] = 'successful';
 
- return response()->json($data);
+   return response()->json($data);
 }
 
 public function getEducation(){
@@ -562,11 +559,11 @@ public function getEducation(){
     if(count($prof_edu) > 0){
         $data['hasEdu'] = "1";
         $predId = [];
-
+            
         foreach($prof_edu as $pred){
             $predID[] = $pred->education_id;
         }
-
+        
         $education = Education::whereIn('education_id',$predID)->get();
         $data['education'] = $education; 
     }
@@ -579,14 +576,14 @@ public function getEducation(){
 }
 
 public function findEducation(Request $req){
-   $edID = $req->education;
+ $edID = $req->education;
 
-   $attainment = Attainment::all();
-   $degree = Degrees::all();
-   $education = Education::where('education_id',$edID)->first();
-   $field_study = Field_study::where('degree_id',$education->degree_id)->get();
+ $attainment = Attainment::all();
+ $degree = Degrees::all();
+ $education = Education::where('education_id',$edID)->first();
+ $field_study = Field_study::where('degree_id',$education->degree_id)->get();
 
-   if(count($education) > 0){
+ if(count($education) > 0){
     $data['hasEdu'] = "1";
     $data['education'] = $education; 
 }
@@ -613,26 +610,26 @@ public function updateEducation(Request $req){
 
     if($attainment == 1) //If Highschool
     {
-     $education->attainment = $attainment;
-     $education->school = $school;
-     $education->start = $start;
-     $education->end = $end;
-     $education->save();
- }
- else
- {
-     $education->attainment = $attainment;
-     $education->school = $school;
-     $education->start = $start;
-     $education->end = $end;
-     $education->degree_id = $degree;
-     $education->field_study = $field;
-     $education->save();
- }
- $data['id'] = $education;
- $data['status'] = 'successful';
+       $education->attainment = $attainment;
+       $education->school = $school;
+       $education->start = $start;
+       $education->end = $end;
+       $education->save();
+   }
+   else
+   {
+       $education->attainment = $attainment;
+       $education->school = $school;
+       $education->start = $start;
+       $education->end = $end;
+       $education->degree_id = $degree;
+       $education->field_study = $field;
+       $education->save();
+   }
+   $data['id'] = $education;
+   $data['status'] = 'successful';
 
- return response()->json($data);
+   return response()->json($data);
 }
 
 public function removeEducation(Request $req){
@@ -731,24 +728,24 @@ public function updateWork(Request $req){
 }
 
 public function setVerification(Request $req){
- $skills = [];
- $skills[] = $req->skills;
+   $skills = [];
+   $skills[] = $req->skills;
 
- $id = Auth::user()->id;
- $profile = Profiles::where('user_id',$id)->first();
+   $id = Auth::user()->id;
+   $profile = Profiles::where('user_id',$id)->first();
 
- $size = 0;
- foreach($skills as $sk){
+   $size = 0;
+   foreach($skills as $sk){
     $size += count($sk);
 }
 if($size > 0){
     for($i=0; $i<$size; $i++){
-     $prof_sk = new Prof_Skill;
-     $prof_sk->profile_id = $profile->profile_id;
-     $prof_sk->skill_id = $skills[0][$i];
-     $prof_sk->save();
- }
- $data['skill'] = 1;
+       $prof_sk = new Prof_Skill;
+       $prof_sk->profile_id = $profile->profile_id;
+       $prof_sk->skill_id = $skills[0][$i];
+       $prof_sk->save();
+   }
+   $data['skill'] = 1;
 }
 else{
     $data['skill'] = 0;

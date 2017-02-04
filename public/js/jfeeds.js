@@ -18,11 +18,10 @@ function initializeMap(){
 
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position) {
-    geolocations = {
+      geolocations = {
         lat: position.coords.latitude,
         lng: position.coords.longitude
       };
-
       var meos = [];
       var locs;
       var centers = { lat:geolocations.lat , lng:geolocations.lng };
@@ -30,19 +29,18 @@ function initializeMap(){
       var geocoder = new google.maps.Geocoder();
       geocoder.geocode({ 'latLng': meos[0] }, function (results, status) {
         if (status == google.maps.GeocoderStatus.OK) {
-             // console.log(results);
-          var res = results[0].address_components;
-          for(var i=0; i<res.length; i++){
-            if(res[i].types[0] =="locality"){
-             $('#search-loc').val(res[i].long_name);
-             nearbs = res[i].long_name;
+             var res = results[0].address_components;
+             for(var i=0; i<res.length; i++){
+              if(res[i].types[0] =="locality"){
+               $('#search-loc').val(res[i].long_name);
+               nearbs = res[i].long_name;
              // console.log(nearbs);
            }
          }
        }
      });
 
-  feedmap = new google.maps.Map(document.getElementById('feed-gmap'), {
+      feedmap = new google.maps.Map(document.getElementById('feed-gmap'), {
         center:centers,
         zoom: 18
       });
@@ -56,14 +54,13 @@ function initializeMap(){
         center: centers,
         zoom: 18
       });
-  $("#loading").fadeOut(300);
-})
-    }
+      $("#loading").fadeOut(300);
+    })
   }
-  
+}
 
 function initializeData(){
- 
+
  $('#feed-body').attr('hidden',true);
  $.ajaxSetup({
   headers: {
@@ -91,7 +88,6 @@ function initializeData(){
    $('#s-skill').append($('<option>').text(val.name).attr('value',val.skill_id).addClass('selectoption'))
  });
   
-
   $('#s-skill').selectpicker('refresh');
 
   $.each(data.paytypes,function(key,value){
@@ -100,24 +96,34 @@ function initializeData(){
 
   $('#fil-ptype').selectpicker('refresh');
 
-  
+  var jobids = [];
+$(".windows8").fadeOut(200);
+
   //----------------Job Feeds------------//
-  for(i = 0; i< data.jobs.length; i++){
-    for(z = 0; z< data.jobadd.length; z++){
-      if(data.jobs[i].job_id == data.jobadd[z].jobid){
-        for(x = 0; x< data.profile.length; x++){
-          if(data.jobs[i].user_id == data.profile[x].user_id){
-           $('#jobfeed-res').append($('<a>').addClass('list-group-item item-res').attr('data-val',data.jobs[i].job_id).attr('id','item')
-            .append($('<div>').addClass('cont-feeds')
-              .append($('<img>').addClass('img-rounded pull-left').attr('src',''))
-              .append($('<h4>').addClass('list-group-item-heading ellipsis meta-title').text(data.jobs[i].title))
-              .append($('<p>').addClass('list-group-item-text meta meta-employer').text('by '+data.profile[x].fname + ' ' + data.profile[x].lname))
-              .append($('<i>').addClass('meta-loc meta-marker fa-1x fa fa-map-marker'))
-              .append($('<p>').addClass('list-group-item-text meta meta-loc meta-locality').text(data.jobadd[z].locality))));
-         }
-       }
-     }}
-   }
+  for(var z = 0; z< data.final.length; z++){
+      for(i = 0; i< data.jobs.length; i++){
+        if(data.final[z] == data.jobs[i].job_id){
+          for(x = 0; x< data.profile.length; x++){
+            if(data.jobs[i].user_id == data.profile[x].user_id){
+              if(jobids.indexOf(data.jobs[i].job_id) < 0){
+                jobids.push(data.jobs[i].job_id);
+                $('#jobfeed-res').append($('<a>').addClass('list-group-item near-res').attr('data-val',data.jobs[i].job_id)
+                  .append($('<div>').addClass('cont-feeds')
+                    .append($('<img>').addClass('img-rounded pull-left').attr('src',data.profile[x].avatar))
+                    .append($('<h4>').addClass('list-group-item-heading ellipsis meta-title').text(data.jobs[i].title))
+                    .append($('<p>').addClass('list-group-item-text meta meta-employer').text('by '+data.profile[x].fname + ' ' + data.profile[x].lname))
+                    .append($('<i>').addClass('meta-loc meta-marker fa-1x fa fa-map-marker'))
+                    .append($('<p>').addClass('list-group-item-text meta meta-loc meta-locality').text('Cebu City'))));
+              }
+            }
+          }
+      }
+        }
+    }
+
+  $('#feeds').attr('hidden',false);
+
+
    $('.item-res ').click(function(e) {
     e.preventDefault();
     $('.item-res').removeClass('item-active');
@@ -162,7 +168,7 @@ function initializeData(){
 };
 
 $(document).ready(function(){
- 
+
   initializeMap();
   initializeData();
 
@@ -181,7 +187,6 @@ $(document).ready(function(){
  }
 });
 
-  $('.feed-panel').attr('hidden',false);
 
 
 
@@ -291,32 +296,25 @@ $(document).on('click','#tab-recommended',function(e){
   search.done(function(data){
     console.log(data);
     $('#recommended-res').empty();
-
-    for(i = 0; i< data.jobs.length; i++){
-      for(z = 0; z< data.add.length; z++){
-        if(data.jobs[i].job_id == data.add[z].jobid){
-          for(y = 0; y< data.jobskills.length; y++){
-            if(data.jobs[i].job_id == data.jobskills[y].job_id){
-              for(x = 0; x< data.profile.length; x++){
-                if(data.jobs[i].user_id == data.profile[x].user_id){
-                  
-                  if(jobids.indexOf(data.jobs[i].job_id) < 0){
-                    jobids.push(data.jobs[i].job_id);
-                    console.log(jobids);
-                    $('#recommended-res').append($('<a>').addClass('list-group-item recom-res').attr('data-val',data.jobs[i].job_id)
-                      .append($('<div>').addClass('cont-feeds')
-                        .append($('<img>').addClass('img-rounded pull-left').attr('src',''))
-                        .append($('<h4>').addClass('list-group-item-heading ellipsis meta-title').text(data.jobs[i].title))
-                        .append($('<p>').addClass('list-group-item-text meta meta-employer').text('by '+data.profile[x].fname + ' ' + data.profile[x].lname))
-                        .append($('<i>').addClass('meta-loc meta-marker fa-1x fa fa-map-marker'))
-                        .append($('<p>').addClass('list-group-item-text meta meta-loc meta-locality').text(data.add[z].locality))));
-                  }
-                }
+      for(var z = 0; z< data.final.length; z++){
+      for(i = 0; i< data.jobs.length; i++){
+        if(data.final[z] == data.jobs[i].job_id){
+          for(x = 0; x< data.profile.length; x++){
+            if(data.jobs[i].user_id == data.profile[x].user_id){
+              if(jobids.indexOf(data.jobs[i].job_id) < 0){
+                jobids.push(data.jobs[i].job_id);
+                $('#recommended-res').append($('<a>').addClass('list-group-item near-res').attr('data-val',data.jobs[i].job_id)
+                  .append($('<div>').addClass('cont-feeds')
+                    .append($('<img>').addClass('img-rounded pull-left').attr('src',data.profile[x].avatar))
+                    .append($('<h4>').addClass('list-group-item-heading ellipsis meta-title').text(data.jobs[i].title))
+                    .append($('<p>').addClass('list-group-item-text meta meta-employer').text('by '+data.profile[x].fname + ' ' + data.profile[x].lname))
+                    .append($('<i>').addClass('meta-loc meta-marker fa-1x fa fa-map-marker'))
+                    .append($('<p>').addClass('list-group-item-text meta meta-loc meta-locality').text('Cebu City'))));
               }
             }
           }
-        } 
       }
+        }
     }
 
     $('.recom-res ').click(function(e) {
@@ -528,30 +526,26 @@ $(document).on('click','#tab-nearby',function(e){
   search.done(function(data){
     console.log(data);
     $('#nearby-res').empty();
-    for(i = 0; i< data.jobs.length; i++){
-      for(z = 0; z< data.add.length; z++){
-        if(data.jobs[i].job_id == data.add[z].jobid){
-          for(y = 0; y< data.jobskills.length; y++){
-            if(data.jobs[i].job_id == data.jobskills[y].job_id){
-              for(x = 0; x< data.profile.length; x++){
-                if(data.jobs[i].user_id == data.profile[x].user_id){
-                  if(jobids.indexOf(data.jobs[i].job_id) < 0){
-                    jobids.push(data.jobs[i].job_id);
-                    console.log(jobids);
-                    $('#nearby-res').append($('<a>').addClass('list-group-item near-res').attr('data-val',data.jobs[i].job_id)
-                      .append($('<div>').addClass('cont-feeds')
-                        .append($('<img>').addClass('img-rounded pull-left').attr('src',data.profile[x].avatar))
-                        .append($('<h4>').addClass('list-group-item-heading ellipsis meta-title').text(data.jobs[i].title))
-                        .append($('<p>').addClass('list-group-item-text meta meta-employer').text('by '+data.profile[x].fname + ' ' + data.profile[x].lname))
-                        .append($('<i>').addClass('meta-loc meta-marker fa-1x fa fa-map-marker'))
-                        .append($('<p>').addClass('list-group-item-text meta meta-loc meta-locality').text(data.add[z].locality))));
-                  }
-                }
+
+    for(var z = 0; z< data.final.length; z++){
+      for(i = 0; i< data.jobs.length; i++){
+        if(data.final[z] == data.jobs[i].job_id){
+          for(x = 0; x< data.profile.length; x++){
+            if(data.jobs[i].user_id == data.profile[x].user_id){
+              if(jobids.indexOf(data.jobs[i].job_id) < 0){
+                jobids.push(data.jobs[i].job_id);
+                $('#nearby-res').append($('<a>').addClass('list-group-item near-res').attr('data-val',data.jobs[i].job_id)
+                  .append($('<div>').addClass('cont-feeds')
+                    .append($('<img>').addClass('img-rounded pull-left').attr('src',data.profile[x].avatar))
+                    .append($('<h4>').addClass('list-group-item-heading ellipsis meta-title').text(data.jobs[i].title))
+                    .append($('<p>').addClass('list-group-item-text meta meta-employer').text('by '+data.profile[x].fname + ' ' + data.profile[x].lname))
+                    .append($('<i>').addClass('meta-loc meta-marker fa-1x fa fa-map-marker'))
+                    .append($('<p>').addClass('list-group-item-text meta meta-loc meta-locality').text('Cebu City'))));
               }
             }
           }
-        } 
       }
+        }
     }
   });
 });
@@ -641,7 +635,7 @@ function loadAlert(){
 }
 //-------- Job Application --------//
 $(document).on('click','#feed-apply-btn',function(e){
-  
+
  e.preventDefault();
 
  var jobid = $('#feed-res-jobid').text();
@@ -661,24 +655,24 @@ $(document).on('click','#feed-apply-btn',function(e){
   console.log(data);
   if(data.status == 0){
     var myconfstart = moment(data.myconf.start).format('MMMM Do YYYY, h:mm a');
-var myconfend = moment(data.myconf.end).format('MMMM Do YYYY, h:mm a');
-var jobconfstart = moment(data.jobconf.start).format('MMMM Do YYYY, h:mm a');
-var jobconfend = moment(data.jobconf.end).format('MMMM Do YYYY, h:mm a');
-      $('#confjtitle').text(data.myconfjob.title);
-      $('#myschedstart').text('Start: ' +myconfstart);
-      $('#myschedend').text('End: '+myconfend);
-      $('#appliedstart').text('Start: ' +jobconfstart);
-      $('#appliedend').text('End: ' +jobconfend);
-      $('#conflictModal').modal('show');
+    var myconfend = moment(data.myconf.end).format('MMMM Do YYYY, h:mm a');
+    var jobconfstart = moment(data.jobconf.start).format('MMMM Do YYYY, h:mm a');
+    var jobconfend = moment(data.jobconf.end).format('MMMM Do YYYY, h:mm a');
+    $('#confjtitle').text(data.myconfjob.title);
+    $('#myschedstart').text('Start: ' +myconfstart);
+    $('#myschedend').text('End: '+myconfend);
+    $('#appliedstart').text('Start: ' +jobconfstart);
+    $('#appliedend').text('End: ' +jobconfend);
+    $('#conflictModal').modal('show');
   }
   else{
     loadAlert();
   }
- });
+});
 
 });
 $(document).on('click','#near-apply-btn',function(e){
-  
+
  e.preventDefault();
 
  var jobid = $('#near-res-jobid').text();
@@ -698,24 +692,24 @@ $(document).on('click','#near-apply-btn',function(e){
   console.log(data);
   if(data.status == 0){
     var myconfstart = moment(data.myconf.start).format('MMMM Do YYYY, h:mm a');
-var myconfend = moment(data.myconf.end).format('MMMM Do YYYY, h:mm a');
-var jobconfstart = moment(data.jobconf.start).format('MMMM Do YYYY, h:mm a');
-var jobconfend = moment(data.jobconf.end).format('MMMM Do YYYY, h:mm a');
-      $('#confjtitle').text(data.myconfjob.title);
-      $('#myschedstart').text('Start: ' +myconfstart);
-      $('#myschedend').text('End: '+myconfend);
-      $('#appliedstart').text('Start: ' +jobconfstart);
-      $('#appliedend').text('End: ' +jobconfend);
-      $('#conflictModal').modal('show');
+    var myconfend = moment(data.myconf.end).format('MMMM Do YYYY, h:mm a');
+    var jobconfstart = moment(data.jobconf.start).format('MMMM Do YYYY, h:mm a');
+    var jobconfend = moment(data.jobconf.end).format('MMMM Do YYYY, h:mm a');
+    $('#confjtitle').text(data.myconfjob.title);
+    $('#myschedstart').text('Start: ' +myconfstart);
+    $('#myschedend').text('End: '+myconfend);
+    $('#appliedstart').text('Start: ' +jobconfstart);
+    $('#appliedend').text('End: ' +jobconfend);
+    $('#conflictModal').modal('show');
   }
   else{
     loadAlert();
   }
- });
+});
 
 });
 $(document).on('click','#rec-apply-btn',function(e){
-  
+
  e.preventDefault();
 
  var jobid = $('#rec-res-jobid').text();
@@ -729,24 +723,24 @@ $(document).on('click','#rec-apply-btn',function(e){
   method: 'GET',
   data:{'jobid':jobid},
 });
-  apply.done(function(data){
+ apply.done(function(data){
   console.log(data);
   if(data.status == 0){
     var myconfstart = moment(data.myconf.start).format('MMMM Do YYYY, h:mm a');
-var myconfend = moment(data.myconf.end).format('MMMM Do YYYY, h:mm a');
-var jobconfstart = moment(data.jobconf.start).format('MMMM Do YYYY, h:mm a');
-var jobconfend = moment(data.jobconf.end).format('MMMM Do YYYY, h:mm a');
-      $('#confjtitle').text(data.myconfjob.title);
-      $('#myschedstart').text('Start: ' +myconfstart);
-      $('#myschedend').text('End: '+myconfend);
-      $('#appliedstart').text('Start: ' +jobconfstart);
-      $('#appliedend').text('End: ' +jobconfend);
-      $('#conflictModal').modal('show');
+    var myconfend = moment(data.myconf.end).format('MMMM Do YYYY, h:mm a');
+    var jobconfstart = moment(data.jobconf.start).format('MMMM Do YYYY, h:mm a');
+    var jobconfend = moment(data.jobconf.end).format('MMMM Do YYYY, h:mm a');
+    $('#confjtitle').text(data.myconfjob.title);
+    $('#myschedstart').text('Start: ' +myconfstart);
+    $('#myschedend').text('End: '+myconfend);
+    $('#appliedstart').text('Start: ' +jobconfstart);
+    $('#appliedend').text('End: ' +jobconfend);
+    $('#conflictModal').modal('show');
   }
   else{
     loadAlert();
   }
- });
+});
 });
 
 $(document).on('change','#search-sel',function(e){

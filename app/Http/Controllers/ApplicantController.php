@@ -21,6 +21,7 @@ use App\Job_Address;
 use Carbon\Carbon;
 use App\Work_Logs;
 use DateTime;
+use App\JobRank;
 use Illuminate\Support\Facades\Input;
 
 class ApplicantController extends Controller
@@ -30,6 +31,11 @@ class ApplicantController extends Controller
 
   public function __construct(Jobs $jobs){
     $this->calendarJob = $jobs;
+  }
+
+  public function getrank(){
+    $rank = new JobRank();
+    return response()->json($rank);
   }
 
   public function getAdmin(){
@@ -264,68 +270,86 @@ public function getNotification(){
 }
 
 public function getJobNearby(Request $req){
-  $loc = $req->loc;
-  $origin_lat = $req->origin['lat'];
-  $origin_lng = $req->origin['lng'];
 
-  $data['origin'] = $req->loc;
-  $id = Auth::user()->id;
-  $outputprofile = Profiles::all();
-  $jobs = Jobs::all();
+$userid = Auth::user()->id;
+$profile = Profiles::where('user_id',$userid)->first();
+$address = Job_Address::where('locality','Cebu City')->get();
+$userskills = Prof_Skill::where('profile_id',$profile->profile_id)->get();
+$userskill = [];
 
-  $profile  = Profiles::where('user_id',$id)->first(); 
-  $skill    = Prof_Skill::where('profile_id',$profile->profile_id)->get();
-
-  foreach($skill as $sk){
-    $skids[] = $sk->skill_id;
+if(count($userskills) > 0){
+  foreach($userskills as $usk){
+    $userskill[] = $usk->skill_id; 
   }
+}
 
-  $jobskills = Job_Skill::whereIn('skill_id',$skids)->get();
-  $jskid = [];
+$lat1 = (float)10.309768188276134;
+$long1 = (float) 123.892872;
 
-  foreach($jobskills as $jsk){
-    $jskid[] = $jsk->job_id;
-  } 
+$ranker = new JobRank;
+$criteria_Loc = 0.5;
+$criteria_skill = 0.3;
+$criteria_history = 0.2;
+$location_arr = [];
+$loc_points = [];
+$skill_points = [];
+$history_arr = [];
+$history_points = [];
+$addressID = [];  
+foreach($address as $add){
+  $addressID[] = $add->jobid;
+  $url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=".$lat1.",".$long1."&destinations=".$add->lat.",".$add->lng."&mode=transit&key=AIzaSyDBJJH4SL6eCDPu7N5C-2XcBt8jpZJeMyQ&libraries=places";
+  $json = @file_get_contents($url);
+  $location_datas = json_decode($json);
+  $location_arr = $ranker->array_push_assoc($location_arr, $add->jobid,$location_datas->rows[0]->elements[0]->distance->value);
+  $loc_points = $ranker->array_push_assoc($loc_points, $add->jobid,$ranker->getLocationPoints($location_datas->rows[0]->elements[0]->distance->value) * $criteria_Loc);
+  $skill_points = $ranker->array_push_assoc($skill_points,$add->jobid,$ranker->getSkillPoints($userskill,$add->jobid) * $criteria_skill);
+  $history_points = $ranker->array_push_assoc($history_points,$add->jobid,$ranker->getHistory($add->jobid,$userid) * $criteria_history);
+}
 
-  $jobadd   = Job_Address::where('locality',$loc)
-  ->whereIn('jobid',$jskid)->get();
+$addCount = count($addressID);
+$result = [];
+for($i = 0; $i< $addCount; $i++){
+  $result[$addressID[$i]] = ( $loc_points[$addressID[$i]] + $skill_points[$addressID[$i]] + $history_points[$addressID[$i]] ) / 3;
+}
 
-  $jaddids =[];
-  foreach($jobadd as $jadd){
-    $jaddids[] = $jadd->jobid;
+function cmps($a, $b)
+{
+  if ($a == $b) {
+    return 0;
   }
+  return ($a > $b) ? -1 : 1;
+}
 
-  $jobs = Jobs::WhereIn('job_id',$jaddids)->get();
+uasort($result,"App\Http\Controllers\cmps");
+$finalres = [];
 
-  $data['jobs'] = $jobs;
-  $data['jobskills'] = $jobskills;
-  $data['add'] = $jobadd;
-  $data['profile'] = $outputprofile;
-  $data['message'] = 'success';
+foreach($result as $key => $res){
+  $finalres[] = $key;
+}
 
-  return response()->json($data);    
+$finaljobs = Jobs::whereIn('job_id',$finalres)->get();
+$jobsss = Jobs::all();
+
+
+$data['jobs']   = $finaljobs;   
+$data['final'] = $finalres;
+$data['result'] = $result;
+$data['location_arr'] = $location_arr;
+$data['loc_points'] = $loc_points;
+$data['skill_points'] = $skill_points;
+$data['history_points'] = $history_points;
+$data['profile'] = Profiles::all();
+$data['message'] = 'success';
+return response()->json($data);    
 }
 
 public function getSeemore(Request $req){
 
-  $workid = $req->workid;
-  $schedid = $req->schedid;
-  $data['status'] = 1;
-
-  $work = Works::where('work_id',$workid)->first();
-  $sched = Schedules::where('schedule_id',$work->sched_id)->first();
-  $job = Jobs::where('job_id',$sched->job_id)->first();
-  $profile = Profiles::where('user_id',$job->user_id)->first();
-  $address = Job_Address::where('jobid',$job->job_id)->first();
-
-  $data['address'] = $address;
-  $data['profile'] = $profile;
-  $data['work'] = $work;
-  $data['job'] = $job;
-  $data['sched'] = $sched;
-
-
-
+ $var = 1;
+ $rank = new JobRank;
+ $new = $rank->setValue(1);
+ return response()->json($new);
 
   return response()->json($data); 
 }
@@ -333,7 +357,6 @@ public function getSeemore(Request $req){
 public function getJobSearch(Request $req){
 
   $skill = [];
-
   $loc      = $req->location;
   $cat      = $req->cat;
   $skill    = $req->skill;
@@ -478,45 +501,76 @@ public function getResult(Request $request){
   return response()->json($data);
 }
 
-
-
 public function getJobRecommended(){
-  $id = Auth::user()->id;
-  $outputprofile = Profiles::all();
-  $jobs = Jobs::all();
+   $userid = Auth::user()->id;
+$profile = Profiles::where('user_id',$userid)->first();
+$address = Job_Address::where('locality','Cebu City')->get();
+$userskills = Prof_Skill::where('profile_id',$profile->profile_id)->get();
+$userskill = [];
 
-  $profile  = Profiles::where('user_id',$id)->first();
-  $skill    = Prof_Skill::where('profile_id',$profile->profile_id)->get();
-
-  foreach($skill as $sk){
-    $skids[] = $sk->skill_id;
+if(count($userskills) > 0){
+  foreach($userskills as $usk){
+    $userskill[] = $usk->skill_id; 
   }
+}
 
-  $jobskills = Job_Skill::whereIn('skill_id',$skids)
-  ->get();
-  $jskid = [];
+$lat1 = (float)10.309768188276134;
+$long1 = (float) 123.892872;
 
-  foreach($jobskills as $jsk){
-    $jskid[] = $jsk->job_id;
-  } 
+$ranker = new JobRank;
+$criteria_Loc = 0.3;
+$criteria_skill = 0.5;
+$criteria_history = 0.2;
+$location_arr = [];
+$loc_points = [];
+$skill_points = [];
+$history_arr = [];
+$history_points = [];
+$addressID = [];  
+foreach($address as $add){
+  $addressID[] = $add->jobid;
+  $url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=".$lat1.",".$long1."&destinations=".$add->lat.",".$add->lng."&mode=transit&key=AIzaSyDBJJH4SL6eCDPu7N5C-2XcBt8jpZJeMyQ&libraries=places";
+  $json = @file_get_contents($url);
+  $location_datas = json_decode($json);
+  $location_arr = $ranker->array_push_assoc($location_arr, $add->jobid,$location_datas->rows[0]->elements[0]->distance->value);
+  $loc_points = $ranker->array_push_assoc($loc_points, $add->jobid,$ranker->getLocationPoints($location_datas->rows[0]->elements[0]->distance->value) * $criteria_Loc);
+  $skill_points = $ranker->array_push_assoc($skill_points,$add->jobid,$ranker->getSkillPoints($userskill,$add->jobid) * $criteria_skill);
+  $history_points = $ranker->array_push_assoc($history_points,$add->jobid,$ranker->getHistory($add->jobid,$userid) * $criteria_history);
+}
 
-  $jobadd   = Job_Address::where('locality',$profile->locality)
-  ->whereIn('jobid',$jskid)->get();
+$addCount = count($addressID);
+$result = [];
+for($i = 0; $i< $addCount; $i++){
+  $result[$addressID[$i]] = ( $loc_points[$addressID[$i]] + $skill_points[$addressID[$i]] + $history_points[$addressID[$i]] ) / 3;
+}
 
-  $jaddids =[];
-  foreach($jobadd as $jadd){
-    $jaddids[] = $jadd->jobid;
+function cmps($a, $b)
+{
+  if ($a == $b) {
+    return 0;
   }
+  return ($a > $b) ? -1 : 1;
+}
 
-  $jobs = Jobs::WhereIn('job_id',$jaddids)->get();
+uasort($result,"App\Http\Controllers\cmps");
+$finalres = [];
 
-  $data['jobs'] = $jobs;
-  $data['jobskills'] = $jobskills;
-  $data['add'] = $jobadd;
-  $data['profile'] = $outputprofile;
-  $data['message'] = 'success';
+foreach($result as $key => $res){
+  $finalres[] = $key;
+}
 
-  return response()->json($data);
+$finaljobs = Jobs::whereIn('job_id',$finalres)->get();
+
+$data['jobs']   = $finaljobs;   
+$data['final'] = $finalres;
+$data['result'] = $result;
+$data['location_arr'] = $location_arr;
+$data['loc_points'] = $loc_points;
+$data['skill_points'] = $skill_points;
+$data['history_points'] = $history_points;
+$data['profile'] = Profiles::all();
+$data['message'] = 'success';
+return response()->json($data);
 
 }
 
@@ -525,21 +579,84 @@ public function getJobPage(){
 }
 
 public function getJobPageData(){
- $jobs = Jobs::all();
- $jobskills = Job_Skill::all();
- $jobadd = Job_Address::all();
- $profile = Profiles::all();
+   $userid = Auth::user()->id;
+$profile = Profiles::where('user_id',$userid)->first();
+$address = Job_Address::where('locality','Cebu City')->get();
+$userskills = Prof_Skill::where('profile_id',$profile->profile_id)->get();
+$userskill = [];
 
- $data['jobs']           = $jobs;
- $data['jobskill'] = $jobskills;
- $data['jobadd'] = $jobadd;    
- $data['profile'] = $profile;
+if(count($userskills) > 0){
+  foreach($userskills as $usk){
+    $userskill[] = $usk->skill_id; 
+  }
+}
+
+$lat1 = (float)10.309768188276134;
+$long1 = (float) 123.892872;
+
+$ranker = new JobRank;
+$criteria_Loc = 0.2;
+$criteria_skill = 0.3;
+$criteria_history = 0.5;
+$location_arr = [];
+$loc_points = [];
+$skill_points = [];
+$history_arr = [];
+$history_points = [];
+$addressID = [];  
+foreach($address as $add){
+  $addressID[] = $add->jobid;
+  $url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=".$lat1.",".$long1."&destinations=".$add->lat.",".$add->lng."&mode=transit&key=AIzaSyDBJJH4SL6eCDPu7N5C-2XcBt8jpZJeMyQ&libraries=places";
+  $json = @file_get_contents($url);
+  $location_datas = json_decode($json);
+  $location_arr = $ranker->array_push_assoc($location_arr, $add->jobid,$location_datas->rows[0]->elements[0]->distance->value);
+  $loc_points = $ranker->array_push_assoc($loc_points, $add->jobid,$ranker->getLocationPoints($location_datas->rows[0]->elements[0]->distance->value) * $criteria_Loc);
+  $skill_points = $ranker->array_push_assoc($skill_points,$add->jobid,$ranker->getSkillPoints($userskill,$add->jobid) * $criteria_skill);
+  $history_points = $ranker->array_push_assoc($history_points,$add->jobid,$ranker->getHistory($add->jobid,$userid) * $criteria_history);
+}
+
+$addCount = count($addressID);
+$result = [];
+for($i = 0; $i< $addCount; $i++){
+  $result[$addressID[$i]] = ( $loc_points[$addressID[$i]] + $skill_points[$addressID[$i]] + $history_points[$addressID[$i]] ) / 3;
+}
+
+function cmps($a, $b)
+{
+  if ($a == $b) {
+    return 0;
+  }
+  return ($a > $b) ? -1 : 1;
+}
+
+uasort($result,"App\Http\Controllers\cmps");
+$finalres = [];
+
+foreach($result as $key => $res){
+  $finalres[] = $key;
+}
+
+$finaljobs = Jobs::whereIn('job_id',$finalres)->get();
+$jobsss = Jobs::all();
+
+
+$data['jobs']   = $finaljobs;   
+$data['final'] = $finalres;
+$data['result'] = $result;
+$data['location_arr'] = $location_arr;
+$data['loc_points'] = $loc_points;
+$data['skill_points'] = $skill_points;
+$data['history_points'] = $history_points;
+$data['profile'] = Profiles::all();
+$data['message'] = 'success';
+
+
+
 
  $data['skill']          = Skills::all();
  $data['paytypes']       = Paytypes::all();
  $data['categories']     = Categories::all();
 
- $geocoder = new google.maps.Geocoder();
  return response()->json($data);
 }
 
@@ -571,6 +688,7 @@ public function Apply(Request $req){
 
     $myid = [];
     $jids = [];
+    
     foreach($mysched as $my){
       foreach($jobsched as $j){
         $mstart = new DateTime($my->start);

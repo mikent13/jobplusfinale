@@ -29,6 +29,7 @@ Route::get('/get/checker/job','UserController@checkJob');
 Route::get('/get/checker','UserController@checkPage');
 Route::get('/get/checker/dummy','UserController@getJob');
 
+Route::get('/get/rank','ApplicantController@getrank');
 /*
 |--------------------------------------------------------------------------
 | Profile Routes
@@ -60,8 +61,6 @@ Route::get('/user/setup', [
 	'uses' => 'UserController@getSetup',
 	'as' => 'user/setup'
 	])->middleware('auth');
-
-
 
 Route::get('/app/setup', [
 	'uses' => 'UserController@getSetup',

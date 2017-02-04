@@ -678,7 +678,6 @@ $("#filter-box").mouseleave(function() {
 
       input = document.getElementById('address');
       var options = {
-        types: ['(cities)'],
         componentRestrictions: {country: "ph"}
       };
 
