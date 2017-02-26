@@ -21,11 +21,7 @@ class Profiles extends Model
         'biography'
     ];
 
-    public function user()
-    {
-    	return $this->belongsTo('App\User');
-    }
-
+  
 
 }
  

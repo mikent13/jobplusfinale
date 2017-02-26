@@ -8,4 +8,8 @@ class Job_Skill extends Model
 {
    protected $table = 'job_skills';
    public $timestamps = false;
+
+   public function skills(){
+        return $this->hasMany('App\Skills');
+   }
 }

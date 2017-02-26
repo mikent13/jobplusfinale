@@ -16,47 +16,28 @@ function initializeMap(){
   $('#rec-gmap').attr('hidden',true);
   $('#near-gmap').attr('hidden',true);
 
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function(position) {
-      geolocations = {
-        lat: position.coords.latitude,
-        lng: position.coords.longitude
-      };
-      var meos = [];
-      var locs;
-      var centers = { lat:geolocations.lat , lng:geolocations.lng };
-      meos.push(centers);
-      var geocoder = new google.maps.Geocoder();
-      geocoder.geocode({ 'latLng': meos[0] }, function (results, status) {
-        if (status == google.maps.GeocoderStatus.OK) {
-             var res = results[0].address_components;
-             for(var i=0; i<res.length; i++){
-              if(res[i].types[0] =="locality"){
-               $('#search-loc').val(res[i].long_name);
-               nearbs = res[i].long_name;
-             // console.log(nearbs);
-           }
-         }
-       }
-     });
+  var meos = [];
+  var centers = { lat:10.3133 , lng:123.88 };
+  meos.push(centers);
+  feedmap = new google.maps.Map(document.getElementById('feed-gmap'), {
+    center:centers,
+    zoom: 18,
+    mapTypeId: google.maps.MapTypeId.HYBRID
+  });
 
-      feedmap = new google.maps.Map(document.getElementById('feed-gmap'), {
-        center:centers,
-        zoom: 18
-      });
+  recmap = new google.maps.Map(document.getElementById('rec-gmap'), {
+    center: centers,
+    zoom: 18,
+    mapTypeId: google.maps.MapTypeId.HYBRID
+  });
 
-      recmap = new google.maps.Map(document.getElementById('rec-gmap'), {
-        center: centers,
-        zoom: 18
-      });
+  nearmap = new google.maps.Map(document.getElementById('near-gmap'), {
+    center: centers,
+    zoom: 18,
+    mapTypeId: google.maps.MapTypeId.HYBRID
+  });
 
-      nearmap = new google.maps.Map(document.getElementById('near-gmap'), {
-        center: centers,
-        zoom: 18
-      });
-      $("#loading").fadeOut(300);
-    })
-  }
+  $("#loading").fadeOut(300);
 }
 
 function initializeData(){
@@ -97,17 +78,16 @@ function initializeData(){
   $('#fil-ptype').selectpicker('refresh');
 
   var jobids = [];
-$(".windows8").fadeOut(200);
-
+  $(".windows8").fadeOut(200);
   //----------------Job Feeds------------//
-  for(var z = 0; z< data.final.length; z++){
-      for(i = 0; i< data.jobs.length; i++){
-        if(data.final[z] == data.jobs[i].job_id){
+  // for(var z = 0; z< data.final.length; z++){
+    for(i = 0; i< data.jobs.length; i++){
+        // if(data.final[z] == data.jobs[i].job_id){
           for(x = 0; x< data.profile.length; x++){
             if(data.jobs[i].user_id == data.profile[x].user_id){
               if(jobids.indexOf(data.jobs[i].job_id) < 0){
                 jobids.push(data.jobs[i].job_id);
-                $('#jobfeed-res').append($('<a>').addClass('list-group-item near-res').attr('data-val',data.jobs[i].job_id)
+                $('#jobfeed-res').append($('<a>').addClass('list-group-item item-res').attr('data-val',data.jobs[i].job_id)
                   .append($('<div>').addClass('cont-feeds')
                     .append($('<img>').addClass('img-rounded pull-left').attr('src',data.profile[x].avatar))
                     .append($('<h4>').addClass('list-group-item-heading ellipsis meta-title').text(data.jobs[i].title))
@@ -117,20 +97,16 @@ $(".windows8").fadeOut(200);
               }
             }
           }
-      }
         }
-    }
 
-  $('#feeds').attr('hidden',false);
+        $('#feeds').attr('hidden',false);
 
+        $('.item-res ').click(function(e) {
+          e.preventDefault();
+          $('.item-res').removeClass('item-active');
+          $(this).addClass('item-active')
+        });
 
-   $('.item-res ').click(function(e) {
-    e.preventDefault();
-    $('.item-res').removeClass('item-active');
-    $(this).addClass('item-active')
-  });
-
-   
       //   for(z = 0; z< data.jobadd.length; z++){
       //   if(data.jobs[i].job_id == data.jobadd[z].jobid){
       //     $('#side-res').append($('<p>').addClass('list-group-item-text meta meta-loc').text(data.jobadd[z].locality));
@@ -240,6 +216,7 @@ $(document).on('click','#btn-search',function(e){
       'ptype': $('#fil-ptype').val(),
     },
   });
+   
    search.done(function(data){
     console.log(data);
     $('#jobfeed-res').empty();
@@ -260,7 +237,7 @@ $(document).on('click','#btn-search',function(e){
             if(data.jobs[i].user_id == data.profile[x].user_id){
               $('#jobfeed-res').append($('<a>').addClass('list-group-item item-res').attr('data-val',data.jobs[i].job_id)
                 .append($('<div>').addClass('cont-feeds')
-                  .append($('<img>').addClass('img-rounded pull-left').attr('src',''))
+                  .append($('<img>').addClass('img-rounded pull-left').attr('src',data.profile[x].avatar))
                   .append($('<h4>').addClass('list-group-item-heading ellipsis meta-title').text(data.jobs[i].title))
                   .append($('<p>').addClass('list-group-item-text meta meta-employer').text('by '+data.profile[x].fname + ' ' + data.profile[x].lname))
                   .append($('<i>').addClass('meta-loc meta-marker fa-1x fa fa-map-marker'))
@@ -296,14 +273,14 @@ $(document).on('click','#tab-recommended',function(e){
   search.done(function(data){
     console.log(data);
     $('#recommended-res').empty();
-      for(var z = 0; z< data.final.length; z++){
+    for(var z = 0; z< data.final.length; z++){
       for(i = 0; i< data.jobs.length; i++){
         if(data.final[z] == data.jobs[i].job_id){
           for(x = 0; x< data.profile.length; x++){
             if(data.jobs[i].user_id == data.profile[x].user_id){
               if(jobids.indexOf(data.jobs[i].job_id) < 0){
                 jobids.push(data.jobs[i].job_id);
-                $('#recommended-res').append($('<a>').addClass('list-group-item near-res').attr('data-val',data.jobs[i].job_id)
+                $('#recommended-res').append($('<a>').addClass('list-group-item recom-res').attr('data-val',data.jobs[i].job_id)
                   .append($('<div>').addClass('cont-feeds')
                     .append($('<img>').addClass('img-rounded pull-left').attr('src',data.profile[x].avatar))
                     .append($('<h4>').addClass('list-group-item-heading ellipsis meta-title').text(data.jobs[i].title))
@@ -313,8 +290,8 @@ $(document).on('click','#tab-recommended',function(e){
               }
             }
           }
-      }
         }
+      }
     }
 
     $('.recom-res ').click(function(e) {
@@ -332,7 +309,9 @@ $(document).on('click','.recom-res',function(e){
  e.preventDefault();
  $('#rec-result-sched').empty();
  $('#rec-result-skill').empty();
+ 
  $('#rec-body').attr('hidden',false);
+
  $.ajaxSetup({
   headers: {
     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -437,7 +416,7 @@ $(document).on('click','.item-res',function(e){
   console.log(data);
   var meo = [];
   var locs;
-  var centers = { lat: parseFloat(data.address.lat), lng: parseFloat(data.address.lng) };
+  var centers = { lat: parseFloat(data.response[0].address.lat), lng: parseFloat(data.response[0].address.lng) };
   meo.push(centers);
   var geocoder = new google.maps.Geocoder();
   geocoder.geocode({ 'latLng': meo[0] }, function (results, status) {
@@ -445,19 +424,21 @@ $(document).on('click','.item-res',function(e){
       locs = results[0].formatted_address;
       $('#feed-result-add').text(locs);
     }
-    $('#feed-res-jobid').text(data.job.job_id).attr('hidden',true);
-    $('#feed-result-title').text("(" +data.job.job_id + ") "+ data.job.title);
-    for(i = 0; i<data.sched.length; i++){
+    $('#feed-res-jobid').text(data.response[0].job.job_id).attr('hidden',true);
+
+    for(i = 0; i<data.response[0].schedule.length; i++){
       $('#feed-result-sched').append($('<li>')
-        .append($('<p>').text(data.sched[i].start + " until " + data.sched[i].end)));
+        .append($('<p>').text(data.response[0].schedule[i].start + " until " + data.response[0].schedule[i].end)));
     }
-    for(i = 0; i<data.skill.length; i++){
-      $('#feed-result-skill').append($('<p>').text(data.skill[i].name).addClass('mini-skill'));
+
+    for(i = 0; i<data.response[0].skill.length; i++){
+      $('#feed-result-skill').append($('<p>').text(data.response[0].skill[i].name).addClass('mini-skill'));
     }
-    $('#feed-desc').text(data.job.description);
-    $('.meta-sal').text('$' + data.job.salary);
-    $('.meta-slot').text(data.job.slot);
-    $('.meta-ptype').text(data.paytype.name);
+
+    $('#feed-desc').text(data.response[0].job.description);
+    $('.meta-sal').text('Php ' + data.response[0].job.salary + ' / ' + data.response[0].paytype);
+    $('.meta-slot').text(data.response[0].job.slot);
+    $('.meta-jobtype').text(data.response[0].jobtype);
 
   });
 
@@ -471,15 +452,15 @@ $(document).on('click','.item-res',function(e){
   setTimeout(google.maps.event.trigger(feedmap, 'resize'),300);
   feedmap.setCenter(centers);
 
-  var dateposted = moment(data.job.date_posted);
+  var dateposted = moment(data.response[0].job.date_posted);
   $('#postedago').text('Posted ' +dateposted.fromNow());
   $('.sched-start').empty();
   $('.sched-end').empty();
   $('.sched-start').append($('<h3>').text('From'));
   $('.sched-end').append($('<h3>').text('Until'));
-  for(i=0; i<data.sched.length; i++){
-    var start = moment(data.sched[i].start).format('MMMM Do YYYY, h:mm a');
-    var end = moment(data.sched[i].end).format('MMMM Do YYYY, h:mm a');
+  for(i=0; i<data.response[0].schedule.length; i++){
+    var start = moment(data.response[0].schedule[i].start).format('MMMM Do YYYY, h:mm a');
+    var end = moment(data.response[0].schedule[i].end).format('MMMM Do YYYY, h:mm a');
     $('.sched-start').append($('<p>').text(start));
     $('.sched-end').append($('<p>').text(end));
   }
@@ -498,8 +479,8 @@ $(document).on('click','.item-res',function(e){
       //   $('#result-sched').append('<p>' + start +' - '+ end +'</p>');
       // });
 
-      $('#feed-t').text(data.job.title);
-      $('#feed-p').text('by ' +data.user.fname + ' ' + data.user.lname);
+      $('#feed-t').text(data.response[0].job.title);
+      $('#feed-p').text('by ' +data.response[0].user.fname + ' ' + data.response[0].user.lname);
 
     });
 }); 
@@ -544,8 +525,8 @@ $(document).on('click','#tab-nearby',function(e){
               }
             }
           }
-      }
         }
+      }
     }
   });
 });

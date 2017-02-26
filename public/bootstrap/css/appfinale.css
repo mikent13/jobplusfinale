@@ -85,7 +85,7 @@ a,p{
 	color: #d35400;
 	background-color: #fff;
 	 transition: all 0.2s ease;
-}transition: all 0.2s ease;
+}
 
 
 
@@ -160,8 +160,8 @@ a,p{
 .list-group-item-heading{
 	width: 250px;
 	color: red;
-
 }
+
 .list-group-items{
 	border:none;
 }
@@ -422,7 +422,8 @@ a.list-group-item:focus,a.list-group-item:active{
 .mini-meta > p{
 	text-align: center;
 }
-.meta-sal , .meta-ptype, .meta-slot{
+
+.meta-sal , .meta-ptype, .meta-slot, .meta-jobtype{
 	color: #d35400;
 }
 .mini-meta{

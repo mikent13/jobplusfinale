@@ -40,7 +40,6 @@
            </li>
          </ul>
        </div>
-
        <div class="tab-content">
         <div class="tab-pane active" role="tabpanel" id="step1">
           <div class="tab-header">

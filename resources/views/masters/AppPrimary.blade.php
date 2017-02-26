@@ -82,7 +82,7 @@
           </ul>
         </li>
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"> <i class="fa fa-lg fa-user-circle" aria-hidden="true"></i>{{Auth::user()->username}}<span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"> <img src="{{Auth::user()->profile->avatar}}" style="width:25px;height:25px;border-radius:50%;">{{Auth::user()->profile->fname}} {{ Auth::user()->profile->lname}}<span class="caret"></span></a>
           <ul class="dropdown-menu dropdown-cart" role="menu">
               <li>
                 <a href="{{url('/get/user/profile')}}"><span>Profile</span></a>
@@ -90,7 +90,7 @@
                 <a href="#"><span>Job+ Wallet</span></a>
               </li>
               <li class="divider"></li>
-              <li><a class="#" href="">Signout</a></li>
+              <li><a class="" href="">Signout</a></li>
           </ul>
         </li>
       </ul>
@@ -102,10 +102,10 @@
     <div class="footer" id="footer">
         <div class="container">
             <div class="row">
-                <div class="col-lg-5 foot ">
+                <div class="col-lg-7 foot ">
                     <h1> JobPlus </h1>
                     <ul>
-                        <li> <a href="#"><h1>#<b>Road To Graduation March 2017</b></h1></a> </li>
+                       <li> <a href="#"><h1>#<b>Road To Graduation March 2017 <i class="glyphicon glyphicon-education"></i></b></h1></a> </li>
                     </ul>
                 </div>
                 <div class="col-lg-2  col-md-2 col-sm-4 col-xs-6 foot ">

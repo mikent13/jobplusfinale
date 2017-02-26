@@ -1,6 +1,5 @@
 <?php
 
-
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -28,6 +27,7 @@ Route::group(['middleware' => ['web']], function(){
 Route::get('/get/checker/job','UserController@checkJob');
 Route::get('/get/checker','UserController@checkPage');
 Route::get('/get/checker/dummy','UserController@getJob');
+
 
 Route::get('/get/rank','ApplicantController@getrank');
 /*
@@ -134,13 +134,28 @@ Route::get('/employer/jobpost', [
 	'as' => 'emp/job/post'
 	])->middleware('auth');
 
+Route::get('/set/postjob','EmployerController@postJob');
+
+Route::get('/employer/jobpost/data', [
+	'uses' => 'EmployerController@getJobPostData',
+	'as' => 'emp/job/post/data'
+	])->middleware('auth');
+
+
 Route::get('employer/applications', [
 	'uses' => 'EmployerController@getApplications',
 	'as' => 'emp/applications'
 	])->middleware('auth');
 
+// Applications
+Route::get('/employer/applications/data', 'EmployerController@getApplicationData');
 Route::get('/employer/application/response','EmployerController@ApplicationResponse');
 
+//Dashboard
+Route::get('/employer/dashboard/data','EmployerController@getDashboardData');
+Route::get('/employer/startjob','EmployerController@startJob');
+Route::get('/employer/endjob','EmployerController@endJob');
+Route::get('/employer/endjob/summary','EmployerController@endJobSummary');
 /*
 |--------------------------------------------------------------------------
 | Applicant Routes
@@ -156,7 +171,6 @@ Route::get('/applicant/job', [
 	'uses' => 'ApplicantController@getJobPage',
 	'as' => 'app/job/result'
 	])->middleware('auth');
-
 
 Route::get('/app/job/filter','ApplicantController@getFilter');
 Route::get('/app/job/getskill','ApplicantController@getSkills');

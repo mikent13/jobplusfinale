@@ -1,7 +1,10 @@
 <?php
 
 namespace App;
-
+use App\Schedules;
+use DateTime;
+use App\Jobs;
+use App\Works;
 class JobRank{
 
 	public function array_push_assoc($array, $key, $value){
@@ -145,11 +148,79 @@ class JobRank{
 		return $points;
 	}
 
-	function rank($a, $b)
+	public function rank($a, $b)
 	{
 		if ($a == $b) {
 			return 0;
 		}
 		return ($a > $b) ? -1 : 1;
+	}
+
+	public function getConflict($usersched,$start,$end,$jobid){
+		foreach($usersched as $usch){
+			$ids[] = $usch->job_id;
+			$jstart = 	 new DateTime(''.$start.'UTC+8:00');
+			$jend = 	 new DateTime(''.$end.'UTC+8:00');
+			$userstart = new DateTime(''.$usch->start.'UTC+8:00');
+			$userend = 	 new DateTime(''.$usch->end.'UTC+8:00');
+
+			if($userstart == $jstart && $userend == $jend){
+				return 1;
+			}
+			elseif($userstart >= $jstart && $userstart <= $jend){
+				return 1;
+			}
+			elseif ($userend >= $jstart && $userend <= $jend) {
+				return 1;
+			}
+			else{	
+				return 0;
+			}
+		}
+	}
+
+	public function removeConflict($userid,$address){
+		$today = new DateTime;
+		$uwschedID = [];
+		$ids = [];
+		$job = [];
+		$finalids = [];
+		$flagss =[];
+
+		$userwork = Works::where('applicant_id',$userid)
+		->whereNotIn('status',[4,5])
+		->get();
+
+		if(count($userwork) > 0){
+			foreach($userwork as $us){
+				$uwschedID[] = $us->sched_id;
+			}
+
+			$usersched = Schedules::whereIn('schedule_id',$uwschedID)
+			->where('start','>=',$today)
+			->get();
+
+			foreach($address as $add){
+				$ids[] = $add->jobid;
+			}
+
+			$jobsched = Schedules::whereIn('job_id',$ids)
+			->where('start','>=',$today)
+			->get();
+
+			$flag = 0;
+			foreach($jobsched as $jsch){
+				$flag = $this->getConflict($usersched,$jsch->start,$jsch->end,$jsch->job_id);
+				$flagss = $this->array_push_assoc($flagss,$jsch->job_id,$flag);
+				if($flag == 0){
+					$finalids[] = $jsch->job_id; 		
+				}
+			}
+		
+			return $finalids;
+		}
+		else{		
+			return $finalids;
+		}
 	}
 }

@@ -67,6 +67,33 @@ LOCK TABLES `app_notifications` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `application`
+--
+
+DROP TABLE IF EXISTS `application`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `application` (
+  `application_id` int(11) NOT NULL AUTO_INCREMENT,
+  `applicant` int(11) NOT NULL,
+  `job` int(11) NOT NULL,
+  `date` datetime NOT NULL,
+  `is_accepted` tinyint(1) NOT NULL,
+  PRIMARY KEY (`application_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `application`
+--
+
+LOCK TABLES `application` WRITE;
+/*!40000 ALTER TABLE `application` DISABLE KEYS */;
+INSERT INTO `application` VALUES (2,1,1,'2017-02-20 21:50:50',1),(3,1,2,'2017-02-20 21:50:50',1);
+/*!40000 ALTER TABLE `application` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `attainment`
 --
 
@@ -179,7 +206,7 @@ CREATE TABLE `education` (
   `degree_id` int(11) DEFAULT NULL,
   `field_study` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`education_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -188,7 +215,7 @@ CREATE TABLE `education` (
 
 LOCK TABLES `education` WRITE;
 /*!40000 ALTER TABLE `education` DISABLE KEYS */;
-INSERT INTO `education` VALUES (24,2,'University of San Jose-Recoletos',2013,2017,6,'1'),(26,2,'University of San Jose-Recoletos',2013,2016,6,'1'),(28,2,'University of San Carlos',2016,2025,6,'1'),(30,2,'University of San Carlos',2016,2025,6,'1'),(31,2,'University of San Carlos',2016,2025,6,'2'),(33,2,'University of San Carlos',2016,2025,6,'2'),(34,2,'San',2016,2025,6,'1'),(35,2,'San',2016,2024,6,'1'),(36,2,'San',2016,2024,6,'2'),(37,2,'San',2016,2024,0,NULL),(41,2,'hehe',2016,2025,6,'1'),(43,2,'hehe',2016,2025,6,'2'),(44,2,'awww',2016,2025,6,'2'),(46,2,'awwws',2016,2025,6,'1'),(47,2,'asdasd',2016,2025,6,'1'),(48,2,'asdasd',2016,2025,6,'1'),(51,1,'USJR',2016,2025,NULL,NULL);
+INSERT INTO `education` VALUES (24,2,'University of San Jose-Recoletos',2013,2017,6,'1'),(26,2,'University of San Jose-Recoletos',2013,2016,6,'1'),(28,2,'University of San Carlos',2016,2025,6,'1'),(30,2,'University of San Carlos',2016,2025,6,'1'),(31,2,'University of San Carlos',2016,2025,6,'2'),(33,2,'University of San Carlos',2016,2025,6,'2'),(34,2,'San',2016,2025,6,'1'),(35,2,'San',2016,2024,6,'1'),(36,2,'San',2016,2024,6,'2'),(37,2,'San',2016,2024,0,NULL),(41,2,'hehe',2016,2025,6,'1'),(43,2,'hehe',2016,2025,6,'2'),(44,2,'awww',2016,2025,6,'2'),(46,2,'awwws',2016,2025,6,'1'),(47,2,'asdasd',2016,2025,6,'1'),(48,2,'asdasd',2016,2025,6,'1'),(51,2,'USC',2016,2025,6,'1'),(52,1,'UC',2016,2025,NULL,NULL);
 /*!40000 ALTER TABLE `education` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -256,7 +283,7 @@ CREATE TABLE `experiences` (
   `employer` varchar(255) CHARACTER SET utf8 NOT NULL,
   `year` int(11) NOT NULL,
   PRIMARY KEY (`experience_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -265,7 +292,7 @@ CREATE TABLE `experiences` (
 
 LOCK TABLES `experiences` WRITE;
 /*!40000 ALTER TABLE `experiences` DISABLE KEYS */;
-INSERT INTO `experiences` VALUES (7,'Dish','Creative',2016),(8,'Dish','Creative',2016),(9,'asdasd','asdasdasd',2016),(12,'','',0),(13,'','',0),(14,'Programmer','Glocorp',2013),(15,'','',0);
+INSERT INTO `experiences` VALUES (7,'Dish','Creative',2016),(8,'Dish','Creative',2016),(9,'asdasd','asdasdasd',2016),(12,'','',0),(13,'','',0),(14,'Programmer','Glocorp',2013),(15,'','',0),(16,'Tambay','Sa puso Mo',2014),(17,'Works at Krusty Krab','Mr. Crab',2015);
 /*!40000 ALTER TABLE `experiences` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -277,13 +304,12 @@ DROP TABLE IF EXISTS `job_address`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `job_address` (
-  `id` int(10) unsigned NOT NULL,
-  `jobid` int(10) NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `lat` float NOT NULL,
   `lng` float NOT NULL,
   `locality` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -292,7 +318,7 @@ CREATE TABLE `job_address` (
 
 LOCK TABLES `job_address` WRITE;
 /*!40000 ALTER TABLE `job_address` DISABLE KEYS */;
-INSERT INTO `job_address` VALUES (1,1,14.5512,121.023,'Makati'),(2,2,14.5542,121.024,'Makati'),(3,3,10.3441,123.939,'Mandaue City'),(4,4,10.3169,123.893,'Mandaue City'),(5,5,10.3333,123.937,'Mandaue City'),(7,7,10.3169,123.893,'Cebu City'),(8,8,10.308,123.89,'Cebu City'),(9,9,10.3169,123.893,'Cebu City'),(10,10,10.3113,123.9,'Cebu City'),(11,11,11.024,124.6,'Ormoc'),(12,12,11.024,124.6,'Ormoc'),(13,13,11.0225,124.599,'Ormoc'),(14,14,11.0258,124.595,'Ormoc'),(15,15,11.0206,124.6,'Ormoc'),(16,16,11.0186,124.603,'Ormoc');
+INSERT INTO `job_address` VALUES (13,10.3133,123.88,'Cebu City');
 /*!40000 ALTER TABLE `job_address` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -304,11 +330,11 @@ DROP TABLE IF EXISTS `job_skills`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `job_skills` (
-  `id` int(10) NOT NULL,
+  `id` int(10) NOT NULL AUTO_INCREMENT,
   `job_id` int(10) NOT NULL,
   `skill_id` int(10) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -317,8 +343,32 @@ CREATE TABLE `job_skills` (
 
 LOCK TABLES `job_skills` WRITE;
 /*!40000 ALTER TABLE `job_skills` DISABLE KEYS */;
-INSERT INTO `job_skills` VALUES (1,1,1),(2,1,2),(3,1,3),(4,2,4),(5,2,3),(6,3,6),(7,3,7),(8,4,8),(9,5,12),(10,5,13),(11,7,5),(12,7,7),(13,7,9),(14,8,22),(15,8,19),(16,9,17),(17,9,18),(18,10,5),(19,10,6),(20,11,12),(21,12,7),(22,12,8),(23,13,20),(24,13,21),(25,14,14),(26,15,16),(27,15,18),(28,16,1),(29,16,2),(30,16,3);
+INSERT INTO `job_skills` VALUES (12,14,17);
 /*!40000 ALTER TABLE `job_skills` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `job_type`
+--
+
+DROP TABLE IF EXISTS `job_type`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `job_type` (
+  `jobtype_id` int(11) NOT NULL,
+  `name` varchar(45) NOT NULL,
+  PRIMARY KEY (`jobtype_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `job_type`
+--
+
+LOCK TABLES `job_type` WRITE;
+/*!40000 ALTER TABLE `job_type` DISABLE KEYS */;
+INSERT INTO `job_type` VALUES (1,'One time'),(2,'Daily'),(3,'Weekly');
+/*!40000 ALTER TABLE `job_type` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -332,6 +382,8 @@ CREATE TABLE `jobs` (
   `job_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `category_id` varchar(5) COLLATE utf8_unicode_ci NOT NULL,
+  `address_id` int(11) NOT NULL,
+  `job_type_id` int(11) NOT NULL,
   `title` varchar(225) CHARACTER SET utf8 NOT NULL,
   `description` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `start_date` datetime NOT NULL,
@@ -342,7 +394,7 @@ CREATE TABLE `jobs` (
   `slot` int(11) NOT NULL,
   `date_posted` date NOT NULL,
   PRIMARY KEY (`job_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -351,7 +403,7 @@ CREATE TABLE `jobs` (
 
 LOCK TABLES `jobs` WRITE;
 /*!40000 ALTER TABLE `jobs` DISABLE KEYS */;
-INSERT INTO `jobs` VALUES (1,2,'1','Hiring: Kasambahay/Dishwasher','Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Donec sollicitudin molestie malesuada. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque in ipsum id orci porta dapibus. Sed porttitor lectus nibh.','2016-10-17 10:00:00','2016-10-17 11:00:00',1,1000.00,0,1,'2016-11-25'),(2,2,'1','Hiring: Yaya/Housekeeper','Vivamus suscipit tortor eget felis porttitor volutpat. Cras ultricies ligula sed magna dictum porta. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin eget tortor risus. Vivamus suscipit tortor eget felis porttitor volutpat.','2016-10-17 11:00:00','2016-10-17 01:00:00',2,1500.00,0,1,'2016-11-24'),(3,2,'2','Hiring:Painter','Nulla porttitor accumsan tincidunt. Vivamus magna justo, lacinia eget consectetur sed, convallis at tellus. Curabitur non nulla sit amet nisl tempus convallis quis ac lectus.','2016-10-17 11:00:00','2016-10-17 12:00:00',3,500.00,0,1,'2016-11-23'),(4,2,'2','Hiring: Cutter','Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque velit nisi, pretium ut lacinia in, elementum id enim. Donec rutrum congue leo eget malesuada.','2016-10-17 11:00:00','2016-10-17 05:00:00',2,750.00,0,1,'2016-11-22'),(5,2,'3','Looking for: Tindera/Retailer','Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Curabitur aliquet quam id dui posuere blandit. Cras ultricies ligula sed magna dictum porta. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec vel','2016-10-17 10:30:00','2016-10-17 12:30:00',1,1500.00,0,1,'2016-11-21'),(7,2,'2','looking for a good construction worker','Mauris blandit aliquet elit, eget tincidunt nibh pulvinar a. Curabitur non nulla sit amet nisl tempus convallis quis ac lectus. Cras ultricies ligula sed magna dictum porta. Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Curabitur ','2016-10-27 11:00:00','2016-10-28 10:00:00',1,1500.00,0,1,'2016-11-20'),(8,2,'4','We need a Plumber ','Donec rutrum congue leo eget malesuada. Vivamus suscipit tortor eget felis porttitor volutpat. Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Nulla porttitor accumsan','2016-10-27 11:00:00','2016-10-28 10:00:00',2,1500.00,0,1,'2016-11-19'),(9,2,'3','Need Driver ASAP','Curabitur non nulla sit amet nisl tempus convallis quis ac lectus. Vivamus magna justo, lacinia eget consectetur sed, convallis at tellus. Cras ultricies ligula sed magna dictum porta. Vivamus suscipit tortor eget felis porttitor volutpat.','2016-10-27 11:00:00','2016-10-28 10:00:00',1,1500.00,0,1,'2016-11-18'),(10,2,'2','Need Carpenter','Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Quisque velit nisi, pretium ut lacinia in, elementum id enim. Sed porttitor lectus nibh. Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Vivamus suscipit tortor eget felis p','2016-10-27 11:00:00','2016-10-28 10:00:00',1,1500.00,0,1,'2016-11-17'),(11,2,'3','looking for a Promo Dicer','Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque velit nisi, pretium ut lacinia in, elementum id enim. Curabitur aliquet quam id dui posuere blandit. Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui.','2016-10-27 11:00:00','2016-10-28 10:00:00',2,1500.00,0,1,'2016-11-16'),(12,2,'2','looking for a good construction worker','Nulla quis lorem ut libero malesuada feugiat. Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Pellentesque in ipsum id orci porta dapibus. Curabitur aliquet quam id dui posuere blandit. Donec sollicitudin molestie malesuada. Curabit','2016-10-27 11:00:00','2016-10-28 10:00:00',3,1500.00,0,1,'2016-11-15'),(13,2,'4','looking for Technician','Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Curabitur aliquet quam id dui posuere blandit. Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Sed porttitor lectus nibh. Vivamus suscipit tortor eget felis porttitor ','2016-10-27 11:00:00','2016-10-28 10:00:00',2,1500.00,0,1,'2016-11-14'),(14,2,'3','looking for a waiter','Vivamus suscipit tortor eget felis porttitor volutpat. Proin eget tortor risus. Donec rutrum congue leo eget malesuada. Nulla quis lorem ut libero malesuada feugiat. Donec sollicitudin molestie malesuada.','2016-10-27 11:00:00','2016-10-28 10:00:00',2,800.00,0,1,'2016-11-13'),(15,2,'3','looking for a good cook','Curabitur non nulla sit amet nisl tempus convallis quis ac lectus. Vivamus magna justo, lacinia eget consectetur sed, convallis at tellus. Cras ultricies ligula sed magna dictum porta. Vivamus suscipit tortor eget felis porttitor volutpat.','2016-10-27 11:00:00','2016-10-28 10:00:00',1,300.00,0,1,'2016-11-12'),(16,2,'1','looking for a good Yaya','Nulla quis lorem ut libero malesuada feugiat. Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Pellentesque in ipsum id orci porta dapibus. Curabitur aliquet quam id dui posuere blandit. Donec sollicitudin molestie malesuada. Curabit','2016-10-27 11:00:00','2016-10-28 10:00:00',1,400.00,0,1,'2016-11-11');
+INSERT INTO `jobs` VALUES (14,2,'3',13,1,'Looking for a driver','20 years old and above. \nWith pleasing personality.','2017-02-26 20:00:16','2017-02-26 22:00:16',1,250.00,1,1,'2017-02-26');
 /*!40000 ALTER TABLE `jobs` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -423,7 +475,7 @@ CREATE TABLE `paytypes` (
 
 LOCK TABLES `paytypes` WRITE;
 /*!40000 ALTER TABLE `paytypes` DISABLE KEYS */;
-INSERT INTO `paytypes` VALUES (1,'Hourly'),(2,'Daily'),(3,'Per Project');
+INSERT INTO `paytypes` VALUES (1,'Hour'),(2,'Session'),(3,'Project');
 /*!40000 ALTER TABLE `paytypes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -439,7 +491,7 @@ CREATE TABLE `prof_educations` (
   `profile_id` int(10) NOT NULL,
   `education_id` int(11) NOT NULL,
   PRIMARY KEY (`profedu_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -448,7 +500,7 @@ CREATE TABLE `prof_educations` (
 
 LOCK TABLES `prof_educations` WRITE;
 /*!40000 ALTER TABLE `prof_educations` DISABLE KEYS */;
-INSERT INTO `prof_educations` VALUES (25,1,51);
+INSERT INTO `prof_educations` VALUES (25,1,51),(26,1,52);
 /*!40000 ALTER TABLE `prof_educations` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -464,7 +516,7 @@ CREATE TABLE `prof_experiences` (
   `profile_id` int(11) NOT NULL,
   `experience_id` int(11) NOT NULL,
   PRIMARY KEY (`profexp_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -473,6 +525,7 @@ CREATE TABLE `prof_experiences` (
 
 LOCK TABLES `prof_experiences` WRITE;
 /*!40000 ALTER TABLE `prof_experiences` DISABLE KEYS */;
+INSERT INTO `prof_experiences` VALUES (1,1,16),(2,1,17);
 /*!40000 ALTER TABLE `prof_experiences` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -514,7 +567,7 @@ CREATE TABLE `prof_skills` (
   `profile_id` int(11) NOT NULL,
   `skill_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=229 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=241 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -523,7 +576,7 @@ CREATE TABLE `prof_skills` (
 
 LOCK TABLES `prof_skills` WRITE;
 /*!40000 ALTER TABLE `prof_skills` DISABLE KEYS */;
-INSERT INTO `prof_skills` VALUES (222,1,1),(223,1,2),(224,1,3),(225,1,13),(226,1,19),(227,1,20),(228,1,21);
+INSERT INTO `prof_skills` VALUES (222,1,1),(223,1,2),(224,1,3),(225,1,13),(226,1,19),(227,1,20),(228,1,21),(232,84,1),(233,84,2),(234,84,3),(235,84,6),(236,84,7),(237,84,8),(238,84,9),(239,84,10),(240,84,11);
 /*!40000 ALTER TABLE `prof_skills` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -553,7 +606,7 @@ CREATE TABLE `profiles` (
 
 LOCK TABLES `profiles` WRITE;
 /*!40000 ALTER TABLE `profiles` DISABLE KEYS */;
-INSERT INTO `profiles` VALUES (1,1,'baguion','kent','','Cebu City, Central Visayas, Philippines','A good review','/avatar/1484104578-builder.png'),(84,2,'Baguion','Kim Vincent','09329520016','Cebu City','this is a good description about myself.','/avatar/kim.jpg');
+INSERT INTO `profiles` VALUES (1,1,'Baguion','Kent Michael','','Cebu City, Central Visayas, Philippines','A good review','/avatar/mw.jpg'),(84,2,'Baguion','Kim Vincent','09329520016','Banawa Elementary School, Cebu City, Central Visayas, Philippines','this is a good description about myself.','/avatar/kim.jpg'),(85,3,'Wenceslao','Marvin','','Banawa Elementary School, Cebu City, Central Visayas, Philippines','this is a good description about myself.','/avatar/mw.jpg');
 /*!40000 ALTER TABLE `profiles` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -572,7 +625,7 @@ CREATE TABLE `reviews` (
   `reviewer_id` int(11) NOT NULL,
   `work_id` int(11) NOT NULL,
   PRIMARY KEY (`review_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -581,7 +634,7 @@ CREATE TABLE `reviews` (
 
 LOCK TABLES `reviews` WRITE;
 /*!40000 ALTER TABLE `reviews` DISABLE KEYS */;
-INSERT INTO `reviews` VALUES (1,'Nice review',5,2,1,1),(2,'asdasd',5,2,1,2);
+INSERT INTO `reviews` VALUES (6,'A nice review for you.',4,2,1,17),(7,'That was a nice review.',5,2,1,17),(8,'good feedback',5,2,1,17),(9,'I commend this guys, such a reliable person.',5,1,2,34),(10,'I commend this guys, such a reliable person.',5,1,2,34),(11,'asdasd',5,1,2,34);
 /*!40000 ALTER TABLE `reviews` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -598,7 +651,7 @@ CREATE TABLE `schedules` (
   `start` datetime NOT NULL,
   `end` datetime NOT NULL,
   PRIMARY KEY (`schedule_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -607,7 +660,7 @@ CREATE TABLE `schedules` (
 
 LOCK TABLES `schedules` WRITE;
 /*!40000 ALTER TABLE `schedules` DISABLE KEYS */;
-INSERT INTO `schedules` VALUES (1,1,'2017-01-06 14:00:00','2017-01-06 15:00:00'),(4,2,'2017-01-06 15:00:00','2017-01-06 16:00:00'),(5,3,'2017-01-06 14:00:00','2017-01-06 15:00:00'),(6,4,'2017-01-06 16:00:00','2017-01-06 17:00:00'),(7,5,'2017-01-06 17:00:00','2017-01-06 18:00:00'),(8,7,'2017-01-06 19:00:00','2017-01-06 19:00:00'),(9,8,'2017-01-06 18:00:00','2017-01-06 19:00:00'),(10,9,'2017-01-06 19:00:00','2017-01-06 20:00:00'),(11,10,'2017-01-06 19:00:00','2017-01-06 20:00:00'),(12,11,'2017-01-06 20:00:00','2017-01-06 21:00:00'),(13,12,'2017-01-06 20:00:00','2017-01-06 21:00:00'),(14,13,'2017-01-06 21:00:00','2017-01-06 22:00:00'),(15,14,'2017-01-06 21:00:00','2017-01-06 22:00:00'),(16,15,'2017-01-06 22:00:00','2017-01-06 23:00:00'),(17,16,'2017-01-06 22:00:00','2017-01-06 23:00:00');
+INSERT INTO `schedules` VALUES (7,14,'2017-02-26 20:00:16','2017-02-26 22:00:16');
 /*!40000 ALTER TABLE `schedules` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -647,7 +700,7 @@ CREATE TABLE `status` (
   `status_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`status_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -656,8 +709,34 @@ CREATE TABLE `status` (
 
 LOCK TABLES `status` WRITE;
 /*!40000 ALTER TABLE `status` DISABLE KEYS */;
-INSERT INTO `status` VALUES (1,'Active'),(2,'Upcoming'),(3,'Ongoing'),(4,'Ended'),(5,'Pending');
+INSERT INTO `status` VALUES (1,'Active'),(2,'Upcoming'),(3,'Ongoing'),(4,'Ended');
 /*!40000 ALTER TABLE `status` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user_review`
+--
+
+DROP TABLE IF EXISTS `user_review`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user_review` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `number_votes` int(11) NOT NULL,
+  `total_points` int(11) NOT NULL,
+  `average` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user_review`
+--
+
+LOCK TABLES `user_review` WRITE;
+/*!40000 ALTER TABLE `user_review` DISABLE KEYS */;
+/*!40000 ALTER TABLE `user_review` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -685,34 +764,33 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'applicant','moch@gmail.com','$2y$10$u7hcDAzeFgPFbYXWNxVdweyGU9XtLWeqHxdScyuW.aZsTaz4d27uu','C8q1WbEFL4ycd2EI7QIFSpvw3cvigE7fQAXfe3F0SEv43sBN9PR6O3e03PxZ'),(2,'employer','itnel13@gmail.com','$2y$10$E2PIeMbL68qZwELK3USQgO275CPJNjwJfAvoPHUVrLSa1kAryyws6','ACSz39a7Y7fk8uGG8OD4EhTkCrnPGbkCtCYJEzpp5lnVmGqJf4Z1hH2a9jEr');
+INSERT INTO `users` VALUES (1,'applicant','moch@gmail.com','$2y$10$u7hcDAzeFgPFbYXWNxVdweyGU9XtLWeqHxdScyuW.aZsTaz4d27uu','zDKgSw2EQgkcGwOcGkLenXENCcWErJ9RJxH1t4NsymQtwLNV0Qe5Ov3TE2ye'),(2,'employer','itnel13@gmail.com','$2y$10$E2PIeMbL68qZwELK3USQgO275CPJNjwJfAvoPHUVrLSa1kAryyws6','7bltPaxC0P9wkvmGYDEC1ac1jm4ZZMlKUSkTg7HnEWbzOA6q3sxzZWKqOIf3'),(3,'dummy1','dummy1@gmail.com','password',NULL);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `work_logs`
+-- Table structure for table `work_reviewed`
 --
 
-DROP TABLE IF EXISTS `work_logs`;
+DROP TABLE IF EXISTS `work_reviewed`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `work_logs` (
+CREATE TABLE `work_reviewed` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `work_id` int(11) NOT NULL,
-  `job_id` int(11) NOT NULL,
-  `date_ended` datetime NOT NULL,
+  `applicant_reviewed` tinyint(1) NOT NULL,
+  `employer_reviewed` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `work_logs`
+-- Dumping data for table `work_reviewed`
 --
 
-LOCK TABLES `work_logs` WRITE;
-/*!40000 ALTER TABLE `work_logs` DISABLE KEYS */;
-INSERT INTO `work_logs` VALUES (1,6,3,'2017-01-06 18:01:17'),(2,7,2,'2017-01-06 18:01:17');
-/*!40000 ALTER TABLE `work_logs` ENABLE KEYS */;
+LOCK TABLES `work_reviewed` WRITE;
+/*!40000 ALTER TABLE `work_reviewed` DISABLE KEYS */;
+/*!40000 ALTER TABLE `work_reviewed` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -726,11 +804,13 @@ CREATE TABLE `works` (
   `work_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `sched_id` int(10) NOT NULL,
   `applicant_id` int(10) NOT NULL,
+  `employer_id` int(10) NOT NULL,
   `status` int(11) NOT NULL,
-  `date` datetime NOT NULL,
-  `is_start` tinyint(1) NOT NULL,
+  `start_time` datetime DEFAULT NULL,
+  `end_time` datetime DEFAULT NULL,
+  `is_started` tinyint(1) NOT NULL,
   PRIMARY KEY (`work_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -739,7 +819,6 @@ CREATE TABLE `works` (
 
 LOCK TABLES `works` WRITE;
 /*!40000 ALTER TABLE `works` DISABLE KEYS */;
-INSERT INTO `works` VALUES (3,8,1,1,'2017-01-06 15:31:04',0),(4,9,1,2,'2017-01-06 15:31:04',0),(5,6,1,2,'2017-01-06 15:31:04',0),(6,5,1,4,'2017-01-06 15:31:04',0),(7,4,1,4,'2017-01-06 15:31:04',0);
 /*!40000 ALTER TABLE `works` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -752,4 +831,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-01-27  4:17:12
+-- Dump completed on 2017-02-27  7:01:03

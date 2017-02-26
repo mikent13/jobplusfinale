@@ -28,7 +28,6 @@ use DB;
 use Auth;
 use Session;
 
-
 class UserController extends Controller
 {
     public function getHome(){
@@ -40,7 +39,9 @@ class UserController extends Controller
         return response()->json($data);
     }
     public function checkPage(){
-        return view('users.checker');
+        $job = Jobs::all();
+        $sched = Schedules::all();
+        return view('users.checker',compact('job','sched'));
     }
 
     public function getJob(){
@@ -350,7 +351,6 @@ private function processMessage($message, $sender) {
     return true;
 }
 
-
 public function getSMSPage(){
     return view('masters.sms');
 }
@@ -365,6 +365,7 @@ public function getAdmin(){
     $category = Categories::all();
     return view('masters.admin',compact('job','skill','sk','address','paytype','schedule','category'));
 }
+
 public function getProfileData(){
     $skill_ids = [];
     $id = Auth::user()->id;

@@ -364,7 +364,6 @@ function initializeData(){
 		componentRestrictions: {country: "ph"}
 	};
 
-
 	searchBox = new google.maps.places.Autocomplete(input,options);
 	searchBox.addListener('places_changed', function() {
 		places = searchBox.getPlaces();

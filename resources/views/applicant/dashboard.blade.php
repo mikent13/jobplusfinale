@@ -15,6 +15,7 @@
     </div>
   </div>
 </div>
+
 <div class="container">
   <h1>Schedule</h1>
   <hr>
@@ -202,7 +203,7 @@
       <div class="modal-body">
         <div class="row">
           <ul class="nav nav-tabs resched-head" role="tablist">
-          <li role="presentation" class="active"><a href="#start" aria-controls="start" role="tab" data-toggle="tab" id="resched-start">Start</a></li>
+            <li role="presentation" class="active"><a href="#start" aria-controls="start" role="tab" data-toggle="tab" id="resched-start">Start</a></li>
             <li role="presentation"><a href="#end" aria-controls="end" role="tab" data-toggle="tab" id="resched-end">End</a></li>
           </ul>
 
@@ -214,7 +215,7 @@
                 <div id="active-datepicker1"></div>
               </div>
             </div>
-              <button class="btn  btn-cancel" id="btn-next">Next   <i class="fa fa-arrow-right" aria-hidden="true"></i></button>
+            <button class="btn  btn-cancel" id="btn-next">Next   <i class="fa fa-arrow-right" aria-hidden="true"></i></button>
           </div>
           <div role="tabpanel" class="tab-pane" id="end">
             <div style="overflow:hidden;">
@@ -234,8 +235,6 @@
     </div> 
   </div>
 </div>
-
-
 </div>
 </div>
 @endsection

@@ -87,31 +87,30 @@
 			<li role="presentation"><a href="#nearby" id="tab-nearby" aria-controls="nearby" role="tab" data-toggle="tab"><h3>Nearby Jobs</h3></a></li>
 		</ul>
 		<div class="windows8">
-								<div class="wBall" id="wBall_1">
-									<div class="wInnerBall"></div>
-								</div>
-								<div class="wBall" id="wBall_2">
-									<div class="wInnerBall"></div>
-								</div>
-								<div class="wBall" id="wBall_3">
-									<div class="wInnerBall"></div>
-								</div>
-								<div class="wBall" id="wBall_4">
-									<div class="wInnerBall"></div>
-								</div>
-								<div class="wBall" id="wBall_5">
-									<div class="wInnerBall"></div>
-								</div>
-							</div>
+			<div class="wBall" id="wBall_1">
+				<div class="wInnerBall"></div>
+			</div>
+			<div class="wBall" id="wBall_2">
+				<div class="wInnerBall"></div>
+			</div>
+			<div class="wBall" id="wBall_3">
+				<div class="wInnerBall"></div>
+			</div>
+			<div class="wBall" id="wBall_4">
+				<div class="wInnerBall"></div>
+			</div>
+			<div class="wBall" id="wBall_5">
+				<div class="wInnerBall"></div>
+			</div>
+		</div>
 		<!-- Tab panes -->
 		<div class="tab-content">
 			<div role="tabpanel" class="tab-pane active" id="feeds">
+
 				<div class="col-md-5 ">
 					<div class="panel panel-default jp-tabpanel ">
 						<!-- Job list-->
-						<div class="list-group" id="jobfeed-res">
-
-						</div>
+						<div class="list-group" id="jobfeed-res"></div>
 					</div>
 				</div>
 				<div id="feed-body" class="col-md-7 jp-content">
@@ -139,8 +138,8 @@
 								<p class="mini-m">Salary</p>
 							</div>
 							<div class="col-md-4 mini-meta">
-								<p class=" meta-ptype"></p>
-								<p class="mini-m">Paytype</p>
+								<p class=" meta-jobtype"></p>
+								<p class="mini-m">Job type</p>
 							</div>
 							<div class="col-md-4 mini-meta">
 								<p class=" meta-slot"></p>
@@ -165,9 +164,7 @@
 					</div>
 				</div>
 			</div>
-
 			<!-- Recommended Job list-->
-			
 			<div role="tabpanel" class="tab-pane" id="recommended">
 				<div class="col-md-5 jp-content feed-panel">
 					<div class="panel panel-default jp-tabpanel ">

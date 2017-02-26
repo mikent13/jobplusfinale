@@ -51,7 +51,6 @@
   <div class="profcontainer">
     <div class="profbody body-overview" >
       <div class="row profinfo">
-
         <h1>Overview</h1>
       </div>
       <p id="overview"></p>
