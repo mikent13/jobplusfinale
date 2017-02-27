@@ -19,6 +19,7 @@ use App\Profiles;
 use App\Job_Skill;
 use App\Job_Address;
 use Carbon\Carbon;
+use App\Application;
 use App\Work_Logs;
 use DateTime;
 use App\JobRank;
@@ -692,16 +693,13 @@ public function Apply(Request $req){
   $jobid = $req->jobid;
   $today = new DateTime;
   $userid = Auth::user()->id;
-  $sched = Schedules::where('job_id',$jobid)->get();
-  foreach($sched as $jsch){
-   $work = new Works;
-   $work->sched_id = $jsch->schedule_id;
-   $work->applicant_id = $userid;
-   $work->status = 5;
-   $work->date = $today;
-   $work->is_start = 0;
-   $work->save();
- }
+
+  $application = new Application;
+  $application->applicant = $userid;
+  $application->job = $jobid;
+  $application->date = $today;
+  $application->is_accepted = 0;
+  $application->save();
 
  $data['status'] = 1; 
 

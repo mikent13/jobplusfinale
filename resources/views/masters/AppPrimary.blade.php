@@ -90,7 +90,7 @@
                 <a href="#"><span>Job+ Wallet</span></a>
               </li>
               <li class="divider"></li>
-              <li><a class="" href="">Signout</a></li>
+              <li><a class="" href="{{url('/logout')}}">Signout</a></li>
           </ul>
         </li>
       </ul>

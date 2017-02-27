@@ -620,6 +620,7 @@ $(document).on('click','#feed-apply-btn',function(e){
  e.preventDefault();
 
  var jobid = $('#feed-res-jobid').text();
+ 
  $.ajaxSetup({
   headers: {
     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

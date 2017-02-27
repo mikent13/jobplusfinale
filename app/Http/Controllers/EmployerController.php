@@ -324,7 +324,7 @@ public function ApplicationResponse(Request $req){
       $work->employer_id = Auth::user()->id;
       $work->status = 3;
       $work->date = new DateTime;
-      $work->is_start = 0;
+      $work->is_started = 0;
       $work->save();
     }
   }
