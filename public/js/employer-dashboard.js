@@ -6,7 +6,8 @@ $(document).ready(function(){
 		$('#active-feeds').empty();
 		$('#upcoming-feeds').hide(400);
 		$('#upcoming-feeds').empty();
-
+		$('#pending-feeds').hide(400);
+		$('#pending-feeds').empty();
 		$.ajaxSetup({
 			headers: {
 				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -20,50 +21,69 @@ $(document).ready(function(){
 
 		sel.done(function(data){
 			console.log(data);
+
 			$('#active-feeds').show(400);
 			$('#upcoming-feeds').show(400);
+			$('#pending-feeds').show(400);
+
+			if(data.pending_status == 200){
+				for(var a=0; a<data.pending.length; a++){
+					var end = moment(data.pending[a].work.end_time).fromNow();
+					$('#pending-feeds').append($('<div>').addClass('card-cont col-md-12')
+						.append($('<span>').addClass('app-image col-md-2')
+							.append($('<img>').attr('src',data.pending[a].applicant.avatar)))
+						.append($('<span>').addClass('card-center col-md-7')
+							.append($('<h2>').text(data.pending[a].applicant.fname + ' '+data.pending[a].applicant.lname))
+							.append($('<p>').text('currently working on your job:'))
+							.append($('<a>').text(data.pending[a].schedule.jobs.title))
+							.append($('<span>').addClass('button-tool')
+								.append($('<button>').addClass('btn btn-md btn-startjob hidden').text('Start session').attr('workid',data.pending[a].work.work_id))
+								.append($('<button>').addClass('btn btn-md btn-endjob').text('End session').attr({'workid':data.pending[a].work.work_id}))
+								.append($('<p>').addClass('start-at').text('Ended ' + end))))
+						.append($('<span>').addClass('end-time col-md-3')
+							.append($('<p>').text('Service charge: '))
+							.append($('<h3>').text('Php ' + data.pending[a].schedule.jobs.salary + ' / ' + data.pending[a].schedule.jobs.paytypes.name)))
+						)
+				}
+			}
 
 			if(data.active_status == 200){
 				for(var i=0; i<data.active.length; i++){
-					for(var z=0; z<data.reviewed.length;z++){
-						var start = new moment(data.active[i].schedules.start).format('LT');
-						if(data.active[i].is_start == 0){
-							$('#active-feeds').append($('<div>').addClass('card-cont col-md-12')
-								.append($('<span>').addClass('app-image col-md-2')
-									.append($('<img>').attr('src',data.active[i].users.profile.avatar)))
-								.append($('<span>').addClass('card-center col-md-7')
-									.append($('<h2>').text(data.active[i].users.profile.fname + ' '+data.active[i].users.profile.lname))
-									.append($('<p>').text('currently working on your job:'))
-									.append($('<a>').text(data.active[i].schedules.jobs.title))
-									.append($('<span>').addClass('button-tool')
-										.append($('<button>').addClass('btn btn-md btn-startjob').text('Start session').attr('workid',data.active[i].work_id))
-										.append($('<button>').addClass('btn btn-md btn-endjob hidden').text('End session').attr('workid',data.active[i].work_id))
-										.append($('<p>').addClass('start-at').text('Scheduled at ' + start))))
-								.append($('<span>').addClass('end-time col-md-3')
-									.append($('<p>').text('Service charge: '))
-									.append($('<h3>').text('Php ' + data.active[i].schedules.jobs.salary + ' / ' + data.active[i].schedules.jobs.paytypes.name)))
-								)
-						}
-						else if(data.active[i].work_id == data.reviewed[z].work_id){
-							
-						}
-						else{
-							$('#active-feeds').append($('<div>').addClass('card-cont col-md-12')
-								.append($('<span>').addClass('app-image col-md-2')
-									.append($('<img>').attr('src',data.active[i].users.profile.avatar)))
-								.append($('<span>').addClass('card-center col-md-7')
-									.append($('<h2>').text(data.active[i].users.profile.fname + ' '+data.active[i].users.profile.lname))
-									.append($('<p>').text('currently working on your job:'))
-									.append($('<a>').text(data.active[i].schedules.jobs.title))
-									.append($('<span>').addClass('button-tool')
-										.append($('<button>').addClass('btn btn-md btn-startjob hidden').text('Start session').attr('workid',data.active[i].work_id))
-										.append($('<button>').addClass('btn btn-md btn-endjob').text('End session').attr({'workid':data.active[i].work_id}))
-										.append($('<p>').addClass('start-at').text('Scheduled at ' + start))))
-								.append($('<span>').addClass('end-time col-md-3')
-									.append($('<p>').text('Service charge: '))
-									.append($('<h3>').text('Php ' + data.active[i].schedules.jobs.salary + ' / ' + data.active[i].schedules.jobs.paytypes.name)))
-								)
-						}
+					console.log(data.active[i].work.is_started);
+					var start = new moment(data.active[i].schedule.start).format('LT');
+					if(data.active[i].work.is_started == 0){
+						$('#active-feeds').append($('<div>').addClass('card-cont col-md-12')
+							.append($('<span>').addClass('app-image col-md-2')
+								.append($('<img>').attr('src',data.active[i].applicant.avatar)))
+							.append($('<span>').addClass('card-center col-md-7')
+								.append($('<h2>').text(data.active[i].applicant.fname + ' '+data.active[i].applicant.lname))
+								.append($('<p>').text('currently working on your job:'))
+								.append($('<a>').text(data.active[i].schedule.jobs.title))
+								.append($('<span>').addClass('button-tool')
+									.append($('<button>').addClass('btn btn-md btn-startjob').text('Start session').attr('workid',data.active[i].work_id))
+									.append($('<button>').addClass('btn btn-md btn-endjob hidden').text('End session').attr('workid',data.active[i].work_id))
+									.append($('<p>').addClass('start-at').text('Scheduled at ' + start))))
+							.append($('<span>').addClass('end-time col-md-3')
+								.append($('<p>').text('Service charge: '))
+								.append($('<h3>').text('Php ' + data.active[i].schedule.jobs.salary + ' / ' + data.active[i].schedule.jobs.paytypes.name)))
+							)
+					}
+					else{
+						$('#active-feeds').append($('<div>').addClass('card-cont col-md-12')
+							.append($('<span>').addClass('app-image col-md-2')
+								.append($('<img>').attr('src',data.active[i].applicant.avatar)))
+							.append($('<span>').addClass('card-center col-md-7')
+								.append($('<h2>').text(data.active[i].applicant.fname + ' '+data.active[i].applicant.lname))
+								.append($('<p>').text('currently working on your job:'))
+								.append($('<a>').text(data.active[i].schedule.jobs.title))
+								.append($('<span>').addClass('button-tool')
+									.append($('<button>').addClass('btn btn-md btn-startjob hidden').text('Start session').attr('workid',data.active[i].work_id))
+									.append($('<button>').addClass('btn btn-md btn-endjob').text('End session').attr({'workid':data.active[i].work_id}))
+									.append($('<p>').addClass('start-at').text('Scheduled at ' + start))))
+							.append($('<span>').addClass('end-time col-md-3')
+								.append($('<p>').text('Service charge: '))
+								.append($('<h3>').text('Php ' + data.active[i].schedule.jobs.salary + ' / ' + data.active[i].schedule.jobs.paytypes.name)))
+							)
 					}
 				}
 			}
@@ -73,14 +93,14 @@ $(document).ready(function(){
 
 			if(data.upcoming_status == 200){
 				for(var y=0; y<data.upcoming.length; y++){
-					var start = new moment(data.upcoming[y].schedules.start).format('LT');
+					var start = new moment(data.upcoming[y].schedule.start).format('LT');
 					$('#upcoming-feeds').append($('<div>').addClass('card-cont col-md-12')
 						.append($('<span>').addClass('app-image col-md-2')
-							.append($('<img>').attr('src',data.upcoming[y].users.profile.avatar)))
+							.append($('<img>').attr('src',data.upcoming[y].applicant.avatar)))
 						.append($('<span>').addClass('card-center col-md-7')
-							.append($('<h2>').text(data.upcoming[y].users.profile.fname + ' '+data.upcoming[y].users.profile.lname))
+							.append($('<h2>').text(data.upcoming[y].applicant.fname + ' '+data.upcoming[y].applicant.lname))
 							.append($('<p>').text('will be working on your job:'))
-							.append($('<a>').text(data.upcoming[y].schedules.jobs.title))
+							.append($('<a>').text(data.upcoming[y].schedule.jobs.title))
 							.append($('<span>').addClass('button-tool')
 								.append($('<p>').addClass('start-at').text('Scheduled at '+ start))
 								.append($('<span>').addClass('button-resched')
@@ -88,7 +108,7 @@ $(document).ready(function(){
 									.append($('<button>').addClass('btn btn-md btn-dismiss').text('Dismiss applicant').attr('workid',data.upcoming[y].work_id)))))
 						.append($('<span>').addClass('end-time col-md-3')
 							.append($('<p>').text('Service charge: '))
-							.append($('<h3>').text('Php ' + data.upcoming[y].schedules.jobs.salary + ' / ' + data.upcoming[y].schedules.jobs.paytypes.name)))
+							.append($('<h3>').text('Php ' + data.upcoming[y].schedule.jobs.salary + ' / ' + data.upcoming[y].schedule.jobs.paytypes.name)))
 						)
 				}
 			}

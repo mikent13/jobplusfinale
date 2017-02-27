@@ -19,11 +19,15 @@
 <div class="container">
 	<h1>Schedule</h1>
 	<hr>
+	<h2 id="pending-header">End Job Requests</h2>
+	<hr>
+	<div id="pending-feeds"></div>
 	<h2>Applicants currently working right now.</h2>
 	<hr>
-	<div id="active-feeds">
-	</div>
+	<div id="active-feeds"></div>
+	<hr>
 	<h2 class="dash-head">Applicants going to work today.</h2>
+	<hr>
 	<div id="upcoming-feeds"></div>
 </div>
 @endsection

@@ -10,4 +10,7 @@ class Work_Reviewed extends Model
 	public $timestamps = false;  
 	protected $primaryKey =  'id';
 
+	public function works(){
+		return $this->belongsTo('App\Works','work_id');
+	}
 }

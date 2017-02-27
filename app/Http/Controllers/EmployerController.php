@@ -194,7 +194,7 @@ public function endJobSummary(Request $req){
   $workid = $req->workid;
 
   $work = Works::where('work_id',$workid)->first();
-
+  
   if($work->end_time == null){
     $work->end_time = new DateTime;
     $work->save();
@@ -254,7 +254,6 @@ public function endJob(Request $req){
   return response()->json($data);
 }
 
-
 public function getDashboardData(){
   $id = Auth::user()->id;
   $this->setActive();
@@ -263,12 +262,31 @@ public function getDashboardData(){
   $activeID = [];
   $actID = [];
   $upcomingID = [];
+  $needReview = [];
+
+  $review_work = Work_Reviewed::where('employer_reviewed',0)->get();
+  if(count($review_work)>0){
+    foreach($review_work as $rw){
+      if($rw->employer_id == 0 && $rw->works->employer_id == $id && $rw->works->status == 4)
+        $needReview[] = [
+      'work' => $rw->works,
+      'schedule' => $rw->works->schedules,
+      'applicant' => $rw->works->users->profile,
+      'job' => $rw->works->schedules->jobs,
+      'paytype' => $rw->works->schedules->jobs->paytypes->name];
+    }
+    $data['pending_status'] = 200;
+  }
+  else{
+    $data['pending_status'] = 400;
+  }
+
   $active = Works::where('employer_id',$id)->where('status',1)->get();
   if(count($active)>0){
     foreach($active as $act){
       $actID[] = $act->work_id;
       $activeID[] = [
-      'work_id' => $act->work_id,
+      'work' => $act,
       'schedule' => $act->schedules,
       'applicant' => $act->users->profile,
       'job' => $act->schedules->jobs,
@@ -276,20 +294,17 @@ public function getDashboardData(){
       ];
     }
     $data['active_status'] = 200;
-    $data['active'] = $active;
-  $reviewed_works = Work_Reviewed::whereIn('work_id',$actID)->where('employer_reviewed',1)->get();
-  $data['reviewed'] = $reviewed_works;
   }
   else{
     $data['active_status'] = 400;
   }
-  $upcoming = Works::where('employer_id',$id)
-  ->where('status',2)->get();
 
+
+  $upcoming = Works::where('employer_id',$id)->where('status',2)->get();
   if(count($upcoming)>0){
     foreach($upcoming as $up){
       $upcomingID[] = [
-      'work_id' => $up->work_id,
+      'work_' => $up->work,
       'schedule' => $up->schedules,
       'applicant' => $up->users->profile,
       'job' => $up->schedules->jobs,
@@ -297,12 +312,13 @@ public function getDashboardData(){
       ];
     }
     $data['upcoming_status'] = 200;
-    $data['upcoming'] = $upcoming;
   }
   else{
     $data['upcoming_status'] = 400;
   }
-
+    $data['pending'] = $needReview;
+    $data['active'] = $activeID;
+    $data['upcoming'] = $upcomingID;
   return response()->json($data);
 }
 
@@ -338,16 +354,14 @@ public function ApplicationResponse(Request $req){
 
 public function setActive(){
   $userid = Auth::user()->id;
-  $work = Works::where('status',2)
-  ->where('employer_id',$userid)
-  ->get();
+  $work = Works::where('status',2)->where('employer_id',$userid)->get();
 
   $now = new DateTime;
   if(count($work)>0){
 
     foreach($work as $w){
       $start = new DateTime($w->schedules->start);
-      $result = $now->diff($start);
+      $result = $start->diff($now);
       $rhour = $result->format('%h');
       if($rhour == 0){
         $w->status = 1;

@@ -80,7 +80,7 @@ function initializeData(){
   var jobids = [];
   $(".windows8").fadeOut(200);
   //----------------Job Feeds------------//
-  // for(var z = 0; z< data.final.length; z++){
+  // for(var z = 0; z< data.final.length; z++){gg
     for(i = 0; i< data.jobs.length; i++){
         // if(data.final[z] == data.jobs[i].job_id){
           for(x = 0; x< data.profile.length; x++){
@@ -620,7 +620,7 @@ $(document).on('click','#feed-apply-btn',function(e){
  e.preventDefault();
 
  var jobid = $('#feed-res-jobid').text();
- 
+
  $.ajaxSetup({
   headers: {
     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

@@ -141,6 +141,7 @@ class ApplicantController extends Controller
         $data['status'] = 0;
       }
     }
+    
     $lat = 14.5512;
     $lng = 121.023;
     $url = 'http://maps.googleapis.com/maps/api/geocode/json?latlng='.$lat.','.$lng.'&sensor=false';
@@ -171,7 +172,6 @@ class ApplicantController extends Controller
       foreach($work as $w){
         $schedid[] = $w->sched_id;
       }
-
 
       //--------------Converting Ongoing Jobs to Upcoming --------------//
 
