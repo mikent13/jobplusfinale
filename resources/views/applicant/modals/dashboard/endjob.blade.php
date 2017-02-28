@@ -5,27 +5,15 @@
         <div class="row">
           <div class="wiz-body">
             <div class="wizard">
-              <div class="wizard-inner" >
-                <ul class="nav nav-tabs" role="tablist">
-                  <li role="presentation" class="active">
-                    <a href="#step1" data-toggle="tab" aria-controls="step1" role="tab" title="Step 1">
-                      <span class="round-tab">
-                        <i class="glyphicon glyphicon-briefcase"></i>
-                      </span>
-                    </a>
-                  </li>
-
-                </ul>
-              </div> 
               <div class="tab-content">
                 <div class="tab-pane active" role="tabpanel" id="step1">
-                  <div class="tab-header">
+                  <div class="tab-header header-top">
                     <h1>Work Summary</h1>
                   </div>  
                   <div class="row">
                     <div class="col-sm-12 setup-header first-tab">
                       <div class="col-md-6 category">
-                       <h3 id="hours_render"></h3>
+                       <h3 id="hours_render">2</h3>
                        <p>Total hours rendered</p>
                      </div>
                      <div class="col-md-6 category">
@@ -59,7 +47,7 @@
              <div class="row">
                <div class="col-md-12">
                  <div class="rating tab-header">
-                   <h1>Rate your Applicant</h1>
+                   <h1>Rate your Employer</h1>
                  </div>
                  <span class="app-img">
                  <img id="applicant-img">

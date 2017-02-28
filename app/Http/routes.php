@@ -191,11 +191,11 @@ Route::get('/applicant/job/start',[
 	'uses' => 'ApplicantController@StartJob',
 	'as' => 'app/job/start'
 	])->middleware('auth');
-Route::get('/applicant/job/end',[
-	'uses' => 'ApplicantController@EndJob',
-	'as' => 'app/job/end'
-	])->middleware('auth');
 
+Route::get('/applicant/endjob','ApplicantController@EndJob');
+Route::get('/applicant/endjob/summary','ApplicantController@endJobSummary');
+Route::get('/applicant/pending/confirmation','ApplicantController@getPendingConfirmation');
+Route::get('/applicant/receive/confirm','ApplicantController@receivePayment');
 /*
 |--------------------------------------------------------------------------
 | Job Routes

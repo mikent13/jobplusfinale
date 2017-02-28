@@ -60,8 +60,8 @@ $(document).ready(function(){
 								.append($('<p>').text('currently working on your job:'))
 								.append($('<a>').text(data.active[i].schedule.jobs.title))
 								.append($('<span>').addClass('button-tool')
-									.append($('<button>').addClass('btn btn-md btn-startjob').text('Start session').attr('workid',data.active[i].work_id))
-									.append($('<button>').addClass('btn btn-md btn-endjob hidden').text('End session').attr('workid',data.active[i].work_id))
+									.append($('<button>').addClass('btn btn-md btn-startjob').text('Start session').attr('workid',data.active[i].work.work_id))
+									.append($('<button>').addClass('btn btn-md btn-endjob hidden').text('End session').attr('workid',data.active[i].work.work_id))
 									.append($('<p>').addClass('start-at').text('Scheduled at ' + start))))
 							.append($('<span>').addClass('end-time col-md-3')
 								.append($('<p>').text('Service charge: '))
@@ -77,8 +77,8 @@ $(document).ready(function(){
 								.append($('<p>').text('currently working on your job:'))
 								.append($('<a>').text(data.active[i].schedule.jobs.title))
 								.append($('<span>').addClass('button-tool')
-									.append($('<button>').addClass('btn btn-md btn-startjob hidden').text('Start session').attr('workid',data.active[i].work_id))
-									.append($('<button>').addClass('btn btn-md btn-endjob').text('End session').attr({'workid':data.active[i].work_id}))
+									.append($('<button>').addClass('btn btn-md btn-startjob hidden').text('Start session').attr('workid',data.active[i].work.work_id))
+									.append($('<button>').addClass('btn btn-md btn-endjob').text('End session').attr({'workid':data.active[i].work.work_id}))
 									.append($('<p>').addClass('start-at').text('Scheduled at ' + start))))
 							.append($('<span>').addClass('end-time col-md-3')
 								.append($('<p>').text('Service charge: '))
@@ -171,29 +171,23 @@ function EndJobSummary(endworkID){
 
 	end.done(function(data){
 		console.log(data);
-		var salary = data.work[0].job.salary;
-		var paytype = data.work[0].paytype;
-		var start =  moment(data.work[0].work.start_time);
-		var end =  moment(data.work[0].work.end_time);
-		var schedstart =  moment(data.work[0].work.schedules.start);
-		var late = schedstart.from(start,'minutes');
-		var result = end.from(start,'hours');
+		var salary = data.work[0].salary;
+		var paytype = data.work[0].paytype.name;
+		var start =   moment(data.work[0].started.date);
+		var end =  moment(data.work[0].ended.date);
 		var img = data.work[0].applicant.avatar;
+		var totalsalary = data.work[0].total_salary;
+		var rendered = data.work[0].rendered; 
+		var fines = data.work[0].fines;
 
-		var tentative = end.from(start,true);
-		var tentative = tentative.replace('hours','');
-		var totalsalary = salary * tentative;
-
-		console.log(start);
-		console.log(end);
-		console.log(result);
+		$('#fines').text(fines);
 		$('#btn-confirm').attr('workid',endworkID);
 		$('#applicant-img').attr('src',img);
 		$('#totalsalary').text('Php ' +totalsalary);
 		$('#salary').text('Php ' + salary + ' / '+paytype);
 		$('#date-started').text(start.format('dddd, MMM. Mo hh:mm a'));
 		$('#date-ended').text(end.format('dddd, MMM. Mo hh:mm a'));
-		$('#hours_render').text(result);
+		$('#hours_render').text(rendered);
 
 		$('#endJob-Modal').modal('show');
 	})
@@ -226,7 +220,8 @@ $(document).on('click','#btn-confirm',function(){
 		swal({
 			title: "Great!",
 			text: "Succesfully ended the job.",
-			showConfirmButton: false
+			showConfirmButton: false,
+			timer:2000
 		});		
 	});
 

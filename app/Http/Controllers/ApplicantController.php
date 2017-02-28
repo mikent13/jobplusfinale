@@ -18,9 +18,11 @@ use App\Paytypes;
 use App\Profiles;
 use App\Job_Skill;
 use App\Job_Address;
+use App\Work_Reviewed;
 use Carbon\Carbon;
 use App\Application;
 use App\Work_Logs;
+use App\Work_Summary;
 use DateTime;
 use App\JobRank;
 use Illuminate\Support\Facades\Input;
@@ -60,183 +62,207 @@ class ApplicantController extends Controller
     return response()->json($data);
   }
 
-  public function getActive(){
-    $userid = Auth::user()->id;
-    $wkid = [];
 
-    $active = Works::where('status',1)
-    ->where('applicant_id',$userid)
-    ->first();
-
-    if(!empty($active)){
-
-      $data['active'] = 1;
-      $sched = Schedules::where('schedule_id',$active->sched_id)->first();
-      $job = Jobs::where('job_id',$sched->job_id)->first();
-      $address = Job_Address::where('jobid',$job->job_id)->first();
-      $employer = Profiles::where('user_id',$job->user_id)->first();
-
-      if($active->is_start == 1){
-        $data['started'] = 1;
-      }
-      else{
-        $data['started'] = 0;
-      }
-
-      $data['sched'] = $sched;
-      $data['job'] = $job;
-      $data['work'] = $active;
-      $data['address'] = $address;
-      $data['employer'] = $employer;
-    }  
-    else{
-
-      $data['active'] = 0;
-
-      $upwork = Works::where('applicant_id', $userid)
-      ->where('status',2)
-      ->get();
-
-      if(!empty($upwork)){
-        $data['status'] = 1;
-        $schedid = [];
-
-        foreach($upwork as $upw){
-          $schedid[] = $upw->sched_id;
+  function getPrevJobLocation(){
+    $today = new DateTime();
+    $today = $today->format('ymd');
+    $job = new DateTime('2017-02-28');
+    $job = $job->format('ymd');
+    // dd(($today == $job));
+    $id = Auth::user()->id;
+    $workschedID = [];
+    $work = Works::where('applicant_id',$id)->where('status',4)->get();
+    if(count($work)>0){
+      foreach($work as $wk){
+        $wkend = new DateTime($wk->end_time);
+        $wkend = $wkend->format('ymd');
+        if(($today == $wkend) == true){
+          $workschedID[] = $wk->sched_id;
         }
-
-        $sched = Schedules::orderBy('start','ASC')
-        ->whereIn('schedule_id',$schedid)
-        ->first();
-
-        $now = new DateTime;
-        $start = new DateTime($sched->start);
-
-        $data['start'] = $start;
-
-        $result = $now->diff($start);
-        $rhour = $result->format('%h');
-        if($rhour == 0){
-            // $data['min'] = '30 min';
-          $work = Works::where('sched_id',$sched->schedule_id)->first();
-          $work->status = 1;
-          $work->save();
-
-          $sched = Schedules::where('schedule_id',$work->sched_id)->first();
-          $job = Jobs::where('job_id',$sched->job_id)->first();
-          $address = Job_Address::where('jobid',$job->job_id)->first();
-          $employer = Profiles::where('user_id',$job->user_id)->first();
-
-          $data['sched'] = $sched;
-          $data['job'] = $job;
-          $data['work'] = $work;
-          $data['address'] = $address;
-          $data['employer'] = $employer;
-        }
-
-        $data['result'] = $result;
-
       }
-      else{
-        $data['status'] = 0;
-      }
+      $sched = Schedules::orderBy('start','DESC')->whereIn('schedule_id',$workschedID)->first();
+      $finalwork = Works::where('sched_id',$sched->schedule_id)->first();
+      return $finalwork;
     }
-    
-    $lat = 14.5512;
-    $lng = 121.023;
-    $url = 'http://maps.googleapis.com/maps/api/geocode/json?latlng='.$lat.','.$lng.'&sensor=false';
-    $json = @file_get_contents($url);
-    $datas = json_decode($json);
-    $data['gmap'] = $datas;
-
-    $disturl = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=Washington,DC&destinations=New+York+City,NY&key=AIzaSyDBJJH4SL6eCDPu7N5C-2XcBt8jpZJeMyQ&libraries=places
-    ';
-    $distjson = @file_get_contents($disturl);
-    $distdata = json_decode($distjson);
-    $data['distance'] = $distdata;
-
-    return response()->json($data);
+    else{
+      return null;
+    }
   }
 
-  public function getUpcoming(){
-    $userid = Auth::user()->id;
+  public function getActive(){
+   $userid = Auth::user()->id;
+   $prof = Profiles::where('user_id',$userid)->first();
+   $response = [];
+   $origin = [];
+   $prevwork = $this->getPrevJobLocation();
 
-    $work = Works::where('applicant_id',$userid)
-    ->where('status',3)
-    ->get();
+   if($prevwork!=null){
+    $lat = $prevwork->schedules->jobs->address->lat;
+    $lng = $prevwork->schedules->jobs->address->lng;
+    $origin =['lat' => $lat,'lng' => $lng];
+    $data['previous_status'] = 200;
+  }
+  else{
+    $data['previous_status'] = 400;
+  }
 
-    if(count($work) > 0){
-      $data['ongoing'] = 'success';
-      $schedid = [];
-      
-      foreach($work as $w){
-        $schedid[] = $w->sched_id;
-      }
+  $data['origin'] = $origin;
 
-      //--------------Converting Ongoing Jobs to Upcoming --------------//
 
-      $now = new DateTime;
-      $sched = Schedules::whereIn('schedule_id',$schedid)->get();
+  $active = Works::where('status',1)->where('applicant_id',$userid)->first();
 
-      $startid = [];
-      foreach($sched as $sch){
-        $starts = new DateTime($sch->start);
-        $ends = new DateTime($sch->end);
-        if($starts > $now){
-          $startid[] = $sch->schedule_id;
-        }
-      }
-      $work = Works::whereIn('sched_id',$startid)->get();
-      foreach($work as $w){
-        $w->status = 2;
-        $w->save();
-      }
-    }
-    else{
-     $data['ongoing'] = 'none';
-   }
+  if(!empty($active)){
+   $data['active'] = 1;
+   $response[]= [
+   'work' => $active,
+   'job' => $active->schedules->jobs,
+   'paytype' => $active->schedules->jobs->paytypes->name,
+   'schedule' => $active->schedules,
+   'destination' => $active->schedules->jobs->address,
+   'employer' =>$active->schedules->jobs->users->profile,
+   'profile' => $prof
+   ];
 
-  //-------------- Getting the Upcoming Jobs --------------//
+ }  
+ else{
 
-   $upcoming = Works::where('status',2)
-   ->where('applicant_id',$userid)
-   ->get();
+  $data['active'] = 0;
 
-   if(count($upcoming) > 0){
+  $upwork = Works::where('applicant_id', $userid)->where('status',2)->get();
+
+  if(count($upwork) > 0){
     $data['status'] = 1;
+    $schedid = [];
 
-    $upschedid  = [];
-    foreach($upcoming as $up){
-      $upschedid[] = $up->sched_id;
+    foreach($upwork as $upw){
+      $schedid[] = $upw->sched_id;
     }
 
-    $upsched = Schedules::orderBy('start','ASC')
-    ->whereIn('schedule_id',$upschedid)
-    ->get();
+    $sched = Schedules::orderBy('start','ASC')->whereIn('schedule_id',$schedid)->first();
+    $now = new DateTime;
+    $start = new DateTime($sched->start); 
 
-    $jobid = [];
-    foreach($upsched as $upsch){
-      $jobid[] = $upsch->job_id;
+    $data['start'] = $start;
+
+    $result = $now->diff($start);
+    $rhour = $result->format('%h');
+    if($rhour == 0){
+            // $data['min'] = '30 min';
+      $work = Works::where('sched_id',$sched->schedule_id)->first();
+      $work->status = 1;
+      $work->save();
+      $response[]= [
+      'work' => $work,
+      'job' => $work->schedules->jobs,
+      'schedule' => $work->schedules,
+      'destination' => $work->schedules->jobs->address,
+      'employer' =>$work->schedules->jobs->users->profile,
+      'mine' => $prof
+      ];
     }
+    $data['result'] = $result;
 
-    $job = Jobs::whereIn('job_id',$jobid)->get();
-
-    $userid = [];
-    foreach($job as $j){
-      $userid[] = $j->user_id;
-    }
-    $profile = Profiles::whereIn('user_id',$userid)->get();
-
-    $data['work'] = $upcoming;
-    $data['profile'] = $profile;
-    $data['job'] = $job;
-    $data['sched'] = $upsched;
   }
   else{
     $data['status'] = 0;
   }
+}
 
-  return response()->json($data);
+$lat = 14.5512;
+$lng = 121.023;
+$url = 'http://maps.googleapis.com/maps/api/geocode/json?latlng='.$lat.','.$lng.'&sensor=false';
+$json = @file_get_contents($url);
+$datas = json_decode($json);
+$data['gmap'] = $datas;
+
+$disturl = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=Washington,DC&destinations=New+York+City,NY&key=AIzaSyDBJJH4SL6eCDPu7N5C-2XcBt8jpZJeMyQ&libraries=places
+';
+$distjson = @file_get_contents($disturl);
+$distdata = json_decode($distjson);
+$data['distance'] = $distdata;
+$data['response'] = $response;
+return response()->json($data);
+}
+
+public function getUpcoming(){
+  $userid = Auth::user()->id;
+
+  $work = Works::where('applicant_id',$userid)
+  ->where('status',3)
+  ->get();
+
+  if(count($work) > 0){
+    $data['ongoing'] = 'success';
+    $schedid = [];
+
+    foreach($work as $w){
+      $schedid[] = $w->sched_id;
+    }
+
+      //--------------Converting Ongoing Jobs to Upcoming --------------//
+
+    $now = new DateTime;
+    $sched = Schedules::whereIn('schedule_id',$schedid)->get();
+
+    $startid = [];
+    foreach($sched as $sch){
+      $starts = new DateTime($sch->start);
+      $ends = new DateTime($sch->end);
+      if($starts > $now){
+        $startid[] = $sch->schedule_id;
+      }
+    }
+    $work = Works::whereIn('sched_id',$startid)->get();
+    foreach($work as $w){
+      $w->status = 2;
+      $w->save();
+    }
+  }
+  else{
+   $data['ongoing'] = 'none';
+ }
+
+  //-------------- Getting the Upcoming Jobs --------------//
+
+ $upcoming = Works::where('status',2)
+ ->where('applicant_id',$userid)
+ ->get();
+
+ if(count($upcoming) > 0){
+  $data['status'] = 1;
+
+  $upschedid  = [];
+  foreach($upcoming as $up){
+    $upschedid[] = $up->sched_id;
+  }
+
+  $upsched = Schedules::orderBy('start','ASC')
+  ->whereIn('schedule_id',$upschedid)
+  ->get();
+
+  $jobid = [];
+  foreach($upsched as $upsch){
+    $jobid[] = $upsch->job_id;
+  }
+
+  $job = Jobs::whereIn('job_id',$jobid)->get();
+
+  $userid = [];
+  foreach($job as $j){
+    $userid[] = $j->user_id;
+  }
+  $profile = Profiles::whereIn('user_id',$userid)->get();
+
+  $data['work'] = $upcoming;
+  $data['profile'] = $profile;
+  $data['job'] = $job;
+  $data['sched'] = $upsched;
+}
+else{
+  $data['status'] = 0;
+}
+
+return response()->json($data);
 }
 
 public function getOngoing(){
@@ -701,13 +727,92 @@ public function Apply(Request $req){
   $application->is_accepted = 0;
   $application->save();
 
- $data['status'] = 1; 
+  $data['status'] = 1; 
 
- return response()->json($data);
+  return response()->json($data);
+}
+
+public function getPendingConfirmation(){
+  $id = Auth::user()->id;
+  $sum = Work_Summary::all();
+  if(count($sum) >0){
+    foreach($sum as $s){
+      if($s->works->applicant_id == $id){
+        $work_sum = Work_Summary::where('summary_id',$s->summary_id)->first();
+      }
+    }
+    $response = [];
+    $response = [
+    'summary' => $work_sum,
+    'employer' => $work_sum->works->schedules->jobs->users->profile ,
+    'work' => $work_sum->works
+    ];
+    $data['summary'] = $response;
+    $status = 200;
+  }
+  else{
+    $status = 400;
+  }
+
+  $data['status'] = $status;
+    return response()->json($data);
+}
+
+public function endJobSummary(Request $req){
+  $workid = $req->workid;
+  $work = Works::where('work_id',$workid)->first();
+  $work->end_time = new DateTime;
+  $work->save();
+
+  $newwork = Works::where('work_id',$work->work_id)->first();
+  $summary = [];
+
+  $started = new DateTime($newwork->start_time);
+  $ended = new DateTime($newwork->end_time);
+  $result = $ended->diff($started);
+  $rendered = $result->h;
+  $salary = $newwork->schedules->jobs->salary;
+  $fines = 0;
+  $paytype = $newwork->schedules->jobs->paytypes;
+  $employer = $newwork->schedules->jobs->users->profile;
+  if($paytype->paytype_id == 1){
+    $total_salary = $salary * $rendered;
+  }
+  else{
+    $total_salary = $salary;
+  }
+
+  $summ = new Work_Summary;
+  $summ->work_id = $newwork->work_id;
+  $summ->salary = $salary;
+  $summ->total_salary = $total_salary;
+  $summ->fines = $fines;
+  $summ->hours_rendered = $rendered;
+  $summ->is_paid = 0;
+  $summ->save();
+
+  $summary[] =[
+  'work' => $newwork,
+  'started' => $started,
+  'ended' => $ended,
+  'rendered' => $rendered,
+  'salary' => $salary,
+  'total_salary' => $total_salary,
+  'fines' => $fines,
+  'paytype' => $paytype,
+  'employer' => $employer
+  ];
+
+
+
+  $data['status'] = 200;
+  $data['work'] = $summary;
+  return response()->json($data);
 }
 
 public function StartJob(Request $req){
   $workid = $req->workid;
+  $now = new DateTime;
 
   $work = Works::where('work_id',$workid)->first();   
 
@@ -716,7 +821,6 @@ public function StartJob(Request $req){
   }
   else{
    $sched = Schedules::where('schedule_id',$work->sched_id)->first();
-   $now = new DateTime;
    $start = new DateTime($sched->start);
    $start->modify('+30 minutes');
    $difference = $start->diff($now);
@@ -730,7 +834,8 @@ public function StartJob(Request $req){
     $data['late'] = 0;
   }
 
-  $work->is_start = 1;
+  $work->is_started = 1;
+  $work->start_time = $now;
   $work->save();
   $data['status'] = 1;
 }
@@ -746,7 +851,7 @@ public function StartJob(Request $req){
     //   //late
     //   $data['late'] = 1;
     // }
-
+$data['end'] = $sched->end;
 $data['message'] = 'success';
 return response()->json($data);  
 }
@@ -755,13 +860,12 @@ public function EndJob(Request $req){
 
   $rate   = $req->rate;
   $desc   = $req->review;
-  $workid  = $req->work;
+  $workid  = $req->workid;
 
   $work = Works::where('work_id',$workid)->first();
-  
-  if($work->end_time == null){
-    $work->end_time = new DateTime;
-  }
+  $work->status = 4;
+  $work->is_started = 0;
+  $work->save();
 
   $review               = new Reviews;
   $review->comment      = $desc;
@@ -773,17 +877,16 @@ public function EndJob(Request $req){
 
   $work_reviewed = Work_Reviewed::where('work_id',$workid)->first();
   if(count($work_reviewed) > 0){
-    $work_reviewed->applicant_id = 1;
+    $work_reviewed->applicant_reviewed = 1;
     $work_reviewed->save();
 
-    if($work->reviewed->employer_id == 1){
+    if($work_reviewed->employer_reviewed == 1){
       $work_reviewed->delete();
 
-      $work->status = 4;
-      $work->is_started = 0;
-      $work->save();
       $data['message'] = 'work officialy closed';
     }
+
+    
   }
   else{
     $new_work_review = new Work_Reviewed;
@@ -822,6 +925,15 @@ public function setReschedule(Request $req){
 
   $data['status'] = 1;
 
+  return response()->json($data);
+}
+
+public function receivePayment(Request $req){
+$sumid = $req->sumid;
+
+$sum = Work_Summary::where('summary_id',$sumid)->first();
+$sum->delete();
+$data['status'] = 200;
   return response()->json($data);
 }
 

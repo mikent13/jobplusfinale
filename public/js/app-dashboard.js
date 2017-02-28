@@ -1,33 +1,102 @@
 
-
 $(document).ready(function(){
+ pendingConfirmation();
+ initializeMap();
+ activeJob();
+ upcomingJob();
+ loadEnd();
 
-  $(document).on('change','#act-actions',function(){
-    var val = $('#act-actions option:selected').val();
-    if(val == 2){
-      $('#actResched-Modal').modal('show');
-      $('#active-datepicker1').datetimepicker({
-        inline: true,
-        sideBySide: true
-      });
-      $('#active-datepicker2').datetimepicker({
-        inline: true,
-        sideBySide: true
-      });
+ function pendingConfirmation(){
+  $('.pending_confirm').hide(400);
+  $('.pending-feed').empty();
+  $.ajaxSetup({
+    headers: {
+      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     }
   });
 
-  $(document).on('click','#btn-next',function(){
-    $('#resched-end').click();
-
+  var pending = $.ajax({
+    url: '/applicant/pending/confirmation',
+    method: 'GET'
   });
 
-  $(document).on('click','#btn-active-resched',function(){
-    var start = $('#active-datepicker1').data('date');
-    var end = $('#active-datepicker2').data('date');
-    var workid = $('#act-workid').text();
+  pending.done(function(data){
+    console.log(data);
+    if(data.summary.summary.is_paid == 1){
+      $('#sender').text('from '+ data.summary.employer.fname + ' '+ data.summary.employer.lname);
+      $('#amount_received').text(data.summary.summary.total_salary);
+      $('#btn-receive').attr('sumid',data.summary.summary.summary_id);
+      $('#received_modal').modal('show');
+    }
+    else if(data.status == 200){
+      $('.pending_confirm').show(400);
+      var end = moment(data.summary.work.end_time).fromNow(true);
+      $('.pending-feed').append($('<div>').addClass('card-cont col-md-12')
+        .append($('<span>').addClass('app-image col-md-2')
+          .append($('<img>').attr('src',data.summary.employer.avatar)))
+        .append($('<span>').addClass('card-center col-md-7')
+          .append($('<h2>').text(data.summary.work.schedules.jobs.title))
+          .append($('<p>').text("waiting for employer's confirmation: "))
+          .append($('<a>').text(data.summary.employer.fname + ' '+data.summary.employer.lname))
+          .append($('<span>').addClass('button-tool')
+            .append($('<p>').addClass('start-at').text('Ended ' + end + ' ago'))))
+        .append($('<span>').addClass('end-time col-md-3')
+          .append($('<p>').text('You will receive: '))
+          .append($('<h3>').text('Php ' + data.summary.summary.total_salary)))
+        )
+    }
+    else{
+    }
+  });
+}
+$(document).on('click','#btn-receive',function(){
+  var sumid = $(this).attr('sumid');
+  
+  $.ajaxSetup({
+    headers: {
+      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+  });
 
-    $.ajaxSetup({
+  var confirmed = $.ajax({
+    url: '/applicant/receive/confirm',
+    method: 'GET',
+    data:{
+      'sumid' : sumid
+    }
+  });
+
+  confirmed.done(function(data){
+console.log(data);
+  });
+
+
+});
+$(document).on('change','#act-actions',function(){
+  var val = $('#act-actions option:selected').val();
+  if(val == 2){
+    $('#actResched-Modal').modal('show');
+    $('#active-datepicker1').datetimepicker({
+      inline: true,
+      sideBySide: true
+    });
+    $('#active-datepicker2').datetimepicker({
+      inline: true,
+      sideBySide: true
+    });
+  }
+});
+
+$(document).on('click','#btn-next',function(){
+  $('#resched-end').click();
+});
+
+$(document).on('click','#btn-active-resched',function(){
+  var start = $('#active-datepicker1').data('date');
+  var end = $('#active-datepicker2').data('date');
+  var workid = $('#act-workid').text();
+
+  $.ajaxSetup({
     headers: {
       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     }
@@ -47,18 +116,17 @@ $(document).ready(function(){
     console.log(data);
   });
 
-  });
-
-  $(document).on('click','#btn-prev',function(){
-    $('#resched-start').click();
-  });
-
-  $('.active-body').attr('hidden',true);
-  initializeMap();
-  activeJob();
-  upcomingJob();
-  loadEnd();
 });
+
+$(document).on('click','#btn-prev',function(){
+  $('#resched-start').click();
+});
+
+$('.active-body').attr('hidden',true);
+
+}); // End of Document Ready
+
+
 // upcomingJob();
 // $('#late').hide();
 var options = {
@@ -69,6 +137,10 @@ var options = {
 function error(err) {
   console.warn('ERROR(' + err.code + '): ' + err.message);
 };
+
+
+var orig = [];
+var jobloc;
 
 function activeJob(){
   $('.actend').attr('hidden',true);
@@ -85,33 +157,30 @@ function activeJob(){
 
   active.done(function(data){
     console.log(data);
-    if(data.active == 1 || data.status == 1){
-
+    if(data.active == 1){
       $('#active-p').attr('hidden',true);
-      $('#actitle').text(data.job.title);
-      $('#actemp').text('Hired by '+data.employer.fname + ' '+ data.employer.lname);
-      $('#actdesc').text(data.job.description);
-      $('#modalemp').text(data.employer.fname + ' '+ data.employer.lname +'?');
-      $('#empid').text(data.employer.user_id);
-      $('#act-workid').text(data.work.work_id);
-      var start = moment(data.sched.start);
-      var end = moment(data.sched.end);
-
+      $('#actitle').text(data.response[0].job.title);
+      $('#actemp').text('Hired by '+data.response[0].employer.fname + ' '+ data.response[0].employer.lname);
+      $('#actdesc').text(data.response[0].job.description);
+      $('#modalemp').text(data.response[0].employer.fname + ' '+ data.response[0].employer.lname +'?');
+      $('#empid').text(data.response[0].employer.user_id);
+      $('#act-workid').text(data.response[0].work.work_id);
+      var start = moment(data.response[0].schedule.start);
+      var end = moment(data.response[0].schedule.end);
       var startDay1 = start.format('dddd');
       var startMonth = start.format('MMM');
       var startDay2 = start.format('D'); 
       var startYear = start.format('YYYY');
       var startTime = start.format('LT');
-
       var endDay1 = end.format('dddd');
       var endMonth = end.format('MMM');
       var endDay2 = end.format('D'); 
       var endYear = end.format('YYYY');
       var endTime = end.format('LT');
 
-      if(data.started == 1){
-        $('#actstart').fadeOut(1000);
-        $('#actend').fadeIn(1200);
+      if(data.response[0].work.is_started == 1){
+        $('#actstart').fadeOut(400);
+        $('#actend').fadeIn(600);
         $('#actend').removeClass('hidden');
         $('#head-min').text(end.fromNow(true));
         $('#head-meta').text('until session ends');
@@ -120,22 +189,34 @@ function activeJob(){
        $('#head-min').text(start.fromNow(true));
        $('#head-meta').text('until job starts');
      }
-
-     $('#emp-pic').attr('src',data.employer.avatar);
-     
+     $('#emp-pic').attr('src',data.response[0].employer.avatar);
      $('#startDay').text(startDay1 + ', '+startMonth + '. '+startDay2 + ' '+startYear);
      $('#startTime').text(startTime);
      $('#endDay').text(endDay1 + ', '+endMonth + '. '+endDay2 + ' '+endYear);
      $('#endTime').text(endTime);
+     $('#actsal').text('Php '+data.response[0].job.salary + ' / ' + data.response[0].paytype);
+     $('#actstart').attr('workid',data.response[0].work.work_id);
+     $('#actend').attr('workid',data.response[0].work.work_id);
 
-     $('#actsal').text('PHP '+data.job.salary);
-     $('#actstart').attr('workid',data.work.work_id);
 
+     if(data.previous_status == 400){
+       var geocode = new google.maps.Geocoder();
+       geocode.geocode({ 'address': data.response[0].profile.address }, function (results, status) {
+        if (status == google.maps.GeocoderStatus.OK) {
+         jobloc = { lat: parseFloat(results[0].geometry.location.lat()), lng: parseFloat(results[0].geometry.location.lng()) };
+         orig.push(jobloc);
+       }});
+     }
+     else{
+       jobloc = { lat: parseFloat(data.origin.lat), lng: parseFloat(data.origin.lng) };
+       orig.push(jobloc);
+     }
 
      var meo = [];
      var locs;
-     var centers = { lat: parseFloat(data.address.lat), lng: parseFloat(data.address.lng) };
+     var centers = { lat: parseFloat(data.response[0].destination.lat), lng: parseFloat(data.response[0].destination.lng) };
      meo.push(centers);
+
      var geocoder = new google.maps.Geocoder();
      geocoder.geocode({ 'latLng': meo[0] }, function (results, status) {
       if (status == google.maps.GeocoderStatus.OK) {
@@ -144,99 +225,55 @@ function activeJob(){
       }
     });
 
-     var options = {
-      enableHighAccuracy: true,
-      timeout: 5000,
-      maximumAge: 0
-    };
+     var directionsDisplay = new google.maps.DirectionsRenderer;
+     var directionsService = new google.maps.DirectionsService;
+     var origin = new google.maps.LatLng(data.response[0].destination.lat, data.response[0].destination.lng),
+     destination = new google.maps.LatLng(data.response[0].destination.lat, data.response[0].destination.lng),
+     service = new google.maps.DistanceMatrixService();
 
-    function success(pos) {
-      var crd = pos.coords;
+     $('#actgmap').attr('hidden',false);
+     setTimeout(google.maps.event.trigger(actmap, 'resize'),300);
+     actmap.setCenter(centers);
+     directionsDisplay.setMap(actmap);
 
-      console.log('Your current position is:');
-      console.log('Latitude : ' + crd.latitude);
-      console.log('Longitude: ' + crd.longitude);
-      console.log('More or less ' + crd.accuracy + ' meters.');
-    };
+     calculateAndDisplayRoute(directionsService, directionsDisplay);
 
-    function error(err) {
-      console.warn('ERROR(' + err.code + '): ' + err.message);
-    };
-
-    navigator.geolocation.getCurrentPosition(success, error, options);
-
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(function(position){
-        var geolocations = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude
-        };
-        var directionsDisplay = new google.maps.DirectionsRenderer;
-        var directionsService = new google.maps.DirectionsService;
-
-        var origin = new google.maps.LatLng(geolocations.lat, geolocations.lng),
-        destination = new google.maps.LatLng(data.address.lat, data.address.lng),
-        service = new google.maps.DistanceMatrixService();
-
-        $('#actgmap').attr('hidden',false);
-        setTimeout(google.maps.event.trigger(actmap, 'resize'),300);
-        actmap.setCenter(centers);
-        directionsDisplay.setMap(actmap);
-
-        calculateAndDisplayRoute(directionsService, directionsDisplay);
-
-        function calculateAndDisplayRoute(directionsService, directionsDisplay) {
-          directionsService.route({
-            origin: origin, 
-            destination: destination,  
-            travelMode: google.maps.TravelMode.DRIVING
-          }, function(response, status) {
-            if (status == 'OK') {
-              directionsDisplay.setDirections(response);
-            } else {
-              window.alert('Directions request failed due to ' + status);
-            }
-          });
-        }
-          
-        service.getDistanceMatrix(
-        {
-          origins: [origin],
-          destinations: [destination],
-          travelMode: google.maps.TravelMode.DRIVING,
-          avoidHighways: false,
-          avoidTolls: false,
-        },callback);
-      })};
-
-      function callback(response, status) {
-        console.log(response);
-        if(status=="OK") {
-          $('#actdistance').text(response.rows[0].elements[0].distance.text);
-          $('#acttime').text(response.rows[0].elements[0].duration.text);
+     function calculateAndDisplayRoute(directionsService, directionsDisplay) {
+      directionsService.route({
+        origin: origin, 
+        destination: destination,  
+        travelMode: google.maps.TravelMode.DRIVING
+      }, function(response, status) {
+        if (status == 'OK') {
+          directionsDisplay.setDirections(response);
         } else {
-          alert("Error: " + status);
+          window.alert('Directions request failed due to ' + status);
         }
+      });
+    }
+
+    service.getDistanceMatrix(
+    {
+      origins: [origin],
+      destinations: [destination],
+      travelMode: google.maps.TravelMode.DRIVING,
+      avoidHighways: false,
+      avoidTolls: false,
+    },callback);
+
+    function callback(response, status) {
+      console.log(response);
+      if(status=="OK") {
+        console.log(response);
+        $('#actdistance').text(response.rows[0].elements[0].distance.text);
+        $('#acttime').text(response.rows[0].elements[0].duration.text);
+      } else {
+        alert("Error: " + status);
       }
-
-      $('.active-body').attr('hidden',false);
-
-            // if(data.work.is_start == 1){
-            //   $('#act-endbtn').attr('disabled',false);
-            //   $('#act-startbtn').attr('disabled',true);
-            // }
-            // else
-            // {
-
-            // }
-
-          }
-          else if(data.status == 0 || data.active == 0){
-            $('#active-p').attr('hidden',false);
-            $('.active-body').attr('hidden',true);
-          }
-
-        });
+    }
+    $('.active-body').attr('hidden',false);
+  }
+});
 }
 
 // function ongoingJob(){
@@ -355,7 +392,6 @@ function upcomingJob(){
                                   .append($('<div>').addClass('head-time')
                                     .append($('<h1>').text('PHP '+data.job[y].salary))
                                     .append($('<p>').text('You will receive'))))
-
                                 ))))))
                   }
                 }
@@ -489,15 +525,72 @@ function initializeMap(){
 
 });
 
+ var endworkID =0;
+
  $(document).on('click','#actend',function(){
-  $('#rateModal').modal('show');
+  var endworkID = $(this).attr('workid');
+  promptEndjob(endworkID);
 });
 
- $(document).on('click','#btn-rate',function(){
+ function promptEndjob(endworkID){
+  swal({
+    title: "Do you wis to end the current job session?",
+    type: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#DD6B55",
+    confirmButtonText: "Confirm",
+    closeOnConfirm: true
+  },
+  function(){
+    EndJobSummary(endworkID);
+  });
+}
+
+function EndJobSummary(endworkID){
+  $.ajaxSetup({
+    headers: {
+      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+  });
+
+  var end = $.ajax({
+    url: '/applicant/endjob/summary',
+    method: 'get',
+    data:{
+      'workid': endworkID
+    }
+  });
+
+  end.done(function(data){
+    console.log(data);
+
+    var salary = data.work[0].salary;
+    var paytype = data.work[0].paytype.name;
+    var start =   moment(data.work[0].started.date);
+    var end =  moment(data.work[0].ended.date);
+    var img = data.work[0].employer.avatar;
+    var totalsalary = data.work[0].total_salary;
+    var rendered = data.work[0].rendered; 
+    var fines = data.work[0].fines;
+
+    $('#fines').text(fines);
+    $('#btn-confirm').attr('workid',endworkID);
+    $('#applicant-img').attr('src',img);
+    $('#totalsalary').text('Php ' +totalsalary);
+    $('#salary').text('Php ' + salary + ' / '+paytype);
+    $('#date-started').text(start.format('dddd, MMM. Mo hh:mm a'));
+    $('#date-ended').text(end.format('dddd, MMM. Mo hh:mm a'));
+    $('#hours_render').text(rendered);
+
+    $('#endJob-Modal').modal('show');
+  })
+}
+
+$(document).on('click','#btn-confirm',function(){
+  var workid = $(this).attr('workid');
   var review = $('#review').val();
   var rate = $('#rating-system').val();
-  var emp = $('#empid').text();
-  var work = $('#act-workid').text();
+  console.log(workid);
   $.ajaxSetup({
     headers: {
       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -505,60 +598,64 @@ function initializeMap(){
   });
 
   var endjob = $.ajax({
-    url: '/applicant/job/end',
-    method: 'GET',
-    data: {
-      'review' : review,
-      'rate' : rate,
-      'emp' : emp,
-      'work': work
+    url: '/applicant/endjob',
+    method: 'get',
+    data:{
+      'workid': workid,
+      'rate': rate,
+      'review': review
     }
   });
 
   endjob.done(function(data){
     console.log(data);
-    if(data.status == 1){
-      $('#rateModal').modal('hide');
-      swal("Review sent!", " ", "success");
-    }
+    $('#endJob-Modal').modal('hide');
+    swal({
+      title: "Great!",
+      text: "Succesfully ended the job.",
+      showConfirmButton: false,
+      timer: 2000
+    });
+    activeJob();
   });
-
 
 });
 
- $(document).on('click','#actstart',function(){
-   $.ajaxSetup({
-    headers: {
-      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    }
-  });
+$(document).on('click','#actstart',function(){
+ $.ajaxSetup({
+  headers: {
+    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+  }
+});
 
 
-   var startjob = $.ajax({
-    url: '/applicant/job/start',
-    method: 'GET',
-    data: {
-      'workid' : this.getAttribute('workid'),
-    }
-  });
+ var startjob = $.ajax({
+  url: '/applicant/job/start',
+  method: 'GET',
+  data: {
+    'workid' : this.getAttribute('workid'),
+  }
+});
 
-   startjob.done(function(data){
-    console.log(data);
-    
-    if(data.status == 1){
-      swal("Job has started.", "Work Hard!", "info");
-      $('#actstart').fadeOut(1000);
-      $('#actend').fadeIn(2000);
-      $('#actend').removeClass('hidden');
-      $('#head-min').text(end.fromNow(true));
-      $('#head-meta').text('until session ends');
-    }
-    else{
-      if(data.late == 1){
-        swal("Oops.. It looks like you have exceed the 30 mins late allowance, we will deduct the penalty on your salary. ", " ", "warning");
-      }
-    }
-   
-   });
+ startjob.done(function(data){
+  console.log(data);
 
- });
+  if(data.status == 1){
+    var end = new moment(data.end);
+    console.log(end);
+    swal("Job has started.", "Work Hard!", "info");
+    $('#actstart').fadeOut(1000);
+    $('#actend').fadeIn(2000);
+    $('#actend').removeClass('hidden');
+    $('#head-min').text(end.fromNow());
+    $('#head-meta').text('until session ends');
+  }
+  else{
+    if(data.late == 1){
+      swal("Oops.. It looks like you have exceed the 30 mins late allowance, we will deduct the penalty on your salary. ", " ", "warning");
+    }
+  }
+
+});
+
+});

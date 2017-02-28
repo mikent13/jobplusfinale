@@ -16,6 +16,7 @@ use App\Reviews;
 use App\Job_Skill;
 use App\Application;
 use App\Work_Reviewed;
+use App\Work_Summary;
 use App\User_Review;
 use Auth;
 use Carbon\Carbon;
@@ -191,20 +192,38 @@ public function startJob(Request $req){
 }
 
 public function endJobSummary(Request $req){
-  $workid = $req->workid;
+ $workid = $req->workid;
 
-  $work = Works::where('work_id',$workid)->first();
-  
-  if($work->end_time == null){
-    $work->end_time = new DateTime;
-    $work->save();
-  }
+  $summ =  Work_Summary::where('work_id',$workid)->first();
+
+  $newwork = Works::where('work_id',$summ->work_id)->first();
   $summary = [];
+
+  $started = new DateTime($newwork->start_time);
+  $ended = new DateTime($newwork->end_time);
+  $result = $ended->diff($started);
+  $rendered = $result->h;
+  $salary = $newwork->schedules->jobs->salary;
+  $fines = 0;
+  $paytype = $newwork->schedules->jobs->paytypes;
+  $applicant = $newwork->users->profile;
+  if($paytype->paytype_id == 1){
+    $total_salary = $salary * $rendered;
+  }
+  else{
+    $total_salary = $salary;
+  }
+
   $summary[] =[
-  'work' => $work,
-  'job' => $work->schedules->jobs,
-  'paytype' => $work->schedules->jobs->paytypes->name,
-  'applicant' => $work->users->profile 
+  'work' => $newwork,
+  'started' => $started,
+  'ended' => $ended,
+  'rendered' => $rendered,
+  'salary' => $salary,
+  'total_salary' => $total_salary,
+  'fines' => $fines,
+  'paytype' => $paytype,
+  'applicant' => $applicant
   ];
 
   $data['status'] = 200;
@@ -219,7 +238,6 @@ public function endJob(Request $req){
 
   $work = Works::where('work_id',$workid)->first();
 
-
   $review               = new Reviews;
   $review->comment      = $desc;
   $review->rating       = $rate;
@@ -230,17 +248,8 @@ public function endJob(Request $req){
 
   $work_reviewed = Work_Reviewed::where('work_id',$workid)->first();
   if(count($work_reviewed) > 0){
-    $work_reviewed->employer_id = 1;
-    $work_reviewed->save();
-
-    if($work->reviewed->applicant_id == 1){
-      $work_reviewed->delete();
-
-      $work->status = 4;
-      $work->is_started = 0;
-      $work->save();
-      $data['message'] = 'work officialy closed';
-    }
+    $work_reviewed->employer_reviewed = 1;
+    $work_reviewed->save(); 
   }
   else{
     $new_work_review = new Work_Reviewed;
@@ -251,6 +260,11 @@ public function endJob(Request $req){
     $data['message'] = 'created a new review';
   }
 
+  $work_sum = Work_Summary::where('work_id',$workid)->first();
+  $work_sum->is_paid = 1;
+  $work_sum->save();
+
+  $data['is_paid'] = true;
   return response()->json($data);
 }
 
