@@ -22,30 +22,35 @@ $(document).ready(function(){
 
   pending.done(function(data){
     console.log(data);
-    if(data.summary.summary.is_paid == 1){
-      $('#sender').text('from '+ data.summary.employer.fname + ' '+ data.summary.employer.lname);
-      $('#amount_received').text(data.summary.summary.total_salary);
-      $('#btn-receive').attr('sumid',data.summary.summary.summary_id);
-      $('#received_modal').modal('show');
-    }
-    else if(data.status == 200){
-      $('.pending_confirm').show(400);
-      var end = moment(data.summary.work.end_time).fromNow(true);
-      $('.pending-feed').append($('<div>').addClass('card-cont col-md-12')
-        .append($('<span>').addClass('app-image col-md-2')
-          .append($('<img>').attr('src',data.summary.employer.avatar)))
-        .append($('<span>').addClass('card-center col-md-7')
-          .append($('<h2>').text(data.summary.work.schedules.jobs.title))
-          .append($('<p>').text("waiting for employer's confirmation: "))
-          .append($('<a>').text(data.summary.employer.fname + ' '+data.summary.employer.lname))
-          .append($('<span>').addClass('button-tool')
-            .append($('<p>').addClass('start-at').text('Ended ' + end + ' ago'))))
-        .append($('<span>').addClass('end-time col-md-3')
-          .append($('<p>').text('You will receive: '))
-          .append($('<h3>').text('Php ' + data.summary.summary.total_salary)))
-        )
+    if(data.status == 200){
+      if(data.summary.summary.is_paid == 1){
+        $('#sender').text('from '+ data.summary.employer.fname + ' '+ data.summary.employer.lname);
+        $('#amount_received').text(data.summary.summary.total_salary);
+        $('#btn-receive').attr('sumid',data.summary.summary.summary_id);
+        $('#received_modal').modal('show');
+      }
+      else if(data.status == 200){
+        $('.pending_confirm').show(400);
+        var end = moment(data.summary.work.end_time).fromNow(true);
+        $('.pending-feed').append($('<div>').addClass('card-cont col-md-12')
+          .append($('<span>').addClass('app-image col-md-2')
+            .append($('<img>').attr('src',data.summary.employer.avatar)))
+          .append($('<span>').addClass('card-center col-md-7')
+            .append($('<h2>').text(data.summary.work.schedules.jobs.title))
+            .append($('<p>').text("waiting for employer's confirmation: "))
+            .append($('<a>').text(data.summary.employer.fname + ' '+data.summary.employer.lname))
+            .append($('<span>').addClass('button-tool')
+              .append($('<p>').addClass('start-at').text('Ended ' + end + ' ago'))))
+          .append($('<span>').addClass('end-time col-md-3')
+            .append($('<p>').text('You will receive: '))
+            .append($('<h3>').text('Php ' + data.summary.summary.total_salary)))
+          )
+      }
+      else{
+      }
     }
     else{
+
     }
   });
 }
@@ -67,7 +72,7 @@ $(document).on('click','#btn-receive',function(){
   });
 
   confirmed.done(function(data){
-console.log(data);
+    console.log(data);
   });
 
 
@@ -139,9 +144,6 @@ function error(err) {
 };
 
 
-var orig = [];
-var jobloc;
-
 function activeJob(){
   $('.actend').attr('hidden',true);
   $.ajaxSetup({
@@ -158,6 +160,8 @@ function activeJob(){
   active.done(function(data){
     console.log(data);
     if(data.active == 1){
+      $('.active-body').attr('hidden',false);
+      $('#actgmap').attr('hidden',false);
       $('#active-p').attr('hidden',true);
       $('#actitle').text(data.response[0].job.title);
       $('#actemp').text('Hired by '+data.response[0].employer.fname + ' '+ data.response[0].employer.lname);
@@ -165,8 +169,8 @@ function activeJob(){
       $('#modalemp').text(data.response[0].employer.fname + ' '+ data.response[0].employer.lname +'?');
       $('#empid').text(data.response[0].employer.user_id);
       $('#act-workid').text(data.response[0].work.work_id);
-      var start = moment(data.response[0].schedule.start);
-      var end = moment(data.response[0].schedule.end);
+      var start = new moment(data.response[0].schedule.start);
+      var end = new moment(data.response[0].schedule.end);
       var startDay1 = start.format('dddd');
       var startMonth = start.format('MMM');
       var startDay2 = start.format('D'); 
@@ -198,45 +202,23 @@ function activeJob(){
      $('#actstart').attr('workid',data.response[0].work.work_id);
      $('#actend').attr('workid',data.response[0].work.work_id);
 
-
-     if(data.previous_status == 400){
-       var geocode = new google.maps.Geocoder();
-       geocode.geocode({ 'address': data.response[0].profile.address }, function (results, status) {
-        if (status == google.maps.GeocoderStatus.OK) {
-         jobloc = { lat: parseFloat(results[0].geometry.location.lat()), lng: parseFloat(results[0].geometry.location.lng()) };
-         orig.push(jobloc);
-       }});
-     }
-     else{
-       jobloc = { lat: parseFloat(data.origin.lat), lng: parseFloat(data.origin.lng) };
-       orig.push(jobloc);
-     }
-
      var meo = [];
      var locs;
-     var centers = { lat: parseFloat(data.response[0].destination.lat), lng: parseFloat(data.response[0].destination.lng) };
+     var centers = { lat: parseFloat(data.response[0].coord_address.destination.lat), lng: parseFloat(data.response[0].coord_address.destination.lng) };
      meo.push(centers);
 
-     var geocoder = new google.maps.Geocoder();
-     geocoder.geocode({ 'latLng': meo[0] }, function (results, status) {
-      if (status == google.maps.GeocoderStatus.OK) {
-        locs = results[0].formatted_address;
-        $('#actaddress').text(locs);
-      }
-    });
+     $('#actaddress').text(data.response[0].string_address.destination);
+     $('#actdistance').text(data.response[0].distandtime.distance);
+     $('#acttime').text(data.response[0].distandtime.duration);
 
      var directionsDisplay = new google.maps.DirectionsRenderer;
      var directionsService = new google.maps.DirectionsService;
-     var origin = new google.maps.LatLng(data.response[0].destination.lat, data.response[0].destination.lng),
-     destination = new google.maps.LatLng(data.response[0].destination.lat, data.response[0].destination.lng),
-     service = new google.maps.DistanceMatrixService();
-
-     $('#actgmap').attr('hidden',false);
-     setTimeout(google.maps.event.trigger(actmap, 'resize'),300);
-     actmap.setCenter(centers);
+     var origin = new google.maps.LatLng(data.response[0].coord_address.origin.lat, data.response[0].coord_address.origin.lng);
+     var destination = new google.maps.LatLng(data.response[0].coord_address.destination.lat, data.response[0].coord_address.destination.lng);
      directionsDisplay.setMap(actmap);
-
      calculateAndDisplayRoute(directionsService, directionsDisplay);
+     google.maps.event.trigger(actmap, 'resize');
+     actmap.setCenter(destination);
 
      function calculateAndDisplayRoute(directionsService, directionsDisplay) {
       directionsService.route({
@@ -251,27 +233,6 @@ function activeJob(){
         }
       });
     }
-
-    service.getDistanceMatrix(
-    {
-      origins: [origin],
-      destinations: [destination],
-      travelMode: google.maps.TravelMode.DRIVING,
-      avoidHighways: false,
-      avoidTolls: false,
-    },callback);
-
-    function callback(response, status) {
-      console.log(response);
-      if(status=="OK") {
-        console.log(response);
-        $('#actdistance').text(response.rows[0].elements[0].distance.text);
-        $('#acttime').text(response.rows[0].elements[0].duration.text);
-      } else {
-        alert("Error: " + status);
-      }
-    }
-    $('.active-body').attr('hidden',false);
   }
 });
 }
@@ -643,17 +604,17 @@ $(document).on('click','#actstart',function(){
   if(data.status == 1){
     var end = new moment(data.end);
     console.log(end);
-    swal("Job has started.", "Work Hard!", "info");
+    if(data.late == 1){
+      swal("Oops.. It looks like you have exceed the 30 mins late allowance, we will deduct the penalty on your salary. ", " ", "warning");
+    }
+    else{
+      swal("Job has started.", "Work Hard!", "info");
+    }
     $('#actstart').fadeOut(1000);
     $('#actend').fadeIn(2000);
     $('#actend').removeClass('hidden');
     $('#head-min').text(end.fromNow());
     $('#head-meta').text('until session ends');
-  }
-  else{
-    if(data.late == 1){
-      swal("Oops.. It looks like you have exceed the 30 mins late allowance, we will deduct the penalty on your salary. ", " ", "warning");
-    }
   }
 
 });

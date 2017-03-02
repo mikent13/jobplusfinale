@@ -66,8 +66,8 @@ class ApplicantController extends Controller
   function getPrevJobLocation(){
     $today = new DateTime();
     $today = $today->format('ymd');
-    $job = new DateTime('2017-02-28');
-    $job = $job->format('ymd');
+    // $job = new DateTime('2017-02-28');
+    // $job = $job->format('ymd');
     // dd(($today == $job));
     $id = Auth::user()->id;
     $workschedID = [];
@@ -79,6 +79,9 @@ class ApplicantController extends Controller
         if(($today == $wkend) == true){
           $workschedID[] = $wk->sched_id;
         }
+      }
+      if(count($workschedID) == 0){
+        return null;
       }
       $sched = Schedules::orderBy('start','DESC')->whereIn('schedule_id',$workschedID)->first();
       $finalwork = Works::where('sched_id',$sched->schedule_id)->first();
@@ -94,38 +97,78 @@ class ApplicantController extends Controller
    $prof = Profiles::where('user_id',$userid)->first();
    $response = [];
    $origin = [];
+
    $prevwork = $this->getPrevJobLocation();
 
-   if($prevwork!=null){
-    $lat = $prevwork->schedules->jobs->address->lat;
-    $lng = $prevwork->schedules->jobs->address->lng;
-    $origin =['lat' => $lat,'lng' => $lng];
-    $data['previous_status'] = 200;
+   $active = Works::where('status',1)->where('applicant_id',$userid)->first();
+
+   if($prevwork == null){
+      // Convert user address to lat and long
+    $url = 'https://maps.googleapis.com/maps/api/geocode/json?address='.urlencode($prof->address).'&sensor=false';
+    $json = @file_get_contents($url);
+    $orig = json_decode($json);
+
+    $origlat = $orig->results[0]->geometry->location->lat;
+    $origlng = $orig->results[0]->geometry->location->lng;
+    $origin = ['lat' => ''.$origlat,'lng' => ''.$origlng];
+
+    $orig_address = $prof->address;
+
   }
   else{
-    $data['previous_status'] = 400;
-  }
 
-  $data['origin'] = $origin;
+   $origlat = $prevwork->schedules->jobs->address->lat;
+   $origlng = $prevwork->schedules->jobs->address->lng;
+   $origin = ['lat' => ''.$origlat,'lng' => ''.$origlng];
+
+   // Convert user coordinates to string address
+   $origurl = 'https://maps.googleapis.com/maps/api/geocode/json?latlng='.urlencode($origlat).','.urlencode($origlng).'&sensor=false';
+   $origjson = @file_get_contents($origurl);
+   $orginss = json_decode($origjson);
+
+   $orig_address = $orginss->results[0]->formatted_address;
+ }
 
 
-  $active = Works::where('status',1)->where('applicant_id',$userid)->first();
-
-  if(!empty($active)){
+ if(!empty($active)){
    $data['active'] = 1;
+
+   $destlat = $active->schedules->jobs->address->lat;
+   $destlng = $active->schedules->jobs->address->lng; 
+   $destination = ['lat' => ''.$destlat, 'lng' => ''.$destlng];
+
+      // Convert job coordinates to string address
+   $disturl = 'https://maps.googleapis.com/maps/api/geocode/json?latlng='.urlencode($destlat).','.urlencode($destlng).'&sensor=false';
+   $distjson = @file_get_contents($disturl);
+   $destin = json_decode($distjson);
+
+   $dest_address = $destin->results[0]->formatted_address;
+   $address = ['destination' => $dest_address, 'origin' => $orig_address];
+
+    // Get the Distance from User address to work address
+   $disturl = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&travelMode=DRIVING&avoidHighways=false&avoidTolls=false&origins='.urlencode($orig_address).'&destinations='.urlencode($dest_address).'&key=AIzaSyDBJJH4SL6eCDPu7N5C-2XcBt8jpZJeMyQ&libraries=places';
+   $distjson = @file_get_contents($disturl);
+   $distdata = json_decode($distjson);
+
+   $distance = $distdata->rows[0]->elements[0]->distance->text;
+   $duration = $distdata->rows[0]->elements[0]->duration->text;
+   $distobj = ['distance' => $distance, 'duration' => $duration];
+
+   $latadd = ['origin' => $origin, 'destination' => $destination];
+
    $response[]= [
    'work' => $active,
    'job' => $active->schedules->jobs,
    'paytype' => $active->schedules->jobs->paytypes->name,
    'schedule' => $active->schedules,
-   'destination' => $active->schedules->jobs->address,
    'employer' =>$active->schedules->jobs->users->profile,
-   'profile' => $prof
+   'string_address' => $address,
+   'distandtime' => $distobj,
+   'coord_address' => $latadd
    ];
 
  }  
  else{
-
   $data['active'] = 0;
 
   $upwork = Works::where('applicant_id', $userid)->where('status',2)->get();
@@ -147,39 +190,58 @@ class ApplicantController extends Controller
     $result = $now->diff($start);
     $rhour = $result->format('%h');
     if($rhour == 0){
-            // $data['min'] = '30 min';
+        // $data['min'] = '30 min';
       $work = Works::where('sched_id',$sched->schedule_id)->first();
       $work->status = 1;
       $work->save();
+
+      $destlat = $work->schedules->jobs->address->lat;
+      $destlng = $work->schedules->jobs->address->lng; 
+      $destination = ['lat' => ''.$destlat, 'lng' => ''.$destlng];
+
+      // Convert job coordinates to string address
+      $disturl = 'https://maps.googleapis.com/maps/api/geocode/json?latlng='.urlencode($destlat).','.urlencode($destlng).'&sensor=false';
+      $distjson = @file_get_contents($disturl);
+      $destin = json_decode($distjson);
+
+      $dest_address = $destin->results[0]->formatted_address;
+      $address = ['destination' => $dest_address, 'origin' => $orig_address];
+
+    // Get the Distance from User address to work address
+      $disturl = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&travelMode=DRIVING&avoidHighways=false&avoidTolls=false&origins='.urlencode($orig_address).'&destinations='.urlencode($dest_address).'&key=AIzaSyDBJJH4SL6eCDPu7N5C-2XcBt8jpZJeMyQ&libraries=places';
+      $distjson = @file_get_contents($disturl);
+      $distdata = json_decode($distjson);
+
+      $distance = $distdata->rows[0]->elements[0]->distance->text;
+      $duration = $distdata->rows[0]->elements[0]->duration->text;
+      $distobj = ['distance' => $distance, 'duration' => $duration];
+
+      $latadd = ['origin' => $origin, 'destination' => $destination];
+
       $response[]= [
       'work' => $work,
       'job' => $work->schedules->jobs,
+      'paytype' => $work->schedules->jobs->paytypes->name,
       'schedule' => $work->schedules,
-      'destination' => $work->schedules->jobs->address,
       'employer' =>$work->schedules->jobs->users->profile,
-      'mine' => $prof
+      'string_address' => $address,
+      'distandtime' => $distobj,
+      'coord_address' => $latadd
       ];
+
     }
     $data['result'] = $result;
-
   }
   else{
     $data['status'] = 0;
   }
+
+    // code here
 }
 
-$lat = 14.5512;
-$lng = 121.023;
-$url = 'http://maps.googleapis.com/maps/api/geocode/json?latlng='.$lat.','.$lng.'&sensor=false';
-$json = @file_get_contents($url);
-$datas = json_decode($json);
-$data['gmap'] = $datas;
 
-$disturl = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=Washington,DC&destinations=New+York+City,NY&key=AIzaSyDBJJH4SL6eCDPu7N5C-2XcBt8jpZJeMyQ&libraries=places
-';
-$distjson = @file_get_contents($disturl);
-$distdata = json_decode($distjson);
-$data['distance'] = $distdata;
+
+
 $data['response'] = $response;
 return response()->json($data);
 }
@@ -755,7 +817,7 @@ public function getPendingConfirmation(){
   }
 
   $data['status'] = $status;
-    return response()->json($data);
+  return response()->json($data);
 }
 
 public function endJobSummary(Request $req){
@@ -766,20 +828,36 @@ public function endJobSummary(Request $req){
 
   $newwork = Works::where('work_id',$work->work_id)->first();
   $summary = [];
+  $start = new DateTime($newwork->schedules->start);
+  $started = new DateTime($newwork->start_time);
+  $start->modify('+30 minutes');
+  $difference = $start->diff($started);
+  $data['start'] = $start;
+  $data['diff'] = $difference;
+  $salary = $newwork->schedules->jobs->salary;
+
+  if($difference->invert == 0){
+    $late = 1;
+    $fines = 0.05 * $salary;
+  }
+  else{
+    $late= 0;
+    $fines = 0;
+  }
 
   $started = new DateTime($newwork->start_time);
   $ended = new DateTime($newwork->end_time);
-  $result = $ended->diff($started);
+  $schedstart = new DateTime($newwork->schedules->start);
+  $schedend = new DateTime($newwork->end_time);
+  $result = $schedend->diff($schedstart);
   $rendered = $result->h;
-  $salary = $newwork->schedules->jobs->salary;
-  $fines = 0;
   $paytype = $newwork->schedules->jobs->paytypes;
   $employer = $newwork->schedules->jobs->users->profile;
   if($paytype->paytype_id == 1){
-    $total_salary = $salary * $rendered;
+    $total_salary = ($salary * $rendered) - $fines;
   }
   else{
-    $total_salary = $salary;
+    $total_salary = $salary - $fines;
   }
 
   $summ = new Work_Summary;
@@ -802,8 +880,6 @@ public function endJobSummary(Request $req){
   'paytype' => $paytype,
   'employer' => $employer
   ];
-
-
 
   $data['status'] = 200;
   $data['work'] = $summary;
@@ -929,11 +1005,11 @@ public function setReschedule(Request $req){
 }
 
 public function receivePayment(Request $req){
-$sumid = $req->sumid;
+  $sumid = $req->sumid;
 
-$sum = Work_Summary::where('summary_id',$sumid)->first();
-$sum->delete();
-$data['status'] = 200;
+  $sum = Work_Summary::where('summary_id',$sumid)->first();
+  $sum->delete();
+  $data['status'] = 200;
   return response()->json($data);
 }
 

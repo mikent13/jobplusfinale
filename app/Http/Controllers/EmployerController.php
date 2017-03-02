@@ -201,18 +201,13 @@ public function endJobSummary(Request $req){
 
   $started = new DateTime($newwork->start_time);
   $ended = new DateTime($newwork->end_time);
-  $result = $ended->diff($started);
-  $rendered = $result->h;
-  $salary = $newwork->schedules->jobs->salary;
-  $fines = 0;
+  
+  $rendered = $summ->hours_rendered;
+  $salary = $summ->salary;
+  $fines = $summ->fines;
   $paytype = $newwork->schedules->jobs->paytypes;
   $applicant = $newwork->users->profile;
-  if($paytype->paytype_id == 1){
-    $total_salary = $salary * $rendered;
-  }
-  else{
-    $total_salary = $salary;
-  }
+  $total_salary = $summ->total_salary;
 
   $summary[] =[
   'work' => $newwork,

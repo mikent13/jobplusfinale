@@ -43,16 +43,17 @@ function initializeMap(){
 function initializeData(){
 
  $('#feed-body').attr('hidden',true);
+ 
  $.ajaxSetup({
   headers: {
     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
   }
 });
-
- var jobdatas = $.ajax({
+var jobdatas = $.ajax({
   url:'/get/jobpagedata',
   method:'GET',
 });
+ 
 
  jobdatas.done(function(data){
   console.log(data);
