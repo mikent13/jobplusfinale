@@ -49,7 +49,7 @@ function initializeData(){
     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
   }
 });
-var jobdatas = $.ajax({
+ var jobdatas = $.ajax({
   url:'/get/jobpagedata',
   method:'GET',
 });
@@ -81,32 +81,25 @@ var jobdatas = $.ajax({
   var jobids = [];
   $(".windows8").fadeOut(200);
   //----------------Job Feeds------------//
-  // for(var z = 0; z< data.final.length; z++){gg
-    for(i = 0; i< data.jobs.length; i++){
-        // if(data.final[z] == data.jobs[i].job_id){
-          for(x = 0; x< data.profile.length; x++){
-            if(data.jobs[i].user_id == data.profile[x].user_id){
-              if(jobids.indexOf(data.jobs[i].job_id) < 0){
-                jobids.push(data.jobs[i].job_id);
-                $('#jobfeed-res').append($('<a>').addClass('list-group-item item-res').attr('data-val',data.jobs[i].job_id)
-                  .append($('<div>').addClass('cont-feeds')
-                    .append($('<img>').addClass('img-rounded pull-left').attr('src',data.profile[x].avatar))
-                    .append($('<h4>').addClass('list-group-item-heading ellipsis meta-title').text(data.jobs[i].title))
-                    .append($('<p>').addClass('list-group-item-text meta meta-employer').text('by '+data.profile[x].fname + ' ' + data.profile[x].lname))
-                    .append($('<i>').addClass('meta-loc meta-marker fa-1x fa fa-map-marker'))
-                    .append($('<p>').addClass('list-group-item-text meta meta-loc meta-locality').text('Cebu City'))));
-              }
-            }
-          }
-        }
 
-        $('#feeds').attr('hidden',false);
+  for(i = 0; i< data.jobs.length; i++){
+    jobids.push(data.jobs[i].job_id);
+    $('#jobfeed-res').append($('<a>').addClass('list-group-item item-res').attr('data-val',data.jobs[i].job.job_id)
+      .append($('<div>').addClass('cont-feeds')
+        .append($('<img>').addClass('img-rounded pull-left').attr('src',data.jobs[i].employer.avatar))
+        .append($('<h4>').addClass('list-group-item-heading ellipsis meta-title').text(data.jobs[i].job.title))
+        .append($('<p>').addClass('list-group-item-text meta meta-employer').text('by '+data.jobs[i].employer.fname + ' ' + data.jobs[i].employer.lname))
+        .append($('<i>').addClass('meta-loc meta-marker fa-1x fa fa-map-marker'))
+        .append($('<p>').addClass('list-group-item-text meta meta-loc meta-locality').text(data.jobs[i].job.address.address))));
+  }
 
-        $('.item-res ').click(function(e) {
-          e.preventDefault();
-          $('.item-res').removeClass('item-active');
-          $(this).addClass('item-active')
-        });
+  $('#feeds').attr('hidden',false);
+
+  $('.item-res ').click(function(e) {
+    e.preventDefault();
+    $('.item-res').removeClass('item-active');
+    $(this).addClass('item-active')
+  });
 
       //   for(z = 0; z< data.jobadd.length; z++){
       //   if(data.jobs[i].job_id == data.jobadd[z].jobid){
@@ -270,25 +263,17 @@ $(document).on('click','#tab-recommended',function(e){
   search.done(function(data){
     console.log(data);
     $('#recommended-res').empty();
-    for(var z = 0; z< data.final.length; z++){
-      for(i = 0; i< data.jobs.length; i++){
-        if(data.final[z] == data.jobs[i].job_id){
-          for(x = 0; x< data.profile.length; x++){
-            if(data.jobs[i].user_id == data.profile[x].user_id){
-              if(jobids.indexOf(data.jobs[i].job_id) < 0){
-                jobids.push(data.jobs[i].job_id);
-                $('#recommended-res').append($('<a>').addClass('list-group-item recom-res').attr('data-val',data.jobs[i].job_id)
-                  .append($('<div>').addClass('cont-feeds')
-                    .append($('<img>').addClass('img-rounded pull-left').attr('src',data.profile[x].avatar))
-                    .append($('<h4>').addClass('list-group-item-heading ellipsis meta-title').text(data.jobs[i].title))
-                    .append($('<p>').addClass('list-group-item-text meta meta-employer').text('by '+data.profile[x].fname + ' ' + data.profile[x].lname))
-                    .append($('<i>').addClass('meta-loc meta-marker fa-1x fa fa-map-marker'))
-                    .append($('<p>').addClass('list-group-item-text meta meta-loc meta-locality').text('Cebu City'))));
-              }
-            }
-          }
-        }
-      }
+    var jobids = [];
+
+    for(i = 0; i< data.jobs.length; i++){
+      jobids.push(data.jobs[i].job_id);
+      $('#recommended-res').append($('<a>').addClass('list-group-item item-res').attr('data-val',data.jobs[i].job.job_id)
+        .append($('<div>').addClass('cont-feeds')
+          .append($('<img>').addClass('img-rounded pull-left').attr('src',data.jobs[i].employer.avatar))
+          .append($('<h4>').addClass('list-group-item-heading ellipsis meta-title').text(data.jobs[i].job.title))
+          .append($('<p>').addClass('list-group-item-text meta meta-employer').text('by '+data.jobs[i].employer.fname + ' ' + data.jobs[i].employer.lname))
+          .append($('<i>').addClass('meta-loc meta-marker fa-1x fa fa-map-marker'))
+          .append($('<p>').addClass('list-group-item-text meta meta-loc meta-locality').text(data.jobs[i].job.address.address))));
     }
 
     $('.recom-res ').click(function(e) {
@@ -412,15 +397,15 @@ $(document).on('click','.item-res',function(e){
 
  request.done(function(data){
   console.log(data);
-if(data.response[0].conflict.conflict == 1){
-  $('.conflict').show(400);
-  var myjob = data.response[0].conflict.work_sched.schedules.jobs.title;
-  $('#conflict-message').text('Oops. it looks like this job conflicts with your work: ' + myjob );
-  $('.btn-apply').hide(400);
-}
-else{
-  $('.btn-apply').show(400);
-}
+  if(data.response[0].conflict.conflict == 1){
+    $('.conflict').show(400);
+    var myjob = data.response[0].conflict.work_sched.schedules.jobs.title;
+    $('#conflict-message').text('Oops. it looks like this job conflicts with your work: ' + myjob );
+    $('.btn-apply').hide(400);
+  }
+  else{
+    $('.btn-apply').show(400);
+  }
   var meo = [];
   var locs;
   var centers = { lat: parseFloat(data.response[0].address.lat), lng: parseFloat(data.response[0].address.lng) };
@@ -505,36 +490,24 @@ $(document).on('click','#tab-nearby',function(e){
   var search = $.ajax({
     url: '/get/job/nearby',
     method: 'GET',
-    data:{
-      'loc' :nearbs,
-      'origin':geolocations
-    }
   });
 
   search.done(function(data){
     console.log(data);
     $('#nearby-res').empty();
-
-    for(var z = 0; z< data.final.length; z++){
-      for(i = 0; i< data.jobs.length; i++){
-        if(data.final[z] == data.jobs[i].job_id){
-          for(x = 0; x< data.profile.length; x++){
-            if(data.jobs[i].user_id == data.profile[x].user_id){
-              if(jobids.indexOf(data.jobs[i].job_id) < 0){
-                jobids.push(data.jobs[i].job_id);
-                $('#nearby-res').append($('<a>').addClass('list-group-item near-res').attr('data-val',data.jobs[i].job_id)
-                  .append($('<div>').addClass('cont-feeds')
-                    .append($('<img>').addClass('img-rounded pull-left').attr('src',data.profile[x].avatar))
-                    .append($('<h4>').addClass('list-group-item-heading ellipsis meta-title').text(data.jobs[i].title))
-                    .append($('<p>').addClass('list-group-item-text meta meta-employer').text('by '+data.profile[x].fname + ' ' + data.profile[x].lname))
-                    .append($('<i>').addClass('meta-loc meta-marker fa-1x fa fa-map-marker'))
-                    .append($('<p>').addClass('list-group-item-text meta meta-loc meta-locality').text('Cebu City'))));
-              }
-            }
-          }
-        }
-      }
+    var jobids = [];
+    
+    for(i = 0; i< data.jobs.length; i++){
+      jobids.push(data.jobs[i].job_id);
+      $('#nearby-res').append($('<a>').addClass('list-group-item item-res').attr('data-val',data.jobs[i].job.job_id)
+        .append($('<div>').addClass('cont-feeds')
+          .append($('<img>').addClass('img-rounded pull-left').attr('src',data.jobs[i].employer.avatar))
+          .append($('<h4>').addClass('list-group-item-heading ellipsis meta-title').text(data.jobs[i].job.title))
+          .append($('<p>').addClass('list-group-item-text meta meta-employer').text('by '+data.jobs[i].employer.fname + ' ' + data.jobs[i].employer.lname))
+          .append($('<i>').addClass('meta-loc meta-marker fa-1x fa fa-map-marker'))
+          .append($('<p>').addClass('list-group-item-text meta meta-loc meta-locality').text(data.jobs[i].job.address.address))));
     }
+
   });
 });
 
@@ -626,7 +599,7 @@ function loadAlert(){
 }
 //-------- Job Application --------//
 $(document).on('click','#feed-apply-btn',function(e){
-$('#policy-Modal').modal('show');
+  $('#policy-Modal').modal('show');
 
 //  e.preventDefault();
 
