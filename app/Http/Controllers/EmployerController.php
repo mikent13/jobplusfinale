@@ -44,14 +44,16 @@ public function getDashboard(){
 
 public function postJob(Request $req){
   $id = Auth::user()->id;
+  
   $data['requested'] = $req->all();
 
   $address = new Job_Address;
   $address->lat = $req->lat;
   $address->lng = $req->lng;
   $address->locality = $req->locality;
+  $address->address = $req->address;
   $address->save();
-
+  
   $newjob = new Jobs;
   $newjob->user_id = $id;
   $newjob->category_id = $req->category;
@@ -67,7 +69,7 @@ public function postJob(Request $req){
   $newjob->slot = $req->slot;
   $newjob->date_posted = new DateTime;
   $newjob->save();
-
+  
   $jobid = $newjob->job_id;
   $jsched = new Schedules;
   $jsched->job_id = $jobid;
@@ -76,7 +78,6 @@ public function postJob(Request $req){
   $jsched->save();
 
   $arr[] = $req->skills;
-
   for($i=0; $i<count($req->skills); $i++){
     $skills = new Job_Skill;
     $skills->job_id = $jobid;

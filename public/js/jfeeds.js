@@ -164,16 +164,12 @@ $(document).ready(function(){
  }
 });
 
-
-
-
-  
 //----------------------------Requests------------------------------------//
 function loadStart(){
  $("#loading").fadeIn(200);
  $('#feed-body').attr('hidden',true);
-
 }
+
 function loadEnd(){
   $('#scroll').click();
   $('#loading').fadeOut(200);
@@ -395,6 +391,7 @@ $(document).on('click','#tab-feeds',function(e){
 //--------Job Onclick  --------//
 $(document).on('click','.item-res',function(e){
  e.preventDefault();
+ $('.conflict').hide(400);
  $('#feed-result-sched').empty();
  $('#feed-result-skill').empty();
  $('#feed-body').attr('hidden',false);
@@ -415,6 +412,15 @@ $(document).on('click','.item-res',function(e){
 
  request.done(function(data){
   console.log(data);
+if(data.response[0].conflict.conflict == 1){
+  $('.conflict').show(400);
+  var myjob = data.response[0].conflict.work_sched.schedules.jobs.title;
+  $('#conflict-message').text('Oops. it looks like this job conflicts with your work: ' + myjob );
+  $('.btn-apply').hide(400);
+}
+else{
+  $('.btn-apply').show(400);
+}
   var meo = [];
   var locs;
   var centers = { lat: parseFloat(data.response[0].address.lat), lng: parseFloat(data.response[0].address.lng) };
@@ -611,47 +617,51 @@ $(document).on('click','.near-res',function(e){
 });
 });
 
+function showPolicy(){
+
+}
 
 function loadAlert(){
   swal("Thank You!", "Application sent!", "success");
 }
 //-------- Job Application --------//
 $(document).on('click','#feed-apply-btn',function(e){
+$('#policy-Modal').modal('show');
 
- e.preventDefault();
+//  e.preventDefault();
 
- var jobid = $('#feed-res-jobid').text();
+//  var jobid = $('#feed-res-jobid').text();
 
- $.ajaxSetup({
-  headers: {
-    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-  }
-});
+//  $.ajaxSetup({
+//   headers: {
+//     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+//   }
+// });
 
- var apply = $.ajax({
-  url: '/app/apply',
-  method: 'GET',
-  data:{'jobid':jobid},
-});
+//  var apply = $.ajax({
+//   url: '/app/apply',
+//   method: 'GET',
+//   data:{'jobid':jobid},
+// });
 
- apply.done(function(data){
-  console.log(data);
-  if(data.status == 0){
-    var myconfstart = moment(data.myconf.start).format('MMMM Do YYYY, h:mm a');
-    var myconfend = moment(data.myconf.end).format('MMMM Do YYYY, h:mm a');
-    var jobconfstart = moment(data.jobconf.start).format('MMMM Do YYYY, h:mm a');
-    var jobconfend = moment(data.jobconf.end).format('MMMM Do YYYY, h:mm a');
-    $('#confjtitle').text(data.myconfjob.title);
-    $('#myschedstart').text('Start: ' +myconfstart);
-    $('#myschedend').text('End: '+myconfend);
-    $('#appliedstart').text('Start: ' +jobconfstart);
-    $('#appliedend').text('End: ' +jobconfend);
-    $('#conflictModal').modal('show');
-  }
-  else{
-    loadAlert();
-  }
-});
+//  apply.done(function(data){
+//   console.log(data);
+//   if(data.status == 0){
+//     var myconfstart = moment(data.myconf.start).format('MMMM Do YYYY, h:mm a');
+//     var myconfend = moment(data.myconf.end).format('MMMM Do YYYY, h:mm a');
+//     var jobconfstart = moment(data.jobconf.start).format('MMMM Do YYYY, h:mm a');
+//     var jobconfend = moment(data.jobconf.end).format('MMMM Do YYYY, h:mm a');
+//     $('#confjtitle').text(data.myconfjob.title);
+//     $('#myschedstart').text('Start: ' +myconfstart);
+//     $('#myschedend').text('End: '+myconfend);
+//     $('#appliedstart').text('Start: ' +jobconfstart);
+//     $('#appliedend').text('End: ' +jobconfend);
+//     $('#conflictModal').modal('show');
+//   }
+//   else{
+//     loadAlert();
+//   }
+// });
 
 });
 $(document).on('click','#near-apply-btn',function(e){

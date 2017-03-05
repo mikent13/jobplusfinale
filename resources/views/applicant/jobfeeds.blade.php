@@ -3,6 +3,7 @@
 <link rel="stylesheet" href="/bootstrap/css/jfeeds.css">
 @endsection
 @section('body')
+@include('applicant.modals.jobfeed.policy')
 <a href="#scrolled" class="hidden" id="scroll"></a>
 <div class="jbheader">
 	<div class="container">
@@ -115,7 +116,11 @@
 				</div>
 				<div id="feed-body" class="col-md-7 jp-content">
 					<div class="panel feed-panel">
+					<div class=" col-md-12 conflict">
+							<p id="conflict-message"></p>
+						</div>
 						<div class="row feed-top">
+						
 							<div class="col-md-6 feed-title">
 								<h1 id="feed-t"></h1>
 								<p id="feed-p"></p>
