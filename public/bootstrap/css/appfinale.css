@@ -1255,3 +1255,7 @@ transition: all 0.2s ease;
 	color: #fff;
 	transition: all 0.2s ease;
 }
+
+#feed-res-jobid , #rec-res-jobid , #near-res-jobid{
+	    color: rgba(60, 60, 60, 0);
+}

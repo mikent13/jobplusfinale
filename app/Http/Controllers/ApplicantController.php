@@ -588,7 +588,6 @@ public function getJobPage(){
   return view('applicant.jobfeeds');
 }
 
-
 public function getUserSkills(){
   $userid = Auth::user()->id;
   $profile = Profiles::where('user_id',$userid)->first();
@@ -651,7 +650,7 @@ function getJobNearby(){
     'address' => $jb->jobs->address,
     'employer' => $jb->jobs->users->profile];
   }
-  
+
   $response = [
   'message' => 200,
   'jobs' => $job];
@@ -800,7 +799,7 @@ public function getJobPageData(){
   $wID[] = $w->schedules->job_id;
 }
 
-$job = Jobs::whereNotIn('job_id',$wID)->get();
+$job = Jobs::whereNotIn('job_id',$wID)->where('slot','!=',0)->get();
 
 foreach($job as $jb){
   $jobID[] = $jb->job_id;

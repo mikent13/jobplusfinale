@@ -107,8 +107,8 @@
 		<!-- Tab panes -->
 		<div class="tab-content">
 			<div role="tabpanel" class="tab-pane active" id="feeds">
-
 				<div class="col-md-5 ">
+				<p>Job feed results</p>
 					<div class="panel panel-default jp-tabpanel ">
 						<!-- Job list-->
 						<div class="list-group" id="jobfeed-res"></div>
@@ -116,11 +116,10 @@
 				</div>
 				<div id="feed-body" class="col-md-7 jp-content">
 					<div class="panel feed-panel">
-					<div class=" col-md-12 conflict">
-							<p id="conflict-message"></p>
+						<div class=" col-md-12 conflict">
+							<p class="conflict-message"></p>
 						</div>
 						<div class="row feed-top">
-						
 							<div class="col-md-6 feed-title">
 								<h1 id="feed-t"></h1>
 								<p id="feed-p"></p>
@@ -172,6 +171,7 @@
 			<!-- Recommended Job list-->
 			<div role="tabpanel" class="tab-pane" id="recommended">
 				<div class="col-md-5 jp-content feed-panel">
+				<p>Recommended job results</p>
 					<div class="panel panel-default jp-tabpanel ">
 						<!-- Job list-->
 						<div class="list-group" id="recommended-res">
@@ -180,6 +180,9 @@
 				</div>
 				<div id="rec-body" class="col-md-7 jp-content">
 					<div class="panel feed-panel">
+						<div class=" col-md-12 conflict">
+							<p class="conflict-message"></p>
+						</div>
 						<div class="row feed-top">
 							<div class="col-md-6 feed-title">
 								<h1 id="rec-t"></h1>
@@ -231,14 +234,17 @@
 			</div>
 			<div role="tabpanel" class="tab-pane" id="nearby">
 				<div class="col-md-5 jp-content feed-panel">
+				<p>Nearby job results</p>
 					<div class="panel panel-default jp-tabpanel ">
-						<!-- Job list-->
 						<div class="list-group" id="nearby-res">
 						</div>
 					</div>
 				</div>
 				<div id="near-body" class="col-md-7 jp-content">
 					<div class="panel feed-panel">
+						<div class=" col-md-12 conflict">
+							<p class="conflict-message"></p>
+						</div>
 						<div class="row feed-top">
 							<div class="col-md-6 feed-title">
 								<h1 id="near-t"></h1>
