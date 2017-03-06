@@ -121,17 +121,23 @@ class ProfileController extends Controller
 		$userid = Auth::user()->id;
 		$review = Reviews::where('reviewed_id',$userid)->get();
 		$reviewID = [];
-		foreach($review as $rev){
-			$reviewID[] = [
-			'review' => $rev,
-			'employer' => $rev->employer->profile,
-			'work' => $rev->work
-			];
+		if(count($review) > 0){
+			foreach($review as $rev){
+				$reviewID[] = [
+				'review' => $rev,
+				'employer' => $rev->employer->profile,
+				'job' => $rev->work->schedules->jobs
+				];
+			}
+			$response = [
+			'reviews' => $reviewID,
+			'status' => 200];
 		}
-		$response = [
-		'reviews' => $reviewID,
-		'status' => 200];
-
+		else{
+			$response = [
+			'status' => 400];
+		}
+		return response()->json($response);
 	}
 
 }

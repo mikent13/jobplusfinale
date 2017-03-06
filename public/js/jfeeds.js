@@ -378,8 +378,10 @@ $(document).on('click','.item-res',function(e){
 
  request.done(function(data){
   console.log(data);
-
-  if(data.response[0].conflict.conflict == 1){
+  if(data.response[0].conflict== null){
+    $('.btn-apply').show(400);
+  }
+  else if(data.response[0].conflict.conflict == 1){
     $('.conflict').show(400);
     var myjob = data.response[0].conflict.work_sched.schedules.jobs.title;
     $('.conflict-message').text('Oops. it looks like this job conflicts with your work: ' + myjob );

@@ -34,6 +34,7 @@
 				                        	<input type="password" name="password" placeholder="Password..." class="form-password form-control" id="password">
 				                        </div>
 				                        <button type="submit" class="btn">Sign in!</button>
+				                        <a href="{{url('/register')}}"><p>Not a member yet? Register now</p></a>
 				                    </form>
 
 			                    </div>

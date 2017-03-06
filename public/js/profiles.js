@@ -1,306 +1,298 @@
 $(document).ready(function(){
 
-initializeData();
-getDropzone();
+	initializeData();
+	getDropzone();
 
+	$(document).on('click','#clickme',function(data){
+		$('#modal-skill').modal('hide');
+		$('#modal-overview').modal('show');
+	});
 
-$(document).on('click','#clickme',function(data){
-	$('#modal-skill').modal('hide');
-	$('#modal-overview').modal('show');
-});
-
-function getDropzone(){
+	function getDropzone(){
   //Dropzone.js Options - Upload an image via AJAX.
   Dropzone.options.myDropzone = {
-    uploadMultiple: false,
+  	uploadMultiple: false,
     // previewTemplate: '',
     addRemoveLinks: false,
     // maxFiles: 1,
     dictDefaultMessage: '',
     init: function() {
-      this.on("addedfile", function(file) {
+    	this.on("addedfile", function(file) {
         // console.log('addedfile...');
         $('.dz-image').hide();
         $('.dz-details').hide();
         $('.dz-success-mark').hide();
         $('.dz-error-mark').hide();
-      });
-      this.on("thumbnail", function(file, dataUrl) {
+    });
+    	this.on("thumbnail", function(file, dataUrl) {
         // console.log('thumbnail...');
         $('.dz-image').hide();
         $('.dz-details').hide();
         $('.dz-success-mark').hide();
         $('.dz-error-mark').hide();
-      });
-      this.on("success", function(file, res) {
-      	location.reload();
-        console.log('upload success...');
-        $('#img-thumb').attr('src', res.path);
-        $('input[name="pic_url"]').val(res.path);
-        $('.dz-image').hide();
-        $('.dz-details').hide();
-        $('.dz-success-mark').hide();
-        $('.dz-error-mark').hide();
-      });
+    });
+    	this.on("success", function(file, res) {
+    		location.reload();
+    		console.log('upload success...');
+    		$('#img-thumb').attr('src', res.path);
+    		$('input[name="pic_url"]').val(res.path);
+    		$('.dz-image').hide();
+    		$('.dz-details').hide();
+    		$('.dz-success-mark').hide();
+    		$('.dz-error-mark').hide();
+    	});
     }
-  };
+};
 
-  var myDropzone = new Dropzone("#my-dropzone");
+var myDropzone = new Dropzone("#my-dropzone");
 
-  $('#prof-pic').on('click', function(e) {
-    e.preventDefault();
+$('#prof-pic').on('click', function(e) {
+	e.preventDefault();
     //trigger file upload select
     $("#my-dropzone").trigger('click');
-  });
+});
 }
 
 
- $(function() {
-      $('.rating').barrating({
-        theme: 'fontawesome-stars',
-        readonly:'true',
-        initialRating: ''+3,
-      });
-   });
 
-	var hoverin = {
-		'backgroundColor' : '#e7e7e7',
-		'border-radius': '20px',
-		'cursor': 'pointer',
-		'transition':'0.2s ease-in-out'
-	};
+var hoverin = {
+	'backgroundColor' : '#e7e7e7',
+	'border-radius': '20px',
+	'cursor': 'pointer',
+	'transition':'0.2s ease-in-out'
+};
 
-	var hoverout = {
-		'backgroundColor' : '',
-		'transition':'0.2s ease-in-out'
-	};
-	
-	$('#prof-skills')
-	.mouseover(function() {
-		$('.skills').css(hoverin);
-	})
-	.mouseout(function() {
-		$('.skills').css(hoverout);
-	});
+var hoverout = {
+	'backgroundColor' : '',
+	'transition':'0.2s ease-in-out'
+};
 
-	$(document).on('click','#btnAddEdu',function(){
-		$('#eduModal').modal('show');
+$('#prof-skills')
+.mouseover(function() {
+	$('.skills').css(hoverin);
+})
+.mouseout(function() {
+	$('.skills').css(hoverout);
+});
 
-		var i = 1;
-		$('#attainment').selectpicker('refresh');
-		$('#attainment').selectpicker('val','' + i);
-		$('#school').empty();
+$(document).on('click','#btnAddEdu',function(){
+	$('#eduModal').modal('show');
+
+	var i = 1;
+	$('#attainment').selectpicker('refresh');
+	$('#attainment').selectpicker('val','' + i);
+	$('#school').empty();
+	$('.divdeg').hide('slow');
+	$('.divmajor').hide('slow');
+});
+
+$(document).on('change','#edit-attainment',function(){
+	var attainment = $('#edit-attainment option:selected').val();
+	if(attainment == 2){
+		$('.divdeg').show('slow');
+		$('.divmajor').show('slow');
+	}
+	else{
 		$('.divdeg').hide('slow');
 		$('.divmajor').hide('slow');
-	});
+	}
+});
 
-	$(document).on('change','#edit-attainment',function(){
-		var attainment = $('#edit-attainment option:selected').val();
-		if(attainment == 2){
-			$('.divdeg').show('slow');
-			$('.divmajor').show('slow');
-		}
-		else{
-			$('.divdeg').hide('slow');
-			$('.divmajor').hide('slow');
-		}
-	});
+$(document).on('change','#attainment',function(){
+	var attainment = $('#attainment option:selected').val();
+	if(attainment == 2){
+		$('.divdeg').show('slow');
+		$('.divmajor').show('slow');
+	}
+	else{
+		$('.divdeg').hide('slow');
+		$('.divmajor').hide('slow');
+	}
+});
 
-	$(document).on('change','#attainment',function(){
-		var attainment = $('#attainment option:selected').val();
-		if(attainment == 2){
-			$('.divdeg').show('slow');
-			$('.divmajor').show('slow');
-		}
-		else{
-			$('.divdeg').hide('slow');
-			$('.divmajor').hide('slow');
+$(document).on('change','#degree',function(){
+	var degree = $('#degree option:selected').val();
+
+	$.ajaxSetup({
+		headers: {
+			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 		}
 	});
 
-	$(document).on('change','#degree',function(){
-		var degree = $('#degree option:selected').val();
-
-		$.ajaxSetup({
-			headers: {
-				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-			}
-		});
-
-		var jobdatas = $.ajax({
-			url:'/get/user/degree',
-			method:'GET',
-			data:{
-				'attainment_id': degree
-			}
-		});
-
-		jobdatas.done(function(data){
-			$('#field_study').empty();
-
-			$.each(data.field,function(key,val){
-				$('#field_study').append($('<option>').text(val.title).attr('value',val.edu_field_id).addClass('selectoption'))
-			});
-
-			$('#field_study').selectpicker('refresh');
-		});
-	});
-
-	$(document).on('change','#edit-degree',function(){
-		var degree = $('#edit-degree option:selected').val();
-
-		$.ajaxSetup({
-			headers: {
-				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-			}
-		});
-
-		var jobdatas = $.ajax({
-			url:'/get/user/degree',
-			method:'GET',
-			data:{
-				'attainment_id': degree
-			}
-		});
-
-		jobdatas.done(function(data){
-			$('#edit-field_study').empty();
-
-			$.each(data.field,function(key,val){
-				$('#edit-field_study').append($('<option>').text(val.title).attr('value',val.edu_field_id).addClass('selectoption'))
-			});
-			$('#edit-field_study').selectpicker('refresh');
-		});
-
-	});
-
-
-	$(document).on('click','.name-loc',function(){
-		$('#modal-name').modal('show');
-	});
-
-	$(document).on('click','#overview',function(){
-		$('#modal-overview').modal('show');
-	});
-
-	$(document).on('click','#prof-skills',function(){
-		$('#modal-skill').modal('show');
-		$.ajaxSetup({
-			headers: {
-				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-			}
-		});
-
-		var skills = $.ajax({
-			url:'/get/profile/skill',
-			method:'GET',
-		});
-
-		skills.done(function(data){
-			console.log(data);		
-
-			$('#construction').empty();
-			$('#house').empty();
-			$('#personel').empty();
-			$('#maintenance').empty();
-
-			$.each(data.cons,function(key,val){
-				$('#construction').append($('<option>').text(val.name).attr({'value':val.skill_id}).addClass('selectoption'))
-			});
-			$.each(data.house,function(key,val){
-				$('#house').append($('<option>').text(val.name).attr({'value':val.skill_id}).addClass('selectoption'))
-			});
-			$.each(data.pers,function(key,val){
-				$('#personel').append($('<option>').text(val.name).attr({'value':val.skill_id}).addClass('selectoption'))
-			});
-			$.each(data.main,function(key,val){
-				$('#maintenance').append($('<option>').text(val.name).attr({'value':val.skill_id}).addClass('selectoption'))
-			});
-
-			$('#construction').selectpicker('refresh');
-			$('#house').selectpicker('refresh');
-			$('#personel').selectpicker('refresh');
-			$('#maintenance').selectpicker('refresh');
-
-			var skill = [];
-			for(var i=0; i<data.pskill.length;i++){
-				skill.push(data.pskill[i]);
-			}
-
-			console.log(skill);
-			$('#construction').selectpicker('val', skill);
-			$('#house').selectpicker('val', skill);
-			$('#personel').selectpicker('val', skill);
-			$('#maintenance').selectpicker('val', skill);
-		});
-
-	});
-
-	$(document).on('click','#btn-update-name',function(){
-		var fname = $('#firstname').val();
-		var lname = $('#lastname').val();
-		var address = $('#modal-address').val();
-
-		$.ajaxSetup({
-			headers: {
-				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-			}
-		});
-
-		var name = $.ajax({
-			url:'/set/user/profile/name',
-			method:'GET',
-			complete:initializeData,
-			data:{
-				'fname': fname,
-				'lname': lname,
-				'address': address
-			}
-		});
-	});
-
-	$(document).on('click','#btn-update-overview',function(){
-		var overview = $('#modal-input-overview').val();
-
-		$.ajaxSetup({
-			headers: {
-				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-			}
-		});
-
-		var overview = $.ajax({
-			url:'/set/user/profile/overview',
-			method:'GET',
-			complete:initializeData,
-			data:{
-				'overview': overview
-			}
-		});
-
-	});
-
-	$(document).on('click','#btn-update-skill',function(){
-		var skills = [];
-		var new_skill = [];
-		var house = $('#house').val();
-		var personel = $('#personel').val();
-		var construction = $('#construction').val();
-		var maintenance = $('#maintenance').val(); 
-		if(house == null){
-			house = [];
+	var jobdatas = $.ajax({
+		url:'/get/user/degree',
+		method:'GET',
+		data:{
+			'attainment_id': degree
 		}
-		if(personel == null){
-			personel = [];
+	});
+
+	jobdatas.done(function(data){
+		$('#field_study').empty();
+
+		$.each(data.field,function(key,val){
+			$('#field_study').append($('<option>').text(val.title).attr('value',val.edu_field_id).addClass('selectoption'))
+		});
+
+		$('#field_study').selectpicker('refresh');
+	});
+});
+
+$(document).on('change','#edit-degree',function(){
+	var degree = $('#edit-degree option:selected').val();
+
+	$.ajaxSetup({
+		headers: {
+			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 		}
-		if(construction == null){
-			construction = [];
+	});
+
+	var jobdatas = $.ajax({
+		url:'/get/user/degree',
+		method:'GET',
+		data:{
+			'attainment_id': degree
 		}
-		if(maintenance == null){
-			maintenance = [];
+	});
+
+	jobdatas.done(function(data){
+		$('#edit-field_study').empty();
+
+		$.each(data.field,function(key,val){
+			$('#edit-field_study').append($('<option>').text(val.title).attr('value',val.edu_field_id).addClass('selectoption'))
+		});
+		$('#edit-field_study').selectpicker('refresh');
+	});
+
+});
+
+
+$(document).on('click','.name-loc',function(){
+	$('#modal-name').modal('show');
+});
+
+$(document).on('click','#overview',function(){
+	$('#modal-overview').modal('show');
+});
+
+$(document).on('click','#prof-skills',function(){
+	$('#modal-skill').modal('show');
+	$.ajaxSetup({
+		headers: {
+			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 		}
-		var first = skills.concat(house,personel);
-		var second = skills.concat(construction,maintenance);
-		var third = new_skill.concat(first,second);
+	});
+
+	var skills = $.ajax({
+		url:'/get/profile/skill',
+		method:'GET',
+	});
+
+	skills.done(function(data){
+		console.log(data);		
+
+		$('#construction').empty();
+		$('#house').empty();
+		$('#personel').empty();
+		$('#maintenance').empty();
+
+		$.each(data.cons,function(key,val){
+			$('#construction').append($('<option>').text(val.name).attr({'value':val.skill_id}).addClass('selectoption'))
+		});
+		$.each(data.house,function(key,val){
+			$('#house').append($('<option>').text(val.name).attr({'value':val.skill_id}).addClass('selectoption'))
+		});
+		$.each(data.pers,function(key,val){
+			$('#personel').append($('<option>').text(val.name).attr({'value':val.skill_id}).addClass('selectoption'))
+		});
+		$.each(data.main,function(key,val){
+			$('#maintenance').append($('<option>').text(val.name).attr({'value':val.skill_id}).addClass('selectoption'))
+		});
+
+		$('#construction').selectpicker('refresh');
+		$('#house').selectpicker('refresh');
+		$('#personel').selectpicker('refresh');
+		$('#maintenance').selectpicker('refresh');
+
+		var skill = [];
+		for(var i=0; i<data.pskill.length;i++){
+			skill.push(data.pskill[i]);
+		}
+
+		console.log(skill);
+		$('#construction').selectpicker('val', skill);
+		$('#house').selectpicker('val', skill);
+		$('#personel').selectpicker('val', skill);
+		$('#maintenance').selectpicker('val', skill);
+	});
+
+});
+
+$(document).on('click','#btn-update-name',function(){
+	var fname = $('#firstname').val();
+	var lname = $('#lastname').val();
+	var address = $('#modal-address').val();
+
+	$.ajaxSetup({
+		headers: {
+			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+		}
+	});
+
+	var name = $.ajax({
+		url:'/set/user/profile/name',
+		method:'GET',
+		complete:initializeData,
+		data:{
+			'fname': fname,
+			'lname': lname,
+			'address': address
+		}
+	});
+});
+
+$(document).on('click','#btn-update-overview',function(){
+	var overview = $('#modal-input-overview').val();
+
+	$.ajaxSetup({
+		headers: {
+			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+		}
+	});
+
+	var overview = $.ajax({
+		url:'/set/user/profile/overview',
+		method:'GET',
+		complete:initializeData,
+		data:{
+			'overview': overview
+		}
+	});
+
+});
+
+$(document).on('click','#btn-update-skill',function(){
+	var skills = [];
+	var new_skill = [];
+	var house = $('#house').val();
+	var personel = $('#personel').val();
+	var construction = $('#construction').val();
+	var maintenance = $('#maintenance').val(); 
+	if(house == null){
+		house = [];
+	}
+	if(personel == null){
+		personel = [];
+	}
+	if(construction == null){
+		construction = [];
+	}
+	if(maintenance == null){
+		maintenance = [];
+	}
+	var first = skills.concat(house,personel);
+	var second = skills.concat(construction,maintenance);
+	var third = new_skill.concat(first,second);
 		// console.log('first:' + first +' second:'+second + ' third:'+third);
 
 		$.ajaxSetup({
@@ -326,30 +318,30 @@ function getDropzone(){
 		// console.log(house);
 	});
 
-	$('#edit-name').on('click',function(){
-		$('#myModal').modal('show');
-		$('.modal-title').text('Edit Name & Skills');
-		$('#skillbox').prop('checked',true);
+$('#edit-name').on('click',function(){
+	$('#myModal').modal('show');
+	$('.modal-title').text('Edit Name & Skills');
+	$('#skillbox').prop('checked',true);
+});
+
+$('#name-save').on('click',function(){
+	$.ajaxSetup({
+		headers: {
+			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+		}
 	});
 
-	$('#name-save').on('click',function(){
-		$.ajaxSetup({
-			headers: {
-				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-			}
-		});
-
-		var updatename = $.ajax({
-			url:'/get/update/name',
-			method:'GET',
-			complete:initializeData,
-			data:{
-				'lname': $('#lastname').val(),
-				'fname' : $('#firstname').val()
-			}
-		});
-
+	var updatename = $.ajax({
+		url:'/get/update/name',
+		method:'GET',
+		complete:initializeData,
+		data:{
+			'lname': $('#lastname').val(),
+			'fname' : $('#firstname').val()
+		}
 	});
+
+});
 
 });
 
@@ -763,21 +755,50 @@ function initializeData(){
 			});  
 		}
 
-function getHistory(){
-	$('#divHistory').append($('<div>').addClass('history')
-		.append($('<img>').addClass('history-img').attr('src','/avatar/1483073623-dp.jpg'))
-		.append($('<div>').addClass('history-cont')
-			.append($('<h2>').text('Kent Michael Baguion'))
-			.append($('<select>').attr('id','example').addClass('rating')
-				.append($('<option>').attr('value',1).text('1'))
-				.append($('<option>').attr('value',2).text('2'))
-				.append($('<option>').attr('value',3).text('3'))
-				.append($('<option>').attr('value',4).text('4'))
-				.append($('<option>').attr('value',5).text('5'))
-			)
-			.append($('<p>').text('Proin ssseget tortor risus. Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui.'))
-		))
-}
+		function getHistory(){
+			$.ajaxSetup({
+				headers: {
+					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				}
+			});
+
+			var work = $.ajax({
+				url:'/get/history',
+				method:'GET',
+			});
+
+			work.done(function(data){
+				console.log(data);
+				if(data.status == 200){
+					for(var i =0; i< data.reviews.length; i++){
+						$('#divHistory').append($('<div>').addClass('history')
+							.append($('<img>').addClass('history-img').attr('src',data.reviews[0].employer.avatar))
+							.append($('<div>').addClass('history-cont')
+								.append($('<h2>').text(data.reviews[0].employer.fname + ' ' + data.reviews[0].employer.lname))
+								.append($('<p>').text(data.reviews[0].job.title))
+								.append($('<select>').attr('id','example').addClass('rating')
+									.append($('<option>').attr('value',1).text('1'))
+									.append($('<option>').attr('value',2).text('2'))
+									.append($('<option>').attr('value',3).text('3'))
+									.append($('<option>').attr('value',4).text('4'))
+									.append($('<option>').attr('value',5).text('5'))
+									)
+								.append($('<p>').text(data.reviews[0].review.comment))
+								))
+
+						$('.rating').barrating({
+							theme: 'fontawesome-stars',
+							readonly:'true',
+							initialRating: ''+data.reviews[0].review.rating,
+						});
+					}
+				}
+			});
+
+
+
+
+		}
 
 
 

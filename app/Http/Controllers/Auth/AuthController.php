@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\User;
+use App\Profiles;
 use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
@@ -28,6 +29,8 @@ class AuthController extends Controller
      *
      * @var string
      */
+
+
     protected $redirectTo = '/user/home';
     protected $username = 'username';
     protected $redirectAfterLogout = '/';
@@ -62,12 +65,19 @@ class AuthController extends Controller
      * @param  array  $data
      * @return User
      */
+    
     protected function create(array $data)
     {
-        return User::create([
-            'username' => $data['username'],
-            'email' => $data['email'],
-            'password' => bcrypt($data['password']),
-        ]);
+        $user = new User;
+        $user->username = $data['username'];
+        $user->email = $data['email'];
+        $user->password = bcrypt($data['password']);
+        $user->save();
+
+        $profile = new Profiles;
+        $profile->user_id = $user->id;
+        $profile->save();
+
+        return $user;
     }
 }

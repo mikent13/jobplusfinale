@@ -796,12 +796,15 @@ public function getJobPageData(){
 
  $ranker = new JobRank;
  $works = Works::where('applicant_id',$userid)->get();
+ if(count($works) > 0){
  foreach($works as $w){
   $wID[] = $w->schedules->job_id;
 }
-
 $job = Jobs::whereNotIn('job_id',$wID)->where('slot','!=',0)->get();
-
+}
+else{
+ $job = Jobs::where('slot','!=',0)->get(); 
+}
 foreach($job as $jb){
   $jobID[] = $jb->job_id;
   $jfeed = Job_feeds::where('job_id',$jb->job_id)->where('user_id',$userid)->first();
