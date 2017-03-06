@@ -12,4 +12,7 @@ class Job_Skill extends Model
    public function skills(){
         return $this->hasMany('App\Skills');
    }
+    public function jobs(){
+        return $this->belongsTo('App\Jobs','job_id');
+    }
 }

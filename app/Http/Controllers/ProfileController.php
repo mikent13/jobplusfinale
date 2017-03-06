@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use Auth;
+use App\Reviews;
 use App\Profiles;
 use App\Skills;
 use App\Prof_Skill;
@@ -93,26 +94,44 @@ class ProfileController extends Controller
 	}
 
 	public function setName(Request $req){
-	$fname = $req->fname;
-	$lname = $req->lname;
-	$address = $req->address;
-	$id = Auth::user()->id;
-	$profile = Profiles::where('user_id',$id)->first();	
-	$profile->fname = $fname;
-	$profile->lname = $lname;
-	$profile->address = $address;
-	$profile->save();
-	$data['status'] = 1;
-	return response()->json($data);	
+		$fname = $req->fname;
+		$lname = $req->lname;
+		$address = $req->address;
+		$id = Auth::user()->id;
+		$profile = Profiles::where('user_id',$id)->first();	
+		$profile->fname = $fname;
+		$profile->lname = $lname;
+		$profile->address = $address;
+		$profile->save();
+		$data['status'] = 1;
+		return response()->json($data);	
 	}
 
 	public function setoverview(Request $req){
-	$overview = $req->overview;
-	$id = Auth::user()->id;
-	$profile = Profiles::where('user_id',$id)->first();	
-	$profile->biography = $overview;
-	$profile->save();
-	$data['status'] = 1;
-	return response()->json($data);	
+		$overview = $req->overview;
+		$id = Auth::user()->id;
+		$profile = Profiles::where('user_id',$id)->first();	
+		$profile->biography = $overview;
+		$profile->save();
+		$data['status'] = 1;
+		return response()->json($data);	
 	}
+
+	public function getHistory(){
+		$userid = Auth::user()->id;
+		$review = Reviews::where('reviewed_id',$userid)->get();
+		$reviewID = [];
+		foreach($review as $rev){
+			$reviewID[] = [
+			'review' => $rev,
+			'employer' => $rev->employer->profile,
+			'work' => $rev->work
+			];
+		}
+		$response = [
+		'reviews' => $reviewID,
+		'status' => 200];
+
+	}
+
 }

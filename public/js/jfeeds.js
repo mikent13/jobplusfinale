@@ -156,6 +156,7 @@ $(document).on('click','#btn-search',function(e){
   e.preventDefault();
   $('#tab-feeds').click();
   var json = $('#s-skill').val();
+  console.log(json);
   var zips = [];
   var geocode = new google.maps.Geocoder();
   
@@ -176,6 +177,7 @@ $(document).on('click','#btn-search',function(e){
        }
      }
    }
+   
    var search = $.ajax({
     url: '/app/jobsearch',
     method: 'GET',
@@ -184,7 +186,7 @@ $(document).on('click','#btn-search',function(e){
     data:{
       'cat'  : $('#search-sel option:selected').val(),
       'skill': json,
-      'location':this.loc,
+      'location':$('#s-skill').val(),
       'salary': $('#fil-sal').val(),
       'ptype': $('#fil-ptype').val(),
     },
@@ -203,22 +205,13 @@ $(document).on('click','#btn-search',function(e){
     }
 
     for(i = 0; i< data.jobs.length; i++){
-      for(x = 0; x< data.profile.length; x++){
-        for(z = 0; z< data.add.length; z++){
-          if(data.jobs[i].job_id == data.add[z].jobid){
-            console.log(data.jobs[i].title);
-            if(data.jobs[i].user_id == data.profile[x].user_id){
-              $('#jobfeed-res').append($('<a>').addClass('list-group-item item-res').attr('data-val',data.jobs[i].job_id)
-                .append($('<div>').addClass('cont-feeds')
-                  .append($('<img>').addClass('img-rounded pull-left').attr('src',data.profile[x].avatar))
-                  .append($('<h4>').addClass('list-group-item-heading ellipsis meta-title').text(data.jobs[i].title))
-                  .append($('<p>').addClass('list-group-item-text meta meta-employer').text('by '+data.profile[x].fname + ' ' + data.profile[x].lname))
-                  .append($('<i>').addClass('meta-loc meta-marker fa-1x fa fa-map-marker'))
-                  .append($('<p>').addClass('list-group-item-text meta meta-loc meta-locality').text(data.add[z].locality))));
-            }
-          }
-        }
-      }
+      $('#jobfeed-res').append($('<a>').addClass('list-group-item item-res').attr('data-val',data.jobs[i].job.job_id)
+        .append($('<div>').addClass('cont-feeds')
+          .append($('<img>').addClass('img-rounded pull-left').attr('src',data.jobs[i].employer.avatar))
+          .append($('<h4>').addClass('list-group-item-heading ellipsis meta-title').text(data.jobs[i].job.title))
+          .append($('<p>').addClass('list-group-item-text meta meta-employer').text('by '+data.jobs[i].employer.fname + ' ' + data.jobs[i].employer.lname))
+          .append($('<i>').addClass('meta-loc meta-marker fa-1x fa fa-map-marker'))
+          .append($('<p>').addClass('list-group-item-text meta meta-loc meta-locality').text(data.jobs[i].address.address))));
     }
 
   }); 

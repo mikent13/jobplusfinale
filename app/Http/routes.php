@@ -40,6 +40,7 @@ Route::get('/get/profile/skill','ProfileController@getSkill');
 Route::get('/update/profile/skill','ProfileController@updateSkill');
 Route::get('/set/user/profile/name','ProfileController@setName');
 Route::get('/set/user/profile/overview','ProfileController@setOverview');
+Route::get('/get/history','ProfileController@getHistory');
 /*
 |--------------------------------------------------------------------------
 | User Routes

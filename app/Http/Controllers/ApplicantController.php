@@ -134,7 +134,6 @@ class ApplicantController extends Controller
    $orig_address = $orginss->results[0]->formatted_address;
  }
 
-
  if(!empty($active)){
    $data['active'] = 1;
 
@@ -142,7 +141,7 @@ class ApplicantController extends Controller
    $destlng = $active->schedules->jobs->address->lng; 
    $destination = ['lat' => ''.$destlat, 'lng' => ''.$destlng];
 
-      // Convert job coordinates to string address
+   // Convert job coordinates to string address
    $disturl = 'https://maps.googleapis.com/maps/api/geocode/json?latlng='.urlencode($destlat).','.urlencode($destlng).'&sensor=false';
    $distjson = @file_get_contents($disturl);
    $destin = json_decode($distjson);
@@ -377,119 +376,121 @@ public function getSeemore(Request $req){
 }
 
 public function getJobSearch(Request $req){
-
   $skill = [];
   $loc      = $req->location;
   $cat      = $req->cat;
-  $skill    = $req->skill;
   $salary   = $req->salary;
   $paytype  = $req->ptype;
+  $skill = [];
   $firstids = [];
   $addids = [];
   $newskid = [];
   $jskid = [];
   $profid = [];
   $jobaddid =[];
-  $profile = Profiles::all();
-  $jobadd = Job_Address::all();
+  $userid = Auth::user()->id;
+  $wkID = [];
 
-  $data['loc'] = $loc;
+  if(count($req->skill) > 0){
+    foreach($req->skill as $sk){
+      $skill[] = $sk;
+    }
+  }
 
-  if(  $skill != null ){
+  $work = Works::where('applicant_id',$userid)->whereIn('status',[1,2])->get();
+  if(count($work) > 0){
+    foreach($work as $wk){
+      $wkID[] = $wk->schedules->jobs->job_id;
+    }
+  }
+
+  $jadd = Jobs::whereNotIn('job_id',$wkID)->get();
+
+  if($skill != null ){
     $newsk = Skills::whereIn('skill_id',$skill)->get();
 
     foreach($newsk as $newerskill){
       $newskid[] = $newerskill->skill_id;
     }
 
-    $jskill = Job_Skill::whereIn('skill_id',$newskid)->get();
+    $jskill = Job_Skill::whereIn('skill_id',$newskid)->whereNotIn('job_id',$wkID)->get();
 
     foreach($jskill as $newerjskill){
       $jskid[] = $newerjskill->job_id;
     }
 
-    $data['jobskill'] = $jskid;
-
     $firsts = Jobs::whereIn('job_id',$jskid)->get();
   }
-
   elseif( $cat != 0 && $skill == null ){
-    $firsts = Jobs::where('category_id',$cat)->get();
+    $firsts = Jobs::where('category_id',$cat)->whereNotIn('job_id',$wkID)->get();
   }
 
   elseif( $cat == 0 && $skill == null ){
-    $firsts = all();
+    $firsts = Jobs::whereNotIn('job_id',$wkID)->get();
   }
-
-  foreach($firsts as $first){
-    $firstids[] = $first->job_id;
-  }
-
-  $address = Job_Address::whereIn('jobid',$firstids)->get();
-  foreach($address as $add){
-    if($add->locality == $loc){
-      $addids[] = $add->jobid;
-    }
-  }
-
-  $first = Jobs::whereIn('job_id',$addids)->get();
-
-      //Getting the profiles
-  foreach($first as $f){
-    $profid[] = $f->user_id;
-    $jobaddid[] = $f->job_id;
-  }
-  $newprof = Profiles::whereIn('user_id',$profid)->get();
-  $data['profile'] = $newprof;
-
-      //Getting the Address
-  $jobadd = Job_Address::whereIn('jobid',$jobaddid)->get();
-  $data['add'] = $jobadd;
 
   if($paytype == 0 && $salary == 0){
-    $data['jobs'] = $first;
-    $data['message'] = $firstids;
+    $veryfinal = [];
+    foreach($firsts as $final){
+      $veryfinal[] = [
+      'job' => $final,
+      'employer' =>$final->users->profile,
+      'address' => $final->address];
+    }
+    $data['jobs'] = $veryfinal;
     return response()->json($data);
   }
+$secondID = [];
+foreach($firsts as $fst){
+$secondID[] = $fst->job_id;
+}
 
-      // Filters
+  // Filters
   if( $paytype == 0 && $salary != 0 ){
     if($salary == 1){     
-      $seconds = Jobs::whereIn('job_id',$jobaddid)
+      $seconds = Jobs::whereIn('job_id',$secondID)
       ->where('salary', '<=' , 500)->get();
     }
     elseif($salary == 2){
-      $seconds = Jobs::whereIn('job_id',$jobaddid)
+      $seconds = Jobs::whereIn('job_id',$secondID)
       ->where('salary', '<=' , 1000)->get(); 
     }
     elseif($salary == 3){
-      $seconds = Jobs::whereIn('job_id',$jobaddid)
+      $seconds = Jobs::whereIn('job_id',$secondID)
       ->where('salary', '>=' , 1000)->get();
     }
   }
 
   elseif( $paytype != 0 && $salary == 0 ){
-    $seconds = Jobs::whereIn('job_id',$firstids)
+    $seconds = Jobs::whereIn('job_id',$secondID)
     ->where('paytype', $paytype)->get();
   } 
   elseif( $paytype != 0 && $salary != 0 ){
     if($salary == 1){
-      $seconds = Jobs::whereIn('job_id', $firstids)
+      $seconds = Jobs::whereIn('job_id', $secondID)
       ->where('paytype', $paytype)
       ->where('salary', '<=' , 500)->get();
     }
     elseif($salary == 2){
-      $seconds = Jobs::whereIn('job_id', $firstids)
+      $seconds = Jobs::whereIn('job_id', $secondID)
       ->where('paytype', $paytype)
       ->where('salary', '<=' , 1000)->get(); 
     }
     elseif($salary == 3){
-      $seconds = Jobs::whereIn('job_id', $firstids)
+      $seconds = Jobs::whereIn('job_id', $secondID)
       ->where('paytype', $paytype)
       ->where('salary', '>' , 1000)->get(); 
     }
   }
-  $data['jobs'] = $seconds;
+
+   $veryfinal = [];
+    foreach($seconds as $final){
+      $veryfinal[] = [
+      'job' => $final,
+      'employer' =>$final->users->profile,
+      'address' => $final->address];
+    }
+    $data['jobs'] = $veryfinal;
 
   return response()->json($data);
 
