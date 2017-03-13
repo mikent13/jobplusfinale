@@ -393,6 +393,7 @@
     <div class="col-md-6 verif-input" >
       <input type="text" class="setup-textp" id="verification" >
       <button class="btn btn-md" id="btn_verify">Verify</button>
+      <p id="resend-code">Didn't receive any code yet? Resend code</p>
     </div>
     <div class="col-md-6">
       <img src="/img/sms.png" id="sms">

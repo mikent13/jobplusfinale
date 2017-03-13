@@ -1,5 +1,4 @@
 $(document).ready(function(){
-
 	initializeData();
 	getDropzone();
 
@@ -232,7 +231,7 @@ $(document).on('click','#btn-update-name',function(){
 	var fname = $('#firstname').val();
 	var lname = $('#lastname').val();
 	var address = $('#modal-address').val();
-
+	$('#loading').fadeIn(200);
 	$.ajaxSetup({
 		headers: {
 			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -249,6 +248,8 @@ $(document).on('click','#btn-update-name',function(){
 			'address': address
 		}
 	});
+
+
 });
 
 $(document).on('click','#btn-update-overview',function(){
@@ -272,6 +273,7 @@ $(document).on('click','#btn-update-overview',function(){
 });
 
 $(document).on('click','#btn-update-skill',function(){
+	$('#loading').fadeIn(200);
 	var skills = [];
 	var new_skill = [];
 	var house = $('#house').val();
@@ -350,7 +352,7 @@ function loadEnd(){
 }
 
 function initializeData(){
-
+$('#loading').fadeOut(200);
 	input = document.getElementById('modal-address');
 	var options = {
 		componentRestrictions: {country: "ph"}
@@ -382,6 +384,7 @@ function initializeData(){
 
 	profiledata.done(function(data){
 		console.log(data);
+		$('#balance').text('Php '+data.balance);
 		$('.prof-name').text(data.profile.fname + ' ' + data.profile.lname);
 		$('#address').text(data.profile.address);
 		$('#modal-address').val(data.profile.address);
@@ -771,11 +774,12 @@ function initializeData(){
 				console.log(data);
 				if(data.status == 200){
 					for(var i =0; i< data.reviews.length; i++){
+							var end = moment(data.reviews[0].review.work.end_time).fromNow();
 						$('#divHistory').append($('<div>').addClass('history')
 							.append($('<img>').addClass('history-img').attr('src',data.reviews[0].employer.avatar))
 							.append($('<div>').addClass('history-cont')
 								.append($('<h2>').text(data.reviews[0].employer.fname + ' ' + data.reviews[0].employer.lname))
-								.append($('<p>').text(data.reviews[0].job.title))
+								.append($('<p>').text(data.reviews[0].job.title + ' - ' + end))
 								.append($('<select>').attr('id','example').addClass('rating')
 									.append($('<option>').attr('value',1).text('1'))
 									.append($('<option>').attr('value',2).text('2'))

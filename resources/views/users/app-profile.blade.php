@@ -67,7 +67,7 @@
     </div>
   </div>
 
-  <div class="profcontainer">
+<!--   <div class="profcontainer">
     <div class="profbody">
       <div class="row profinfo">
         <button class="btn btn-md pull-right btn-tool" id="btnAddWork"><i class="fa fa-plus" aria-hidden="true"></i> Add</button>
@@ -75,11 +75,11 @@
         <div id="divWork"></div>
       </div>
     </div>
-  </div>
+  </div> -->
 
   <div class="profcontainer">
     <div class="profbody">
-      <h1>User Reviews</h1>
+      <h1>Work Experience & Reviews</h1>
       <div id="divHistory">
       </div>    
     </div>
@@ -91,7 +91,7 @@
     <div class="profbody">
       <div class="balance">
         <h1>Balance </h1>
-        <h1><i class="fa fa-usd" aria-hidden="true"></i>30.12</h1>
+        <h1 id="balance"></h1>
       </div>
     </div>
   </div>
@@ -161,7 +161,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="submit" id="btn-update-skill" clasps="btn btn-save btn-primary" data-dismiss="modal">Update</button>
+        <button type="submit" id="btn-update-skill" class="btn btn-save btn-primary" data-dismiss="modal">Update</button>
         <button type="button" class="btn btn-cancel " data-dismiss="modal">Cancel</button>
       </div>
     </div> 
@@ -427,6 +427,7 @@
 <script src="/js/dropzone.min.js"></script>
 <script src="/js/jquery.barrating.min.js"></script>
 <script src="/bootstrap/bootstrap-select.js"></script>
+<script src="/calendar/moment.min.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDBJJH4SL6eCDPu7N5C-2XcBt8jpZJeMyQ&libraries=places"></script>
 <script src="/js/profiles.js"></script>
 @endsection

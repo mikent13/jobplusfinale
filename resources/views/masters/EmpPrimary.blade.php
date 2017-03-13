@@ -83,7 +83,7 @@
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><img src="{{Auth::user()->profile->avatar}}" style="width:25px;height:25px;border-radius:50%;"> <!-- <i class="fa fa-lg fa-user-circle" aria-hidden="true"></i> -->{{Auth::user()->profile->fname}}{{ Auth::user()->profile->lname}}<span class="caret"></span></a>
           <ul class="dropdown-menu dropdown-cart" role="menu">
               <li>
-                <a href="{{url('/get/user/profile')}}"><span>Profile</span></a>
+                <a href="{{url('/get/employer/profile')}}"><span>Profile</span></a>
                 <a href="#"><span>Activity Logs</span></a>
                 <a href="#"><span>Job+ Wallet</span></a>
               </li>

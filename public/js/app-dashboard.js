@@ -410,7 +410,6 @@ function initializeMap(){
 
  $(document).on('click','.btn-seemore',function(){
   var workid = this.getAttribute('workid');
-  var schedid = this.getAttribute('schedid');
   $.ajaxSetup({
     headers: {
       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -422,18 +421,17 @@ function initializeMap(){
     method: 'GET',
     data: {
       'workid' : workid,
-      'schedid' : schedid
     }
   });
 
   seemore.done(function(data){
     console.log(data);
     $('#modal-title').text(data.job.title);
-    $('#modal-emp').text('by '+data.profile.fname + ' '+data.profile.lname);
+    $('#modal-emp').text('by '+data.employer.fname + ' '+data.employer.lname);
     $('#modal-desc').text(data.job.description);
-    $('#modal-sal').text(data.job.salary);
-    var start = moment(data.sched.start);
-    var end = moment(data.sched.end);
+    $('#modal-sal').text( data.job.salary + ' / ' +data.paytype);
+    var start = moment(data.schedule.start);
+    var end = moment(data.schedule.end);
     
     var startDay1 = start.format('dddd');
     var startMonth = start.format('MMM');
@@ -457,13 +455,8 @@ function initializeMap(){
     var locs;
     var centers = { lat: parseFloat(data.address.lat), lng: parseFloat(data.address.lng) };
     meo.push(centers);
-    var geocoder = new google.maps.Geocoder();
-    geocoder.geocode({ 'latLng': meo[0] }, function (results, status) {
-      if (status == google.maps.GeocoderStatus.OK) {
-        locs = results[0].formatted_address;
-        $('#modal-address').text(locs);
-      }
-    });
+
+    $('#modal-address').text(data.address.address);
 
     function setMapOnAll(map){
       for (var i = 0; i < markers.length; i++) {
@@ -570,14 +563,19 @@ $(document).on('click','#btn-confirm',function(){
 
   endjob.done(function(data){
     console.log(data);
-    $('#endJob-Modal').modal('hide');
-    swal({
-      title: "Great!",
-      text: "Succesfully ended the job.",
-      showConfirmButton: false,
-      timer: 2000
-    });
-    activeJob();
+    if(data.status == 400){
+      swal("Please Retry!", "You must give a rating.", "error")
+    }
+    else{
+      $('#endJob-Modal').modal('hide');
+      swal({
+        title: "Great!",
+        text: "Succesfully ended the job.",
+        showConfirmButton: false,
+        timer: 2000
+      });
+      activeJob();
+    }
   });
 
 });

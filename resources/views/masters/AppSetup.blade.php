@@ -16,8 +16,6 @@
     @yield('css')
 </head>
 <body>
-
-aw3
 @yield('body')
 <footer>
     <div class="footer" id="footer">

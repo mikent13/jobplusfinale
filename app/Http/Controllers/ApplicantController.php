@@ -35,11 +35,6 @@ use Illuminate\Support\Facades\Input;
 class ApplicantController extends Controller
 {
 
-  private $calendarJob;
-
-  public function __construct(Jobs $jobs){
-    $this->calendarJob = $jobs;
-  }
 
   public function getrank(){
     $rank = new JobRank();
@@ -134,7 +129,7 @@ class ApplicantController extends Controller
    $orig_address = $orginss->results[0]->formatted_address;
  }
 
- if(!empty($active)){
+ if(count($active) > 0){
    $data['active'] = 1;
 
    $destlat = $active->schedules->jobs->address->lat;
@@ -358,21 +353,19 @@ public function getNotification(){
 
 public function getSeemore(Request $req){
   $workid = $req->workid;
-  $schedid = $req->schedid;
   $data['status'] = 1;
 
   $work = Works::where('work_id',$workid)->first();
-  $sched = Schedules::where('schedule_id',$work->sched_id)->first();
-  $job = Jobs::where('job_id',$sched->job_id)->first();
-  $profile = Profiles::where('user_id',$job->user_id)->first();
-  $address = Job_Address::where('jobid',$job->job_id)->first();
+  $response = [
+  'work' => $work,
+  'job' => $work->schedules->jobs,
+  'schedule' => $work->schedules,
+  'employer' => $work->schedules->jobs->users->profile,
+  'address' => $work->schedules->jobs->address,
+  'paytype' => $work->schedules->jobs->paytypes->name
+  ];
 
-  $data['address'] = $address;
-  $data['profile'] = $profile;
-  $data['work'] = $work;
-  $data['job'] = $job;
-  $data['sched'] = $sched;
-  return response()->json($data); 
+  return response()->json($response); 
 }
 
 public function getJobSearch(Request $req){
@@ -390,14 +383,20 @@ public function getJobSearch(Request $req){
   $jobaddid =[];
   $userid = Auth::user()->id;
   $wkID = [];
+  $ctr[] = $req->skill;
 
-  if(count($req->skill) > 0){
-    foreach($req->skill as $sk){
-      $skill[] = $sk;
+  if( count($ctr) > 0){
+    foreach($ctr as $sk){
+      if($sk == ""){
+        $skill = null;
+      }else{
+        $skill[] = $sk;
+      }
     }
   }
 
   $work = Works::where('applicant_id',$userid)->whereIn('status',[1,2])->get();
+
   if(count($work) > 0){
     foreach($work as $wk){
       $wkID[] = $wk->schedules->jobs->job_id;
@@ -440,10 +439,10 @@ public function getJobSearch(Request $req){
     $data['jobs'] = $veryfinal;
     return response()->json($data);
   }
-$secondID = [];
-foreach($firsts as $fst){
-$secondID[] = $fst->job_id;
-}
+  $secondID = [];
+  foreach($firsts as $fst){
+    $secondID[] = $fst->job_id;
+  }
 
   // Filters
   if( $paytype == 0 && $salary != 0 ){
@@ -483,17 +482,16 @@ $secondID[] = $fst->job_id;
     }
   }
 
-   $veryfinal = [];
-    foreach($seconds as $final){
-      $veryfinal[] = [
-      'job' => $final,
-      'employer' =>$final->users->profile,
-      'address' => $final->address];
-    }
-    $data['jobs'] = $veryfinal;
+  $veryfinal = [];
+  foreach($seconds as $final){
+    $veryfinal[] = [
+    'job' => $final,
+    'employer' =>$final->users->profile,
+    'address' => $final->address];
+  }
+  $data['jobs'] = $veryfinal;
 
   return response()->json($data);
-
 }
 
 function getConflict($jobid){
@@ -516,9 +514,12 @@ function getConflict($jobid){
       $distance = $distdata->rows[0]->elements[0]->distance->text;
       $duration = $distdata->rows[0]->elements[0]->duration->text;
       // $distobj[] = ['work' => $wk,'origin' => $origin ,'destination' => $destination,'distance' => $distance, 'duration' => $duration];
-      $replace = array(" mins", " min");
-      $duration = str_replace($replace,'M', $duration);
+      $array1 = array(" hour"," hours"," mins"," min"," ");
+      $replace = array("H","H","M","M","");
+
+      $duration = str_replace($array1,$replace,$duration);
       $str_duration = 'PT'.$duration;
+      // dd($duration);
 
       foreach($job_sched as $job_sch){
         $mstart = new DateTime($wk->schedules->start);
@@ -527,6 +528,7 @@ function getConflict($jobid){
         $jstart = new DateTime($job_sch->start);
         $jend = new DateTime($job_sch->end);
         $mine[] =['start' => $mstart,'end' => $mend];
+
         if($mstart == $jstart && $mend == $jend){
          $result = ['conflict' => 1, 'job_sched' => $job_sch, 'work_sched' => $wk,'step' => 3,'mytime' =>$mine];
          return $result;
@@ -559,10 +561,16 @@ public function getResult(Request $request){
   $job_skill        = Job_Skill::where('job_id',$job->job_id)->get();
   $conflict = $this->getConflict($jobid);
   $sched = Schedules::where('job_id',$job->job_id)->get();
-
+  $userid = Auth::user()->id;
   $skillID = [];
   foreach($job_skill as $js){
     $skillID[] = $js->skill_id;
+  }
+  $is_applied = 0;
+
+  $applied = Application::where('applicant',$userid)->where('job',$jobid)->first();
+  if(count($applied) > 0){
+    $is_applied = 1;
   }
 
   $skill = Skills::whereIn('skill_id',$skillID)->get();
@@ -576,7 +584,8 @@ public function getResult(Request $request){
   'schedule' => $sched,
   'category' => $job->categories->name,
   'address' => $job->address,
-  'conflict' => $conflict
+  'conflict' => $conflict,
+  'applied' => $is_applied
   ];
 
   $data['response'] = $response;
@@ -613,31 +622,36 @@ function getJobFeeds(){
   $jobs = Job_feeds::where('user_id',$userid)->orderBy('result','DESC')->get();
   
   foreach($jobs as $jb){
-    $job[] = [
-    'result' => $jb->result,
-    'job' => $jb->jobs,
-    'address' => $jb->jobs->address,
-    'employer' => $jb->jobs->users->profile];
+    if($jb->jobs->slot > 0){
+      $job[] = [
+      'result' => $jb->result,
+      'job' => $jb->jobs,
+      'address' => $jb->jobs->address,
+      'employer' => $jb->jobs->users->profile];
+    }
   }
   return $job;
 }
 
 function getJobRecommended(){
   $userid = Auth::user()->id;
+
   $jobs = Job_recommended::where('user_id',$userid)->orderBy('result','DESC')->get();
   
   foreach($jobs as $jb){
+   if($jb->jobs->slot > 0){
     $job[] = [
     'result' => $jb->result,
     'job' => $jb->jobs,
     'address' => $jb->jobs->address,
     'employer' => $jb->jobs->users->profile];
   }
+}
 
-  $response = [
-  'message' => 200,
-  'jobs' => $job];
-  return $response;
+$response = [
+'message' => 200,
+'jobs' => $job];
+return $response;
 }
 
 function getJobNearby(){
@@ -645,11 +659,13 @@ function getJobNearby(){
   $jobs = Job_nearby::where('user_id',$userid)->orderBy('result','DESC')->get();
   
   foreach($jobs as $jb){
-    $job[] = [
-    'result' => $jb->result,
-    'job' => $jb->jobs,
-    'address' => $jb->jobs->address,
-    'employer' => $jb->jobs->users->profile];
+    if($jb->jobs->slot > 0){
+      $job[] = [
+      'result' => $jb->result,
+      'job' => $jb->jobs,
+      'address' => $jb->jobs->address,
+      'employer' => $jb->jobs->users->profile];
+    }
   }
 
   $response = [
@@ -668,6 +684,7 @@ function setJobNearby($jobID){
 
  $ranker = new JobRank;
  $nearby_criteria = ['loc' => 0.5, 'skill' => 0.3, 'history' => 0.2];
+
  $job = Jobs::whereIn('job_id',$jobID)->get();
  $userid = Auth::user()->id;
  $profile = Profiles::where('user_id',$userid)->first();
@@ -681,7 +698,6 @@ function setJobNearby($jobID){
    }
  }
 
-
  foreach($job as $jb){
    $jobnearby = Job_nearby::where('user_id',$userid)
    ->where('job_id',$jb->job_id)->first();
@@ -689,8 +705,8 @@ function setJobNearby($jobID){
    $skill_pts = $jobnearby->skill_points;
    if($skill_pts == 0){
      $loc_pts = $jobnearby->location_points * $nearby_criteria['loc'];
-     $skill_pts = $ranker->getSkillPoints($userskill,$jb->jobid)  * $nearby_criteria['skill'];
-     $history_pts = $ranker->getHistory($jb->jobid,$userid) * $nearby_criteria['history'];
+     $skill_pts = $ranker->getSkillPoints($userskill,$jb->job_id)  * $nearby_criteria['skill'];
+     $history_pts = $ranker->getHistory($jb->job_id,$userid) * $nearby_criteria['history'];
 
      $jobnearby->location_points = $loc_pts;
      $jobnearby->skill_points = $skill_pts;
@@ -710,28 +726,50 @@ function setJobRecommended($jobID){
 
  $ranker = new JobRank;
  $recom_criteria = ['loc' => 0.3, 'skill' => 0.5, 'history' => 0.2];
- $job = Jobs::whereIn('job_id',$jobID)->get();
  $userid = Auth::user()->id;
  $profile = Profiles::where('user_id',$userid)->first();
  $userskills = Prof_Skill::where('profile_id',$profile->profile_id)->get();
  $userskill = [];
 
  if(count($userskills) > 0){
-   $skill    = Prof_Skill::where('profile_id',$profile->profile_id)->get();      
+   // $skill    = Prof_Skill::where('profile_id',$profile->profile_id)->get();      
    foreach($userskills as $usk){
      $userskill[] = $usk->skill_id; 
    }
  }
 
- foreach($job as $jb){
+// job already filtered based from profile skill
+$job_skill = Job_Skill::whereIn('skill_id',$userskill)->get();
+$jskillID = [];
+
+foreach($job_skill as $jskill){
+$jskillID[] = $jskill->job_id;
+}
+// get job where jobskill
+
+$finaljob = Jobs::whereIn('job_id',$jskillID)->get();
+$trial = ['user_skill' => $userskill, 'job_skill' => $job_skill,'job_id' => $jskillID];
+// dd($trial);
+$filterJobRecom = Job_recommended::whereNotIn('job_id',$jskillID)->get();
+
+//delete jobids nga di compatible ang skills sa profile skill
+foreach($filterJobRecom as $filter){
+  $filter->delete();
+}
+
+$cleanJob = Job_recommended::all();
+
+ $job = Jobs::whereIn('job_id',$jskillID)->get();
+ //foreach($job as $jb){
+ foreach($cleanJob as $jb){
    $jobrecom = Job_recommended::where('user_id',$userid)
    ->where('job_id',$jb->job_id)->first();
 
    $skill_pts = $jobrecom->skill_points;
    if($skill_pts == 0){
      $loc_pts = $jobrecom->location_points * $recom_criteria['loc'];
-     $skill_pts = $ranker->getSkillPoints($userskill,$jb->jobid)  * $recom_criteria['skill'];
-     $history_pts = $ranker->getHistory($jb->jobid,$userid) * $recom_criteria['history'];
+     $skill_pts = $ranker->getSkillPoints($userskill,$jb->job_id)  * $recom_criteria['skill'];
+     $history_pts = $ranker->getHistory($jb->job_id,$userid) * $recom_criteria['history'];
 
      $jobrecom->location_points = $loc_pts;
      $jobrecom->skill_points = $skill_pts;
@@ -748,7 +786,6 @@ function setJobFeeds($jobID){
  $skill_points = 0;
  $history_arr = [];
  $history_points = 0;
-
  $ranker = new JobRank;
  $feed_criteria = ['loc' => 0.2, 'skill' => 0.3, 'history' => 0.5];
  $job = Jobs::whereIn('job_id',$jobID)->get();
@@ -764,16 +801,15 @@ function setJobFeeds($jobID){
    }
  }
 
-
+$tempIDS = [];
  foreach($job as $jb){
-   $jobfeed = Job_feeds::where('user_id',$userid)
-   ->where('job_id',$jb->job_id)->first();
-
+   $jobfeed = Job_feeds::where('user_id',$userid)->where('job_id',$jb->job_id)->first();
    $skill_pts = $jobfeed->skill_points;
    if($skill_pts == 0){
+      $tempIDS = ['jobids' => $jb->job_id];
      $loc_pts = $jobfeed->location_points * $feed_criteria['loc'];
-     $skill_pts = $ranker->getSkillPoints($userskill,$jb->jobid)  * $feed_criteria['skill'];
-     $history_pts = $ranker->getHistory($jb->jobid,$userid) * $feed_criteria['history'];
+     $skill_pts = $ranker->getSkillPoints($userskill,$jb->job_id)  * $feed_criteria['skill'];
+     $history_pts = $ranker->getHistory($jb->job_id,$userid) * $feed_criteria['history'];
 
      $jobfeed->location_points = $loc_pts;
      $jobfeed->skill_points = $skill_pts;
@@ -793,56 +829,91 @@ public function getJobPageData(){
 
  $lat1 = $orig->results[0]->geometry->location->lat;
  $long1 = $orig->results[0]->geometry->location->lng;
+ 
+ // $userskills = Prof_Skill::where('profile_id',$prof->profile_id)->get();
+ // $userskill = [];
 
+ // if(count($userskills) > 0){
+ //   // $skill    = Prof_Skill::where('profile_id',$profile->profile_id)->get();      
+ //   foreach($userskills as $usk){
+ //     $userskill[] = $usk->skill_id; 
+ //   }
+ // }
+
+// job already filtered based from profile skill
+// $job_skill = Job_Skill::whereIn('skill_id',$userskill)->get();
+// $jskillID = [];
+
+// foreach($job_skill as $jskill){
+// $jskillID[] = $jskill->job_id;
+// }
+// get job where jobskill
+
+// $finaljob = Jobs::whereIn('job_id',$jskillID)->get();
+// $trial = ['user_skill' => $userskill, 'job_skill' => $job_skill,'job_id' => $jskillID];
+// dd($trial);
+$finalnearbyID = [];
  $ranker = new JobRank;
- $works = Works::where('applicant_id',$userid)->get();
- if(count($works) > 0){
- foreach($works as $w){
-  $wID[] = $w->schedules->job_id;
-}
-$job = Jobs::whereNotIn('job_id',$wID)->where('slot','!=',0)->get();
+ $works = Works::where('applicant_id',$userid)->whereIn('status',[1,2,3])->get();
+ if(count($works) > 0){ 
+   foreach($works as $w){
+    $wID[] = $w->schedules->job_id;
+  }
+  $job = Jobs::whereNotIn('job_id',$wID)->where('slot','!=',0)->get();
+  // $job = Jobs::whereIn('job_id',$jskillID)->where('slot','!=',0)->get();
 }
 else{
- $job = Jobs::where('slot','!=',0)->get(); 
+ $job = Jobs::where('slot','!=',0)->get();
 }
-foreach($job as $jb){
-  $jobID[] = $jb->job_id;
-  $jfeed = Job_feeds::where('job_id',$jb->job_id)->where('user_id',$userid)->first();
-  if(count($jfeed) == 0){
-    $url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=".$lat1.",".$long1."&destinations=".$jb->address->lat.",".$jb->address->lng."&mode=transit&key=AIzaSyDBJJH4SL6eCDPu7N5C-2XcBt8jpZJeMyQ&libraries=places";
-    $json = @file_get_contents($url);
-    $location_datas = json_decode($json);
 
-    $jobfeeds = new Job_feeds;
-    $jobfeeds->location_points = $ranker->getLocationPoints($location_datas->rows[0]->elements[0]->distance->value);
-    $jobfeeds->job_id = $jb->job_id;
-    $jobfeeds->user_id = $userid;
-    $jobfeeds->save();
+if(count($job) == 0){
+  $data['status'] = 400;
+}
+else{
 
-    $jobfeeds = new Job_recommended;
-    $jobfeeds->location_points = $ranker->getLocationPoints($location_datas->rows[0]->elements[0]->distance->value);
-    $jobfeeds->job_id = $jb->job_id;
-    $jobfeeds->user_id = $userid;
-    $jobfeeds->save();
+  foreach($job as $jb){   
+    $jobID[] = $jb->job_id;
+    $jfeed = Job_feeds::where('job_id',$jb->job_id)->where('user_id',$userid)->first();
 
-    $jobfeeds = new Job_nearby;
-    $jobfeeds->location_points = $ranker->getLocationPoints($location_datas->rows[0]->elements[0]->distance->value);
-    $jobfeeds->job_id = $jb->job_id;
-    $jobfeeds->user_id = $userid;
-    $jobfeeds->save();
+    if(count($jfeed) == 0){
+      $url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=".$lat1.",".$long1."&destinations=".$jb->address->lat.",".$jb->address->lng."&mode=transit&key=AIzaSyDBJJH4SL6eCDPu7N5C-2XcBt8jpZJeMyQ&libraries=places";
+      $json = @file_get_contents($url);
+      $location_datas = json_decode($json);
+      $distance = $location_datas->rows[0]->elements[0]->distance->value;
 
-  }
-} 
+      // $debug[] = ['jobid' => $jb->job_id,'distance' => $location_datas->rows[0]->elements[0]->distance->value,'origin' => $location_datas->origin_addresses[0],'destination' =>$location_datas->destination_addresses[0] ];
+      $jobfeeds = new Job_feeds;
+      $jobfeeds->location_points = $ranker->getLocationPoints($location_datas->rows[0]->elements[0]->distance->value);
+      $jobfeeds->job_id = $jb->job_id;
+      $jobfeeds->user_id = $userid;
+      $jobfeeds->save();
 
-$this->setJobFeeds($jobID);
-$this->setJobNearby($jobID);
-$this->setJobRecommended($jobID);
+      $jobfeeds = new Job_recommended;
+      $jobfeeds->location_points = $ranker->getLocationPoints($location_datas->rows[0]->elements[0]->distance->value);
+      $jobfeeds->job_id = $jb->job_id;
+      $jobfeeds->user_id = $userid;
+      $jobfeeds->save();
+      if($distance <= 5000){
+        $finalnearbyID[] = $jb->job_id;
+      $jobfeeds = new Job_nearby;
+      $jobfeeds->location_points = $ranker->getLocationPoints($location_datas->rows[0]->elements[0]->distance->value);
+      $jobfeeds->job_id = $jb->job_id;
+      $jobfeeds->user_id = $userid;
+      $jobfeeds->save();
+      }
+    }
+  } 
+  $this->setJobNearby($finalnearbyID);
+  $this->setJobRecommended($jobID);
+  $this->setJobFeeds($jobID);
 
-$jfeed= $this->getJobFeeds();
+  $jfeed= $this->getJobFeeds();
 
+  $data['jobs'] = $jfeed;
+  $data['message'] = 'success';
 
-$data['jobs'] = $jfeed;
-$data['message'] = 'success';
+}
+
 
 $data['skill']          = Skills::all();
 $data['paytypes']       = Paytypes::all();
@@ -878,9 +949,10 @@ public function getPendingConfirmation(){
   if(count($sum) >0){
     foreach($sum as $s){
       if($s->works->applicant_id == $id){
-        $work_sum = Work_Summary::where('summary_id',$s->summary_id)->first();
+        $work_sum = Work_Summary::where('summary_id',$s->summary_id)->where('is_paid','!=',2)->first();
       }
     }
+
     $response = [];
     $response = [
     'summary' => $work_sum,
@@ -1015,12 +1087,20 @@ public function EndJob(Request $req){
   $rate   = $req->rate;
   $desc   = $req->review;
   $workid  = $req->workid;
-
+  if($rate == 0){
+    $data['status'] = 400;
+    return response()->json($data);
+  }
+  else{
   $work = Works::where('work_id',$workid)->first();
   $work->status = 4;
   $work->is_started = 0;
   $work->save();
 
+  $work_log = new Work_Logs;
+  $work_log->work_id = $workid;
+  $work_log->save();
+  
   $review               = new Reviews;
   $review->comment      = $desc;
   $review->rating       = $rate;
@@ -1039,8 +1119,6 @@ public function EndJob(Request $req){
 
       $data['message'] = 'work officialy closed';
     }
-
-    
   }
   else{
     $new_work_review = new Work_Reviewed;
@@ -1050,7 +1128,7 @@ public function EndJob(Request $req){
     $new_work_review->save();
     $data['message'] = 'created a new review';
   }
-
+}
   $data['status'] = 1;
 
   return response()->json($data);
@@ -1084,10 +1162,24 @@ public function setReschedule(Request $req){
 
 public function receivePayment(Request $req){
   $sumid = $req->sumid;
-
-  $sum = Work_Summary::where('summary_id',$sumid)->first();
-  $sum->delete();
+  $work = Work_Summary::where('summary_id',$sumid)->first();
+  $work->is_paid = 2;
+  $work->save();
+  
   $data['status'] = 200;
+  return response()->json($data);
+}
+
+public function getApplications(){
+  $userid = Auth::user()->id;
+  $apps = Application::where('applicant',$userid)
+                      ->where('is_accepted',0)->get();
+  return view('applicant.jobapplications',compact('apps'));
+}
+public function setApplication(Request $req){
+  $appid = Application::where('application_id',$req->id)->first();
+  $appid->delete();
+  $data['message'] = 200;
   return response()->json($data);
 }
 

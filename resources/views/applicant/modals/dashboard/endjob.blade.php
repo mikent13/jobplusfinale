@@ -59,7 +59,7 @@
                  </div>
                </div>
              </div>
-           <button type="button" class="btn btn-nav confirm-end" id="btn-confirm">Rate Applicant</button>
+           <button type="button" class="btn btn-nav confirm-end" id="btn-confirm">Rate Employer</button>
            </div>
          </div>
        </div>

@@ -81,18 +81,18 @@ function initializeData(){
   var jobids = [];
   $(".windows8").fadeOut(200);
   //----------------Job Feeds------------//
-
-  for(i = 0; i< data.jobs.length; i++){
-    jobids.push(data.jobs[i].job_id);
-    $('#jobfeed-res').append($('<a>').addClass('list-group-item item-res').attr('data-val',data.jobs[i].job.job_id)
-      .append($('<div>').addClass('cont-feeds')
-        .append($('<img>').addClass('img-rounded pull-left').attr('src',data.jobs[i].employer.avatar))
-        .append($('<h4>').addClass('list-group-item-heading ellipsis meta-title').text(data.jobs[i].job.title))
-        .append($('<p>').addClass('list-group-item-text meta meta-employer').text('by '+data.jobs[i].employer.fname + ' ' + data.jobs[i].employer.lname))
-        .append($('<i>').addClass('meta-loc meta-marker fa-1x fa fa-map-marker'))
-        .append($('<p>').addClass('list-group-item-text meta meta-loc meta-locality').text(data.jobs[i].job.address.address))));
+  if(data.status != 400){
+    for(i = 0; i< data.jobs.length; i++){
+      jobids.push(data.jobs[i].job_id);
+      $('#jobfeed-res').append($('<a>').addClass('list-group-item item-res').attr('data-val',data.jobs[i].job.job_id)
+        .append($('<div>').addClass('cont-feeds')
+          .append($('<img>').addClass('img-rounded pull-left').attr('src',data.jobs[i].employer.avatar))
+          .append($('<h4>').addClass('list-group-item-heading ellipsis meta-title').text(data.jobs[i].job.title))
+          .append($('<p>').addClass('list-group-item-text meta meta-employer').text('by '+data.jobs[i].employer.fname + ' ' + data.jobs[i].employer.lname))
+          .append($('<i>').addClass('meta-loc meta-marker fa-1x fa fa-map-marker'))
+          .append($('<p>').addClass('list-group-item-text meta meta-loc meta-locality').text(data.jobs[i].job.address.address))));
+    }
   }
-
   $('#feeds').attr('hidden',false);
 
   $('.item-res ').click(function(e) {
@@ -156,6 +156,7 @@ $(document).on('click','#btn-search',function(e){
   e.preventDefault();
   $('#tab-feeds').click();
   var json = $('#s-skill').val();
+  $('#feed-body').hide();
   console.log(json);
   var zips = [];
   var geocode = new google.maps.Geocoder();
@@ -186,7 +187,7 @@ $(document).on('click','#btn-search',function(e){
     data:{
       'cat'  : $('#search-sel option:selected').val(),
       'skill': json,
-      'location':$('#s-skill').val(),
+      'location':loc,
       'salary': $('#fil-sal').val(),
       'ptype': $('#fil-ptype').val(),
     },
@@ -293,7 +294,10 @@ $(document).on('click','.recom-res',function(e){
     var centers = { lat: parseFloat(data.response[0].address.lat), lng: parseFloat(data.response[0].address.lng) };
     meos.push(centers);
 
-    if(data.response[0].conflict.conflict == 1){
+    if(data.response[0].conflict== null){
+      $('.btn-apply').show(400);
+    }
+    else if(data.response[0].conflict.conflict == 1){
       $('.conflict').show(400);
       var myjob = data.response[0].conflict.work_sched.schedules.jobs.title;
       $('.conflict-message').text('Oops. it looks like this job conflicts with your work: ' + myjob );
@@ -301,6 +305,13 @@ $(document).on('click','.recom-res',function(e){
     }
     else{
       $('.btn-apply').show(400);
+    }
+
+    if(data.response[0].applied == 1){
+      $('.btn-apply').attr('disabled',true).text('Applied');
+    }
+    else{
+      $('.btn-apply').attr('disabled',false).text('Apply');
     }
 
     $('#rec-result-add').text(data.response[0].address.address);
@@ -312,9 +323,9 @@ $(document).on('click','.recom-res',function(e){
     }
 
     $('#rec-desc').text(data.response[0].job.description);
-    $('.meta-sal').text('$' + data.response[0].job.salary);
+    $('.meta-sal').text('Php ' + data.response[0].job.salary + ' / ' + data.response[0].paytype);
     $('.meta-slot').text(data.response[0].job.slot);
-    $('.meta-ptype').text(data.response[0].paytype);
+    $('.meta-jobtype').text(data.response[0].jobtype);
 
     var marker = new google.maps.Marker({
       map: recmap,
@@ -327,7 +338,7 @@ $(document).on('click','.recom-res',function(e){
     recmap.setCenter(centers);
 
     var dateposted = moment(data.response[0].job.date_posted);
-    $('#postedago').text('Posted ' +dateposted.fromNow());
+    $('.postedago').text('Posted ' +dateposted.fromNow());
     $('.sched-start').empty();
     $('.sched-end').empty();
     $('.sched-start').append($('<h3>').text('From'));
@@ -362,6 +373,7 @@ $(document).on('click','.item-res',function(e){
   $('#feed-result-sched').empty();
   $('#feed-result-skill').empty();
  // $('#feed-body').attr('hidden',false);
+
  $.ajaxSetup({
   headers: {
     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -378,7 +390,7 @@ $(document).on('click','.item-res',function(e){
 
  request.done(function(data){
   console.log(data);
-  if(data.response[0].conflict== null){
+  if(data.response[0].conflict == null){
     $('.btn-apply').show(400);
   }
   else if(data.response[0].conflict.conflict == 1){
@@ -390,6 +402,14 @@ $(document).on('click','.item-res',function(e){
   else{
     $('.btn-apply').show(400);
   }
+
+  if(data.response[0].applied == 1){
+    $('.btn-apply').attr('disabled',true).text('Applied');
+  }
+  else{
+    $('.btn-apply').attr('disabled',false).text('Apply');
+  }
+
   var meo = [];
   var locs;
   var centers = { lat: parseFloat(data.response[0].address.lat), lng: parseFloat(data.response[0].address.lng) };
@@ -413,18 +433,18 @@ $(document).on('click','.item-res',function(e){
   $('.meta-slot').text(data.response[0].job.slot);
   $('.meta-jobtype').text(data.response[0].jobtype);
 
-
   var marker = new google.maps.Marker({
     map: feedmap,
     position: meo[0],
     title: 'Hello World!'
   });
+
   $('#feed-gmap').attr('hidden',false);
   setTimeout(google.maps.event.trigger(feedmap, 'resize'),300);
   feedmap.setCenter(centers);
 
   var dateposted = moment(data.response[0].job.date_posted);
-  $('#postedago').text('Posted ' +dateposted.fromNow());
+  $('.postedago').text('Posted ' +dateposted.fromNow());
   $('.sched-start').empty();
   $('.sched-end').empty();
   $('.sched-start').append($('<h3>').text('From'));
@@ -516,7 +536,10 @@ $(document).on('click','.near-res',function(e){
 
  request.done(function(data){
   console.log(data);
-  if(data.response[0].conflict.conflict == 1){
+  if(data.response[0].conflict== null){
+    $('.btn-apply').show(400);
+  }
+  else if(data.response[0].conflict.conflict == 1){
     $('.conflict').show(400);
     var myjob = data.response[0].conflict.work_sched.schedules.jobs.title;
     $('.conflict-message').text('Oops. it looks like this job conflicts with your work: ' + myjob );
@@ -526,6 +549,12 @@ $(document).on('click','.near-res',function(e){
     $('.btn-apply').show(400);
   }
 
+  if(data.response[0].applied == 1){
+    $('.btn-apply').attr('disabled',true).text('Applied');
+  }
+  else{
+    $('.btn-apply').attr('disabled',false).text('Apply');
+  }
 
   var meos = [];
   var locs;
@@ -545,9 +574,9 @@ $(document).on('click','.near-res',function(e){
   }
 
   $('#near-desc').text(data.response[0].job.description);
-  $('.meta-sal').text('PHP ' + data.response[0].job.salary);
+  $('.meta-sal').text('Php ' + data.response[0].job.salary + ' / ' + data.response[0].paytype);
   $('.meta-slot').text(data.response[0].job.slot);
-  $('.meta-ptype').text(data.response[0].paytype);
+  $('.meta-jobtype').text(data.response[0].jobtype);
 
   if(markers.length !== 0){
     markers.setMap(null);
@@ -561,8 +590,8 @@ $(document).on('click','.near-res',function(e){
   $('#near-gmap').attr('hidden',false);
   setTimeout(google.maps.event.trigger(nearmap, 'resize'),300);
   nearmap.setCenter(centers);
-  var dateposted = moment(data.response[0].job.date_posted);
-  $('#postedago').text('Posted ' +dateposted.fromNow());
+   var dateposted = moment(data.response[0].job.date_posted);
+  $('.postedago').text('Posted ' +dateposted.fromNow());
   $('.sched-start').empty();
   $('.sched-end').empty();
   $('.sched-start').append($('<h3>').text('From'));
@@ -632,6 +661,7 @@ $(document).on('click','#btn-confirm',function(e){
 
  apply.done(function(data){
   console.log(data);
+  $('.btn-apply').attr('disabled',true).text('Applied');
   $('#policy-Modal').modal('hide');
   loadAlert();
 });

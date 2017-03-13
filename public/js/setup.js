@@ -590,7 +590,6 @@ $("#filter-box").mouseleave(function() {
     });
 
     $('a[href="#step2"]').on('show.bs.tab',function(){
-      var mobile = $('#mobile').val();
       var fname = $('#firstname').val();
       var lname = $('#lastname').val();
       var address = $('#address').val();
@@ -620,7 +619,26 @@ $("#filter-box").mouseleave(function() {
       });
     });
 
+    $(document).on('click','#resend-code',function(){
+      var mobile = $('#mobile').val();
+      $.ajaxSetup({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+      });
 
+      var step1 = $.ajax({
+        url:'/get/user/resend',
+        method:'GET',
+        data:{
+          'mobile': mobile,
+        }
+      });
+
+      step1.done(function(data){
+        console.log(data);
+      });
+    });
 
     $(document).on('click','#btn_verify',function(){
       var code = $('#verification').val();
@@ -644,6 +662,9 @@ $("#filter-box").mouseleave(function() {
         if(data.status == 1){
          swal("Congratulations!", "You have successfuly created your account.", "success");
          $('#btn_redirect').click();
+       }
+       else{
+        swal("Please Retry!", "You have enter the wrong code.", "error")
        }
      });
     });

@@ -5,6 +5,7 @@ use App\Schedules;
 use DateTime;
 use App\Jobs;
 use App\Works;
+use App\Work_Summary;
 class JobRank{
 
 	public function array_push_assoc($array, $key, $value){
@@ -13,38 +14,17 @@ class JobRank{
 	}
 
 	public function getLocationPoints($distance){
-		$points = 0;
-
-		if($distance < 1000){
-			return  $points  = 100;
+		$points = 100;
+		$counter = 0;
+		for($counter = 0; $counter <= $distance; $counter++){
+			$points = $points - 1;
+			$counter = $counter + 499;
 		}
-		else if($distance >= 1000 && $distance < 1500){
-			return  $points = 90;
+		if($points <= 0){
+			$points = 0;
 		}
-		else if($distance >= 1500 && $distance < 2000){
-			return   $points = 85;
-		}
-		else if($distance >= 2000 && $distance < 2500){
-			return  $points = 80;
-		}
-		else if($distance >= 2500 && $distance < 3000){
-			return  $points = 75;
-		}
-		else if($distance >= 3000 && $distance < 3500){
-			return  $points = 70;
-		}
-		else if($distance >= 3500 && $distance < 4000){
-			return  $points = 65;
-		}
-		else if($distance >= 4000 && $distance < 4500){
-			return  $points = 60;
-		}
-		else if($distance >= 4500 && $distance < 5000){
-			return  $points = 55;
-		}
-		else if($distance >= 5000){
-			return  $points = 50;
-		}
+		return $points;
+		
 	}
 
 	public function getSkillPoints(&$userskill,$jobid){
@@ -65,28 +45,31 @@ class JobRank{
 			$points = 100;
 		}
 		else if($lack == 1){
-			$points = 90;
-		}
-		else if($lack == 2){
-			$points = 85;
-		}
-		else if($lack == 3){
 			$points = 80;
 		}
+		else if($lack == 2){
+			$points = 60;
+		}
+		else if($lack == 3){
+			$points = 40;
+		}
 		else if($lack > 3){
-			$points = 75;
+			$points = 20;
 		}
 		return $points;
 	}
 
 	public function getHistoryPoints($workhistoryID,$jobid){
-		$work_history = Work_Logs::where('work_id',$workhistoryID)->first();
+		// $work_history = Work_Logs::where('work_id',$workhistoryID)->first();
+		$work_history = Work_Summary::where('work_id',$workhistoryID)->first();
+
 		if(count($work_history) < 1){
 			$points = 0;
 			return $points;
 		}
-		$history_job = Jobs::where('job_id',$work_history->job_id)->first();
-		$history_job_skill = Job_Skill::where('job_id',$work_history->job_id)->get();
+
+		$history_job = Jobs::where('job_id',$work_history->works->schedules->jobs->job_id)->first();
+		$history_job_skill = Job_Skill::where('job_id',$work_history->works->schedules->jobs->job_id)->get();
 
 		$current_job = Jobs::where('job_id',$jobid)->first();
 		$current_job_skill = Job_Skill::where('job_id',$current_job->job_id)->get();
@@ -113,7 +96,7 @@ class JobRank{
 		if(count($intersect) > 0){
 			$ctrSkills = 1;
 		}
-
+		
 		if($ctrSkills == 1 && $ctrEmployer == 1){
 			$points = 1;
 		}   
@@ -121,26 +104,27 @@ class JobRank{
 			$points = 0;
 		}
 		return $points;
-
 	}
 
 	public function getHistory($jobid,$userid){
 		$histwork = Works::where('applicant_id',$userid)->where('status',4)->get();
+		$job = $jobid;
 
 		if(count($histwork) < 1){
-			$points = 80;
+			$points = 50;
 			return $points;
 		}
 
 		$flag = 0;
+		$hwID = [];
 		foreach($histwork as $hw){
 			if($flag == 0){
-				$flag = $this->getHistoryPoints($hw->work_id,$jobid);
+				$hwID[] = ['work' => $hw->work_id,'jobid' => $job];
+				$flag = $this->getHistoryPoints($hw->work_id,$job);
 			}
 		}
-
 		if($flag == 0){
-			$points = 80;
+			$points = 50;
 		}
 		else{
 			$points = 100;
@@ -216,7 +200,7 @@ class JobRank{
 					$finalids[] = $jsch->job_id; 		
 				}
 			}
-		
+			
 			return $finalids;
 		}
 		else{		

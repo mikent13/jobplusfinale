@@ -149,7 +149,7 @@ a,p{
 	margin-top: -5px;
 }
 #loading{
-	background-color: #083D77;
+	background-color: #d35400;
 	height: 100%;
 	width: 100%;
 	position: fixed;
@@ -422,4 +422,7 @@ a,p{
 }
 .foot-social{
 	padding-top: 30px;
+}
+.well{
+    background-color: rgba(204, 204, 204, 0.38);
 }

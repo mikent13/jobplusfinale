@@ -47,6 +47,8 @@ Route::get('/get/history','ProfileController@getHistory');
 |--------------------------------------------------------------------------
 */
 
+//Resend Verification Code
+Route::get('/get/user/resend','UserController@resendCode');
 
 Route::get('/user/home', [
 	'uses' => 'UserController@getHome',
@@ -148,10 +150,12 @@ Route::get('employer/applications', [
 	'as' => 'emp/applications'
 	])->middleware('auth');
 
+Route::get('/get/employer/profile','EmployerController@getProfile');
+
 // Applications
 Route::get('/employer/applications/data', 'EmployerController@getApplicationData');
 Route::get('/employer/application/response','EmployerController@ApplicationResponse');
-
+Route::get('/employer/application/decline','EmployerController@declineApplication');
 //Dashboard
 Route::get('/employer/dashboard/data','EmployerController@getDashboardData');
 Route::get('/employer/startjob','EmployerController@startJob');
@@ -187,7 +191,8 @@ Route::get('/app/ongoingJob','ApplicantController@getOngoing');
 Route::get('/app/activeJob','ApplicantController@getActive');
 Route::get('/admin/applicant','ApplicantController@getAdmin');
 Route::get('/app/dashboard/seemore','ApplicantController@getSeemore');
-
+Route::get('/app/applications','ApplicantController@getApplications');
+Route::get('/set/application/decline','ApplicantController@setApplication');
 Route::get('/applicant/job/start',[
 	'uses' => 'ApplicantController@StartJob',
 	'as' => 'app/job/start'

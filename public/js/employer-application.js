@@ -67,8 +67,28 @@ $(document).ready(function(){
 		});
 	});
 
-	function thankAlert(){
-		swal("Thank You!", "You have successfuly posted a job!", "success");
-	};
+	$(document).on('click','.btn-decline',function(){
+		var appid = $(this).attr('appid');
+		var response = 0;
+		$.ajaxSetup({
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			}
+		});
+
+		var sel = $.ajax({
+			url: '/employer/application/response',
+			method: 'get',
+			 data:{'appid':appid,
+			 'response': response},
+		});
+
+		sel.done(function(data){
+			console.log(data);
+			initialize();
+		});
+	});
+
+
 
 });

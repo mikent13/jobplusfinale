@@ -46,6 +46,9 @@ $(document).ready(function(){
 						)
 				}
 			}
+			else if(data.pending_status == 400){
+				$('#pending-feeds').append($('<div>').addClass('well well-sm').append($('<p>').text('No items to be displayed.')));
+			}
 
 			if(data.active_status == 200){
 				for(var i=0; i<data.active.length; i++){
@@ -87,6 +90,10 @@ $(document).ready(function(){
 					}
 				}
 			}
+			else if(data.active_status == 400){
+				$('#active-feeds').append($('<div>').addClass('well well-sm').append($('<p>').text('No items to be displayed.')));
+			}
+
 
 
 			/// End of Active Job Feeds
@@ -112,6 +119,10 @@ $(document).ready(function(){
 						)
 				}
 			}
+			else if(data.upcoming_status == 400){
+				$('#upcoming-feeds').append($('<div>').addClass('well well-sm').append($('<p>').text('No items to be displayed.')));
+			}
+
 
 			/// End of Upcoming Job Feeds
 

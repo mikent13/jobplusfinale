@@ -485,6 +485,10 @@ textarea{
     transition: 0.3s ease-in-out;
     border:2px solid transparent;
     margin-top: 15px;
+    margin-bottom: 10px;
+}
+#resend-code:hover{
+cursor: pointer;
 }
 
 #btn_verify:focus, #btn_verify:hover{

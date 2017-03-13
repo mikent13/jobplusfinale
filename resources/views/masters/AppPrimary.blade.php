@@ -35,7 +35,7 @@
       <ul class="nav navbar-nav">
         <li><a href="{{route('app/dashboard')}}"><i class="fa fa-lg fa-clock-o" aria-hidden="true"></i> Schedule</a></li>
         <li><a href="{{route('app/job/result')}}"><i class="fa fa-lg fa-briefcase" aria-hidden="true"></i> Find Job</a></li>
-        <li><a href="#"><i class="fa fa-handshake-o" aria-hidden="true"></i> Job Offers</a></li>
+        <li><a href="{{url('app/applications')}}"><i class="fa fa-handshake-o" aria-hidden="true"></i> Job Applications</a></li>
         <li><a href="#"><i class="fa fa-lg fa-bookmark-o" aria-hidden="true"></i> Saved Jobs</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -85,6 +85,7 @@
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"> <img src="{{Auth::user()->profile->avatar}}" style="width:25px;height:25px;border-radius:50%;">{{Auth::user()->profile->fname}} {{ Auth::user()->profile->lname}}<span class="caret"></span></a>
           <ul class="dropdown-menu dropdown-cart" role="menu">
               <li>
+              <a href="{{url('/employer/dashboard')}}"><span>Switch to Employer</span></a>
                 <a href="{{url('/get/user/profile')}}"><span>Profile</span></a>
                 <a href="#"><span>Activity Logs</span></a>
                 <a href="#"><span>Job+ Wallet</span></a>

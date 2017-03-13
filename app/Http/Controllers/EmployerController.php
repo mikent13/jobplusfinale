@@ -54,6 +54,9 @@ public function postJob(Request $req){
   $address->address = $req->address;
   $address->save();
   
+  $start = new DateTime($req->start);
+  $end = new DateTime($req->end);
+
   $newjob = new Jobs;
   $newjob->user_id = $id;
   $newjob->category_id = $req->category;
@@ -61,8 +64,8 @@ public function postJob(Request $req){
   $newjob->address_id = $address->id;
   $newjob->title = $req->title;
   $newjob->description = $req->description;
-  $newjob->start_date = new DateTime($req->start);
-  $newjob->end_date = new DateTime($req->end);
+  $newjob->start_date = date_format($start, 'Y-m-d H:i:00');
+  $newjob->end_date = date_format($end, 'Y-m-d H:i:00');
   $newjob->paytype = $req->paytype;
   $newjob->salary = $req->salary;
   $newjob->is_all_day = 1;
@@ -73,8 +76,8 @@ public function postJob(Request $req){
   $jobid = $newjob->job_id;
   $jsched = new Schedules;
   $jsched->job_id = $jobid;
-  $jsched->start = new DateTime($req->start);
-  $jsched->end = new DateTime($req->end);
+  $jsched->start = date_format($start, 'Y-m-d H:i:00');
+  $jsched->end = date_format($end, 'Y-m-d H:i:00');
   $jsched->save();
 
   $arr[] = $req->skills;
@@ -195,36 +198,36 @@ public function startJob(Request $req){
 public function endJobSummary(Request $req){
  $workid = $req->workid;
 
-  $summ =  Work_Summary::where('work_id',$workid)->first();
+ $summ =  Work_Summary::where('work_id',$workid)->first();
 
-  $newwork = Works::where('work_id',$summ->work_id)->first();
-  $summary = [];
+ $newwork = Works::where('work_id',$summ->work_id)->first();
+ $summary = [];
 
-  $started = new DateTime($newwork->start_time);
-  $ended = new DateTime($newwork->end_time);
-  
-  $rendered = $summ->hours_rendered;
-  $salary = $summ->salary;
-  $fines = $summ->fines;
-  $paytype = $newwork->schedules->jobs->paytypes;
-  $applicant = $newwork->users->profile;
-  $total_salary = $summ->total_salary;
+ $started = new DateTime($newwork->start_time);
+ $ended = new DateTime($newwork->end_time);
 
-  $summary[] =[
-  'work' => $newwork,
-  'started' => $started,
-  'ended' => $ended,
-  'rendered' => $rendered,
-  'salary' => $salary,
-  'total_salary' => $total_salary,
-  'fines' => $fines,
-  'paytype' => $paytype,
-  'applicant' => $applicant
-  ];
+ $rendered = $summ->hours_rendered;
+ $salary = $summ->salary;
+ $fines = $summ->fines;
+ $paytype = $newwork->schedules->jobs->paytypes;
+ $applicant = $newwork->users->profile;
+ $total_salary = $summ->total_salary;
 
-  $data['status'] = 200;
-  $data['work'] = $summary;
-  return response()->json($data);
+ $summary[] =[
+ 'work' => $newwork,
+ 'started' => $started,
+ 'ended' => $ended,
+ 'rendered' => $rendered,
+ 'salary' => $salary,
+ 'total_salary' => $total_salary,
+ 'fines' => $fines,
+ 'paytype' => $paytype,
+ 'applicant' => $applicant
+ ];
+
+ $data['status'] = 200;
+ $data['work'] = $summary;
+ return response()->json($data);
 }
 
 public function endJob(Request $req){
@@ -260,6 +263,7 @@ public function endJob(Request $req){
   $work_sum->is_paid = 1;
   $work_sum->save();
 
+  
   $data['is_paid'] = true;
   return response()->json($data);
 }
@@ -326,9 +330,9 @@ public function getDashboardData(){
   else{
     $data['upcoming_status'] = 400;
   }
-    $data['pending'] = $needReview;
-    $data['active'] = $activeID;
-    $data['upcoming'] = $upcomingID;
+  $data['pending'] = $needReview;
+  $data['active'] = $activeID;
+  $data['upcoming'] = $upcomingID;
   return response()->json($data);
 }
 
@@ -342,17 +346,20 @@ public function ApplicationResponse(Request $req){
     $job = Jobs::where('job_id',$application->job)->first();
     $job->slot = $job->slot - 1;
     $job->save();
+    
     $sched = Schedules::where('job_id',$job->job_id)->get();
     foreach($sched as $sch){
       $work = new Works;
       $work->sched_id = $sch->schedule_id;
       $work->applicant_id = $application->applicant;
       $work->employer_id = Auth::user()->id;
-      $work->status = 3;
+      $work->status = 2;
       $work->date = new DateTime;
       $work->is_started = 0;
       $work->save();
     }
+
+
   }
   else{
     $application->delete();

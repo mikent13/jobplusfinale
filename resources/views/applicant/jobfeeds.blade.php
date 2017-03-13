@@ -127,7 +127,7 @@
 							<div class=" pull-right feed-tool">
 								<button class="btn btn-md btn-apply" id="feed-apply-btn">Apply</button>
 								<button class="btn btn-md btn-bookmark"><i class="fa fa-heart-o" aria-hidden="true"></i>Save</button>
-								<p id="postedago"></p>
+								<p class="postedago"></p>
 							</div>
 						</div>
 						<div id="feed-gmap" style="height:250px;"></div>
@@ -191,7 +191,7 @@
 							<div class=" pull-right feed-tool">
 								<button class="btn btn-md btn-apply" id="rec-apply-btn">Apply</button>
 								<button class="btn btn-md btn-bookmark"><i class="fa fa-heart-o" aria-hidden="true"></i>Save</button>
-								<p><i class="fa fa-clock-o" aria-hidden="true"></i>1 day ago</p>
+								<p class="postedago"></p>
 							</div>
 						</div>
 						<div id="rec-gmap" style="height:250px;"></div>
@@ -201,17 +201,17 @@
 								<i class="fa fa-4x fa-map-marker" aria-hidden="true"></i>
 								<h1 id="rec-result-add" class="meta-address"></h1>
 							</div>
-							<div class="col-md-4 mini-meta">
-								<p class="mini-m meta-sal"></p>
-								<p>Salary</p>
-							</div>
-							<div class="col-md-4 mini-meta meta-mid">
-								<p class="mini-m meta-ptype"></p>
-								<p>Paytype</p>
+								<div class="col-md-4 mini-meta">
+								<p class=" meta-sal"></p>
+								<p class="mini-m">Salary</p>
 							</div>
 							<div class="col-md-4 mini-meta">
-								<p class="mini-m meta-slot"></p>
-								<p>Slot</p>
+								<p class=" meta-jobtype"></p>
+								<p class="mini-m">Job type</p>
+							</div>
+							<div class="col-md-4 mini-meta">
+								<p class=" meta-slot"></p>
+								<p class="mini-m">Slot</p>
 							</div>
 						</div>
 						<div class="feed-content">
@@ -253,7 +253,7 @@
 							<div class=" pull-right feed-tool">
 								<button class="btn btn-md btn-apply" id="near-apply-btn">Apply</button>
 								<button class="btn btn-md btn-bookmark"><i class="fa fa-heart-o" aria-hidden="true"></i>Save</button>
-								<p><i class="fa fa-clock-o" aria-hidden="true"></i>1 day ago</p>
+								<p claclass="postedago"></p>
 							</div>
 						</div>
 						<div id="near-gmap" style="height:250px;"></div>
@@ -263,17 +263,17 @@
 								<i class="fa fa-4x fa-map-marker" aria-hidden="true"></i>
 								<h1 id="near-result-add" class="meta-address"></h1>
 							</div>
-							<div class="col-md-4 mini-meta">
-								<p class="mini-m meta-sal"></p>
-								<p>Salary</p>
-							</div>
-							<div class="col-md-4 mini-meta meta-center">
-								<p class="mini-m meta-ptype"></p>
-								<p>Paytype</p>
+								<div class="col-md-4 mini-meta">
+								<p class=" meta-sal"></p>
+								<p class="mini-m">Salary</p>
 							</div>
 							<div class="col-md-4 mini-meta">
-								<p class="mini-m meta-slot"></p>
-								<p>Slot</p>
+								<p class=" meta-jobtype"></p>
+								<p class="mini-m">Job type</p>
+							</div>
+							<div class="col-md-4 mini-meta">
+								<p class=" meta-slot"></p>
+								<p class="mini-m">Slot</p>
 							</div>
 						</div>
 						<div class="feed-content">

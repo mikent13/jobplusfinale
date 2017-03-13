@@ -20,6 +20,7 @@ use App\Schedules;
 use App\Works;
 use App\Work_Logs;
 use App\Categories;
+use App\Work_Summary;
 use App\Prof_mobile;
 use Borla\Chikka\Chikka;
 use Illuminate\Support\Facades\Input;
@@ -380,6 +381,18 @@ public function getProfileData(){
     }
 
     $newskill = Skills::whereIn('skill_id',$skill_ids)->get();
+
+    $works = Work_Summary::where('is_paid',2)->get();
+    $balance = 0;
+    if(count($works) > 0){
+        foreach($works as $wk){
+            if($wk->works->applicant_id == $id){
+                $balance = $balance + $wk->total_salary; 
+            }
+        }
+    }
+
+    $data['balance'] = $balance;
     $data['attainment'] = $attainment;
     $data['degree'] = $degree;
     $data['profile'] = $profile;
@@ -560,7 +573,7 @@ public function getEducation(){
     if(count($prof_edu) > 0){
         $data['hasEdu'] = "1";
         $predId = [];
-            
+
         foreach($prof_edu as $pred){
             $predID[] = $pred->education_id;
         }
@@ -822,6 +835,35 @@ public function setStep1(Request $req){
     $profile->save();
 
     $data['saved'] = 1;
+    return response()->json($data);
+}
+
+public function resendCode(Request $request){
+    $userid = Auth::user()->id;
+    $mobile = $request->mobile;
+    $username = Auth::user()->username;
+    $profile = Profiles::Where('user_id',$userid)->first();
+    $profile->mobile = $mobile;
+    $profile->save();
+
+    $bytes = random_bytes(2);
+    $code = bin2hex($bytes);
+    $prof_mob = Prof_mobile::where('profile_id',$profile->profile_id)->first();
+    $prof_mob->code = $code;
+    $prof_mob->save();
+
+    $message ="Hi". " " .$username."! Your verification code is" . " ".$code . " --Thank you for supporting JobPlus!";
+
+    $config = [
+    'shortcode'=> '292902017',
+    'client_id'=> 'b00de5e0839604cdfe07a9e7b5e6c8127ef4bf36ab3b44c0b287ae0603a678c0',
+    'secret_key'=> 'aed7fabd8a0864f8c5a61b5f4dfb4fd3d1737e81d792ff22a3639748391d3612',
+    ];
+
+    $chikka = new Chikka($config);
+    $resp = $chikka->send($mobile, $message);
+    $data['status'] = 200;
+    $data['resp'] = $resp;
     return response()->json($data);
 }
 
