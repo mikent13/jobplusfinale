@@ -16,6 +16,12 @@ Route::get('/', function () {
 	return view('login.login');
 });
 
+/*
+	Jobify Bot Routes
+*/
+Route::get('/jobbot/receive', 'MainController@receive')->middleware("verify");
+Route::post('/jobbot/receive', 'MainController@receive');
+
 
 Route::get('register', ['as' => 'login.register', 'uses' => 'Auth\AuthController@showRegistrationForm']);
 Route::post('register', ['as' => 'auth.register', 'uses' => 'Auth\AuthController@register']);
@@ -106,8 +112,8 @@ Route::get('/get/profiledata', 'UserController@getProfileData');
 Route::get('/get/update/name', 'UserController@updateName');
 Route::get('/admin','UserController@getAdmin');
 Route::get('/sms','UserController@getSMSPage');
-Route::get('/sms/send','UserController@ChikkaSend');
-Route::post('/sms/receive','UserController@ChikkaReceive');
+Route::get('/sms/send/{recipientNumber}/{message}','ChikkaSmsController@send');
+Route::post('/sms/receive','ChikkaSmsController@receive');
 
 Route::get('/get/dash/resched','ApplicantController@setReschedule');
 

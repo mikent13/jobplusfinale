@@ -148,6 +148,14 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
+        
+        
+        /*
+            
+            BotMan
+            
+        */
+        Mpociot\BotMan\BotManServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -214,6 +222,7 @@ return [
         'Calendar' => 'MaddHatter\LaravelFullcalendar\Facades\Calendar',
         'Chikka'=> 'Borla\Chikka\Support\Facades\Chikka',
         'GooglePlaces' => SKAgarwal\GoogleApi\Facade::class,
+        'BotMan' => Mpociot\BotMan\Facades\BotMan::class
     ],
 
 ];

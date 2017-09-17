@@ -12,12 +12,15 @@ class CreateWorksTable extends Migration
      */
     public function up()
     {
+         Schema::dropIfExists('works');
          Schema::create('works', function (Blueprint $table) {
             $table->increments('work_id');
             $table->string('job_id');
             $table->string('user_id');
             $table->integer('status');
             $table->dateTime('date');
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -28,6 +31,6 @@ class CreateWorksTable extends Migration
      */
     public function down()
     {
-      Schema::drop('works');
+      //Schema::drop('works');
     }
 }

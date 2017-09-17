@@ -18,5 +18,6 @@ class Schedules extends Model
    public function jobs(){
         return $this->belongsTo('App\Jobs','job_id');
     }
+
 }
 

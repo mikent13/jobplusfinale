@@ -3,12 +3,18 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Works extends Model
 {
+	use SoftDeletes;
 	protected $primaryKey = 'work_id';
 	protected $table = 'works';
+	protected $dates = ['deleted_at'];
+	 
+	
 	public $timestamps = false;
+	
 
 
 	public function schedules(){
