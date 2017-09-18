@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
-
+use App\Job_Cancelled as CJOB;
+use App\Works;
+use App\Profiles;
+use App\Status;
 
 class ChikkaSmsController extends Controller
 {
@@ -27,6 +29,8 @@ class ChikkaSmsController extends Controller
     //Based from Chikka's price breakdown
     
     protected $receiveData;
+
+    protected $message;
     
     public function send($recipientNumber, $message){
         /*
@@ -53,9 +57,9 @@ class ChikkaSmsController extends Controller
         $data = $request->all();
         if($data){
             //echo json_encode($data);
-            //$this->extractMessage($this->receiveData['message']);
-            $this->send($data['mobile_number'], 'Received');
-            //$this->reply($this->receiveData);
+            $this->extractMessage($data['message'], $data['mobile_number']);
+            // /$this->send($data['mobile_number'], 'Your Message is:'.$data['message']);
+            $this->reply($data, $this->message);
             return "Accepted";
         }else{
             return "Error";
@@ -63,16 +67,12 @@ class ChikkaSmsController extends Controller
  
     }
     
-    public function notify(){
-        $fromChikka = $_POST;
-        
-        if (count(array_diff_key($this->expectedChikkaResponse, $fromChikka)) != 0) {
-            $fromChikka = null;
-        }
-        return $fromChikka;
+    public function notify(Request $request){
+        $data = $request->all();
+        echo json_encode($data);
     }
     
-    public function reply($receiveData){
+    public function reply($receiveData, $message){
          $messageId = $this->generateCode35(32);
          $sendData = array(
             'message_type'      => "REPLY",
@@ -80,11 +80,12 @@ class ChikkaSmsController extends Controller
             'shortcode'         => $this->shortCode,
             'request_id'        => $receiveData['request_id'],
             'message_id'        => $messageId,
-            'message'           => "Received",
+            'message'           => $message,
             'request_cost'      => 'FREE'
             );
         //echo json_encode($sendData);
         $result = $this->sendApiRequest($sendData);
+        echo json_encode($result);
         //echo json_encode($result);
     }
     
@@ -101,14 +102,128 @@ class ChikkaSmsController extends Controller
         return substr(str_shuffle("0123456789abcdefghijklmnopqrstvwxyz"), 0, $length);
     }
     
-    public function extractMessage(){
+
+    public function testExtract(Request $request){
+         $data = $request->all();
+         $this->extractMessage($data['message'], $data['mobile_number']);
+    }
+    public function extractMessage($message, $contactNumber){
+        $message = explode(',', $message);
+        $userId = $this->getUserId($contactNumber);
         /*
             1. Create Code Arrangement
             2. Set Priorities
             3. Manage Message
         */
+        $data = array();
+        switch (strtolower($message[0])) {
+            case 'cancel':
+                # code...
+                if(sizeof($message) == 3){
+                    $data = array(
+                        "action"    => $message[0],
+                        "job_id"    => $message[1],
+                        "reason"    => $message[2],
+                        "mobile_number" => $contactNumber
+                    );
+                    $this->cancel($data, $userId);
+                }
+                else{
+                    $this->message =  'Format for Job Cancellation: cancel,job_id,reason';
+                }
+                break;
+            case 'job_status':
+                # code...
+                if(sizeof($message) == 2){
+                    $data = array(
+                        "action"    => $message[0],
+                        "job_id"    => $message[1],
+                        "mobile_number" => $contactNumber
+                    );   
+                    $this->status($data, $userId);
+                }
+                else{
+                    $this->message = 'Format for Check Job Status: status,job_id';
+                }
+                break;
+            case 'posted':
+                # code...
+                if(sizeof($message) == 2){
+                    $data = array(
+                        "action"    => $message[0],
+                        "location"    => $message[1],
+                        "mobile_number" => $contactNumber
+                    );   
+                    $this->posted($data, $userId);
+                }
+                else{
+                    $this->message = 'Format for Checking Job Posted: posted,location';
+                }
+                break;
+        }
+    }
+
+    public function cancel($data, $userId){
+        $result = $this->deleteWork($data['job_id'], $userId);
+        $response = '';
+        if($result == '1'){
+            $cJob = new CJOB();
+            $cJob->job_id = $data['job_id'];
+            $cJob->user_id = $userId;
+            $cJob->reason = $data['reason'];
+            $cJob->save();
+            $response =  "Job ID:".$data['job_id']." with User ID: ".$userId." was successfully cancelled!";
+        }
+        else{
+            $response = "Job ID:".$data['job_id']." with User ID: ".$userId." was not found!";
+        }
+        $this->message = $response;
+    }
+
+    public function status($data, $userId){
+        $work = Works::select('status')
+                      ->where("job_id",'=', $data['job_id'])
+                      ->where('user_id','=', $userId)
+                      ->limit(1)
+                      ->get();
+        $status = null;
+        if(sizeof($work) > 0){
+            if($work[0]['status'] > 0){
+                $workStatus = Status::select('name')
+                          ->where("status_id", '=', $work[0]['status'])
+                          ->get();
+                $status = 'The Status of Job ID:'.$data['job_id'].' with User ID:'.$userId.' is '.$workStatus[0]['name'];
+            }
+        }
+        else{
+            $status = "Job not found!";
+        }
+        $this->message = $status;
+    }
+
+    public function posted($data, $userId){
+        echo json_encode($data);
     }
     
+    public function deleteWork($jobId, $userId){
+        $work = new Works();
+        $result = $work
+        ->where("job_id","=",$jobId)
+        ->where("user_id","=",$userId)
+        ->delete();
+        return $result;
+    }
+
+    public function getUserId($contactNumber){
+        $profile = new Profiles();
+        $result = $profile->where('mobile', $contactNumber)->get();
+
+        if($result){
+            return $result[0]['user_id'];
+        }
+        else
+            return null;
+    }
     public function receiveNotifications() {
         $fromChikka = $_POST;
         

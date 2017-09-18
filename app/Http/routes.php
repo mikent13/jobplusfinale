@@ -114,6 +114,8 @@ Route::get('/admin','UserController@getAdmin');
 Route::get('/sms','UserController@getSMSPage');
 Route::get('/sms/send/{recipientNumber}/{message}','ChikkaSmsController@send');
 Route::post('/sms/receive','ChikkaSmsController@receive');
+Route::post('/sms/notify','ChikkaSmsController@notify');
+Route::post('/sms/extract','ChikkaSmsController@testExtract');
 
 Route::get('/get/dash/resched','ApplicantController@setReschedule');
 
