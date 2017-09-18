@@ -7,6 +7,9 @@ use App\Job_Cancelled as CJOB;
 use App\Works;
 use App\Profiles;
 use App\Status;
+use App\Jobs;
+use App\Job_Address as JADDRESS;
+use App\Jobs\SendChikka;
 
 class ChikkaSmsController extends Controller
 {
@@ -31,6 +34,8 @@ class ChikkaSmsController extends Controller
     protected $receiveData;
 
     protected $message;
+
+    protected $flag;
     
     public function send($recipientNumber, $message){
         /*
@@ -54,12 +59,17 @@ class ChikkaSmsController extends Controller
         */
     }
     public function receive(Request $request) {
+        $flag = false;
         $data = $request->all();
         if($data){
             //echo json_encode($data);
+            $this->receiveData = $data;
             $this->extractMessage($data['message'], $data['mobile_number']);
-            // /$this->send($data['mobile_number'], 'Your Message is:'.$data['message']);
-            $this->reply($data, $this->message);
+            if($this->flag == false){
+                $result = $this->reply($data, $this->message);
+                if($result->status == 400 || $result->status == '400')
+                    $this->send($data['mobile_number'], $this->message);
+            }
             return "Accepted";
         }else{
             return "Error";
@@ -85,8 +95,9 @@ class ChikkaSmsController extends Controller
             );
         //echo json_encode($sendData);
         $result = $this->sendApiRequest($sendData);
+
         echo json_encode($result);
-        //echo json_encode($result);
+        return $result;
     }
     
     /**
@@ -108,7 +119,7 @@ class ChikkaSmsController extends Controller
          $this->extractMessage($data['message'], $data['mobile_number']);
     }
     public function extractMessage($message, $contactNumber){
-        $message = explode(',', $message);
+        $message = explode(', ', $message);
         $userId = $this->getUserId($contactNumber);
         /*
             1. Create Code Arrangement
@@ -129,7 +140,7 @@ class ChikkaSmsController extends Controller
                     $this->cancel($data, $userId);
                 }
                 else{
-                    $this->message =  'Format for Job Cancellation: cancel,job_id,reason';
+                    $this->message =  'Format for Job Cancellation: cancel, job_id, reason';
                 }
                 break;
             case 'job_status':
@@ -143,7 +154,7 @@ class ChikkaSmsController extends Controller
                     $this->status($data, $userId);
                 }
                 else{
-                    $this->message = 'Format for Check Job Status: status,job_id';
+                    $this->message = 'Format for Check Job Status: status, job_id';
                 }
                 break;
             case 'posted':
@@ -154,12 +165,15 @@ class ChikkaSmsController extends Controller
                         "location"    => $message[1],
                         "mobile_number" => $contactNumber
                     );   
-                    $this->posted($data, $userId);
+                    $this->search($data);
                 }
                 else{
-                    $this->message = 'Format for Checking Job Posted: posted,location';
+                    $this->message = 'Format for Checking Job Posted: posted, location';
                 }
                 break;
+            default:
+                $this->message = 'Format for Checking Job Posted: posted, location';
+            break;
         }
     }
 
@@ -201,10 +215,6 @@ class ChikkaSmsController extends Controller
         $this->message = $status;
     }
 
-    public function posted($data, $userId){
-        echo json_encode($data);
-    }
-    
     public function deleteWork($jobId, $userId){
         $work = new Works();
         $result = $work
@@ -218,11 +228,31 @@ class ChikkaSmsController extends Controller
         $profile = new Profiles();
         $result = $profile->where('mobile', $contactNumber)->get();
 
-        if($result){
+        if(sizeof($result) > 0){
             return $result[0]['user_id'];
         }
         else
             return null;
+    }
+
+    public function search($data){
+        $result = JADDRESS::where('locality', 'like', '%'.$data['location'].'%')->limit(1)->get();
+        
+        if(sizeof($result) > 0){
+            $jobs = Jobs::where('address_id', '=',$result[0]['id'])->orderBy('date_posted',"asc")->limit(10)->get();
+            $this->sendMultiple($jobs);
+        }
+        else{
+            $this->message = "No Jobs found in this location.".PHP_EOL;
+        }
+    }
+
+    public function sendMultiple($jobs){
+        $i = 0;
+        $this->flag = true;
+        if(sizeof($jobs) >= 1){
+            dispatch(new SendChikka($this->receiveData,$jobs));
+        }
     }
     public function receiveNotifications() {
         $fromChikka = $_POST;
