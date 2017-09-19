@@ -14,7 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         // Commands\Inspire::class,
-        Commands\Chikka::class,
+        Commands\Notify::class,
     ];
 
     /**
@@ -28,6 +28,6 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')
         //          ->hourly();
         
-        $schedule->command('chikka')->everyMinute();
+        $schedule->command('notify')->everyMinute();
     }
 }

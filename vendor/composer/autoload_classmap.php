@@ -543,5 +543,5 @@ return array(
     'StatusTableSeeder' => $baseDir . '/database/seeds/StatusTableSeeder.php',
     'TestCase' => $baseDir . '/tests/TestCase.php',
     'Text_Template' => $vendorDir . '/phpunit/php-text-template/src/Template.php',
-    'UpdateTempStorageTable' => $baseDir . '/database/migrations/2017_08_07_205532_update_temp_storage_table.php',
+    'UpdateScheduleTable' => $baseDir . '/database/migrations/2017_09_19_212521_update_schedule_table.php',
 );

@@ -864,7 +864,7 @@ class ComposerStaticInit0e1cc808a8f0ef1aa4befbaae6f501a7
         'StatusTableSeeder' => __DIR__ . '/../..' . '/database/seeds/StatusTableSeeder.php',
         'TestCase' => __DIR__ . '/../..' . '/tests/TestCase.php',
         'Text_Template' => __DIR__ . '/..' . '/phpunit/php-text-template/src/Template.php',
-        'UpdateTempStorageTable' => __DIR__ . '/../..' . '/database/migrations/2017_08_07_205532_update_temp_storage_table.php',
+        'UpdateScheduleTable' => __DIR__ . '/../..' . '/database/migrations/2017_09_19_212521_update_schedule_table.php',
     );
 
     public static function getInitializer(ClassLoader $loader)

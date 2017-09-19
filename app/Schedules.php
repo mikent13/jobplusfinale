@@ -8,7 +8,9 @@ class Schedules extends Model
 {
         protected $primaryKey = 'schedule_id';
     	protected $table = 'schedules';
-         public $timestamps = false;  
+        public $timestamps = false;  
+
+        protected $dates = ['deleted_at'];
     	protected $fillable =[
     		'job_id',
     		'start',
