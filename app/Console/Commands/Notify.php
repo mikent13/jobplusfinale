@@ -38,7 +38,7 @@ class Notify extends Command
         $sched = new Schedules();
         $timeStart  = Carbon::now()->addMinutes(30); 
         $timeEnd    = Carbon::now()->addMinutes(90); // Change 90 to 31
-        $results = $sched->whereBetween('start', [$timeStart, $timeEnd])->whereNull('deleted_at')->orderBy('start','asc')->get();
+        $results = $sched->whereBetween('start', [$timeStart, $timeEnd])->where('notify','=','0')->orderBy('start','asc')->get();
         echo $timeStart.' ----- '.$timeEnd; 
         if(sizeof($results) > 0){
             dispatch(new JobNotify($results));

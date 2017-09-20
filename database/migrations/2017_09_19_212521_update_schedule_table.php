@@ -13,8 +13,7 @@ class UpdateScheduleTable extends Migration
     public function up()
     {
         Schema::table('schedules', function (Blueprint $table) {
-            $table->timestamps();
-            $table->softDeletes();
+            $table->boolean('notify')->after('end')->default('0');
         });
     }
 

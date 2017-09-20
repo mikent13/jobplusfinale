@@ -187,11 +187,35 @@ class ChikkaSmsController extends Controller
             $cJob->reason = $data['reason'];
             $cJob->save();
             $response =  "Job ID:".$data['job_id']." with User ID: ".$userId." was successfully cancelled!";
+            $this->notifyEmployer($data['job_id'], $userId);
         }
         else{
             $response = "Job ID:".$data['job_id']." with User ID: ".$userId." was not found!";
         }
         $this->message = $response;
+    }
+    
+    public function notifyEmployer($jobId, $userId){
+        $cJob = new CJOB();
+        
+        $result = $cJob->where('job_id', '=', $jobId)->get();
+        
+        if(sizeof($result) > 0){
+            $employerNumber = $this->getProfileNumber($result[0]['user_id']);
+            $message =  "The Job ID: ".$jobId." was cancelled by ".$this->getUserCompleteName($userId).'.'.PHP_EOL;
+            $this->send($employerNumber, $message);
+        }
+    }
+    
+    public function getProfileNumber($userId){
+        $profile = new Profiles();
+        $result = $profile->where('user_id', $userId)->get();
+
+        if(sizeof($result) > 0){
+            return $result[0]['mobile'];
+        }
+        else
+            return null;
     }
 
     public function status($data, $userId){
@@ -230,6 +254,17 @@ class ChikkaSmsController extends Controller
 
         if(sizeof($result) > 0){
             return $result[0]['user_id'];
+        }
+        else
+            return null;
+    }
+    
+    public function getUserCompleteName($userId){
+        $profile = new Profiles();
+        $result = $profile->where('user_id', $userId)->get();
+
+        if(sizeof($result) > 0){
+            return $result[0]['lname'].', '.$result[0]['fname'];
         }
         else
             return null;
