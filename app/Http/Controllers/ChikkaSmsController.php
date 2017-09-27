@@ -128,6 +128,8 @@ class ChikkaSmsController extends Controller
         */
         $data = array();
         switch (strtolower($message[0])) {
+            //Reschedule
+            //Ratings
             case 'cancel':
                 # code...
                 if(sizeof($message) == 3){
@@ -274,8 +276,13 @@ class ChikkaSmsController extends Controller
         $result = JADDRESS::where('locality', 'like', '%'.$data['location'].'%')->limit(1)->get();
         
         if(sizeof($result) > 0){
-            $jobs = Jobs::where('address_id', '=',$result[0]['id'])->orderBy('date_posted',"asc")->limit(10)->get();
+            $jobs = Jobs::select('title','description','start_date','end_date','salary')
+            ->where('address_id', '=',$result[0]['id'])
+            ->orderBy('date_posted',"asc")
+            ->limit(10)
+            ->get();
             $this->sendMultiple($jobs);
+            
         }
         else{
             $this->message = "No Jobs found in this location.".PHP_EOL;
@@ -285,7 +292,7 @@ class ChikkaSmsController extends Controller
     public function sendMultiple($jobs){
         $i = 0;
         $this->flag = true;
-        if(sizeof($jobs) >= 1){
+        if(sizeof($result) >= 1){
             dispatch(new SendChikka($this->receiveData,$jobs));
         }
     }

@@ -36,12 +36,17 @@ class Notify extends Command
             1. Get Schedules
         */
         $sched = new Schedules();
-        $timeStart  = Carbon::now()->addMinutes(30); 
+        $timeStart  = Carbon::now()->addMinutes(31); 
         $timeEnd    = Carbon::now()->addMinutes(90); // Change 90 to 31
         $results = $sched->whereBetween('start', [$timeStart, $timeEnd])->where('notify','=','0')->orderBy('start','asc')->get();
         echo $timeStart.' ----- '.$timeEnd; 
         if(sizeof($results) > 0){
             dispatch(new JobNotify($results));
         }
+        
+        
+        
+        
+         
     }
 }
