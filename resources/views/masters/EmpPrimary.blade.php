@@ -83,9 +83,9 @@
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><img src="{{Auth::user()->profile->avatar}}" style="width:25px;height:25px;border-radius:50%;"> <!-- <i class="fa fa-lg fa-user-circle" aria-hidden="true"></i> -->{{Auth::user()->profile->fname}}{{ Auth::user()->profile->lname}}<span class="caret"></span></a>
           <ul class="dropdown-menu dropdown-cart" role="menu">
               <li>
+                <a href="{{url('/applicant/dashboard')}}"><span>Switch to Applicant</span></a>
                 <a href="{{url('/get/employer/profile')}}"><span>Profile</span></a>
-                <a href="#"><span>Activity Logs</span></a>
-                <a href="#"><span>Job+ Wallet</span></a>
+                <a href="{{url('/get/employer/wallet')}}"><span>Job+ Wallet</span></a>
               </li>
               <li class="divider"></li>
               <li><a class="" href="{{url('/logout')}}">Signout</a></li>
@@ -103,7 +103,7 @@
                 <div class="col-lg-7 foot ">
                     <h1> JobPlus </h1>
                     <ul>
-                        <li><a href="#"><h1>#<b>Road To Graduation March 2017 <i class="glyphicon glyphicon-education"></i></b></h1></a> </li>
+                        <li><a href="#"><h1>#<b>Where opportunity meets people</b></h1></a> </li>
                     </ul>
                 </div>
               

@@ -1,5 +1,7 @@
 # Laravel 5 Full Calendar Helper
 
+[![Latest Stable Version](https://poser.pugx.org/maddhatter/laravel-fullcalendar/v/stable)](https://packagist.org/packages/maddhatter/laravel-fullcalendar) [![Total Downloads](https://poser.pugx.org/maddhatter/laravel-fullcalendar/downloads)](https://packagist.org/packages/maddhatter/laravel-fullcalendar) [![Latest Unstable Version](https://poser.pugx.org/maddhatter/laravel-fullcalendar/v/unstable)](https://packagist.org/packages/maddhatter/laravel-fullcalendar) [![License](https://poser.pugx.org/maddhatter/laravel-fullcalendar/license)](https://packagist.org/packages/maddhatter/laravel-fullcalendar)
+
 ***For Laravel 4.2: use the [laravel-4 branch](https://github.com/maddhatter/laravel-fullcalendar/tree/laravel-4)***
 
 This is a simple helper package to make generating [http://fullcalendar.io](http://fullcalendar.io) in Laravel apps easier.
@@ -17,18 +19,23 @@ Or add the following to your composer.json's require section and `composer updat
 }
 ```
 
-Then register the service provider in your `app.php` config file:
+### Laravel 5.4 (and earlier)
+
+Register the service provider in your `app.php` config file:
 
 ```php
-'MaddHatter\LaravelFullcalendar\ServiceProvider',
+MaddHatter\LaravelFullcalendar\ServiceProvider::class,
 ```
 
 And optionally create an alias:
 
 ```php
-'Calendar' => 'MaddHatter\LaravelFullcalendar\Facades\Calendar',
+'Calendar' => MaddHatter\LaravelFullcalendar\Facades\Calendar::class,
 
 ```
+
+### Laravel 5.5+
+The provider and `Calendar` alias will be registered automatically.
 
 You will also need to include [fullcalendar.io](http://fullcalendar.io/)'s files in your HTML.
 
@@ -45,7 +52,7 @@ $event = \Calendar::event(
     "Valentine's Day", //event title
     true, //full day event?
     '2015-02-14', //start time, must be a DateTime object or valid DateTime format (http://bit.ly/1z7QWbg)
-    '2015-02-14' //end time, must be a DateTime object or valid DateTime format (http://bit.ly/1z7QWbg),
+    '2015-02-14', //end time, must be a DateTime object or valid DateTime format (http://bit.ly/1z7QWbg),
 	1, //optional event ID
 	[
 		'url' => 'http://full-calendar.io'
@@ -55,7 +62,7 @@ $event = \Calendar::event(
 #### Implementing `Event` Interface
 
 Alternatively, you can use an existing class and have it implement `MaddHatter\LaravelFullcalendar\Event`. An example of an Eloquent model that implements the `Event` interface:
-  
+
 ```php
 class EventModel extends Eloquent implements \MaddHatter\LaravelFullcalendar\Event
 {
@@ -147,7 +154,7 @@ $event = \Calendar::event(
     "Valentine's Day", //event title
     true, //full day event?
     '2015-02-14', //start time, must be a DateTime object or valid DateTime format (http://bit.ly/1z7QWbg)
-    '2015-02-14' //end time, must be a DateTime object or valid DateTime format (http://bit.ly/1z7QWbg),
+    '2015-02-14', //end time, must be a DateTime object or valid DateTime format (http://bit.ly/1z7QWbg),
 	1, //optional event ID
 	[
 		'url' => 'http://full-calendar.io',
@@ -176,7 +183,7 @@ class CalendarEvent extends \Illuminate\Database\Eloquent\Model implements \Madd
             'color' => $this->background_color,
 			//etc
         ];
-    }	
+    }
 
 	//...
 }
@@ -216,7 +223,7 @@ $calendar = \Calendar::addEvents($events) //add an array with addEvents
 		'firstDay' => 1
 	])->setCallbacks([ //set fullcalendar callback options (will not be JSON encoded)
         'viewRender' => 'function() {alert("Callbacks!");}'
-    ]); 
+    ]);
 
 return view('hello', compact('calendar'));
 ```
@@ -234,7 +241,7 @@ Then to display, add the following code to your View:
     <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.2.7/fullcalendar.min.js"></script>
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.2.7/fullcalendar.min.css"/>
-    	
+
 
     <style>
         /* ... */

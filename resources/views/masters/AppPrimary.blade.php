@@ -87,7 +87,6 @@
               <li>
               <a href="{{url('/employer/dashboard')}}"><span>Switch to Employer</span></a>
                 <a href="{{url('/get/user/profile')}}"><span>Profile</span></a>
-                <a href="#"><span>Activity Logs</span></a>
                 <a href="#"><span>Job+ Wallet</span></a>
               </li>
               <li class="divider"></li>
@@ -106,7 +105,7 @@
                 <div class="col-lg-7 foot ">
                     <h1> JobPlus </h1>
                     <ul>
-                       <li> <a href="#"><h1>#<b>Road To Graduation March 2017 <i class="glyphicon glyphicon-education"></i></b></h1></a> </li>
+                       <li> <a href="#"><h1>#<b>Where opportunity meets people <i class="glyphicon glyphicon-education"></i></b></h1></a> </li>
                     </ul>
                 </div>
                 <div class="col-lg-2  col-md-2 col-sm-4 col-xs-6 foot ">

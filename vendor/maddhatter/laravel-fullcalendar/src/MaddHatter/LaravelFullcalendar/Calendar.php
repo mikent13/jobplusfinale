@@ -3,7 +3,7 @@
 use ArrayAccess;
 use DateTime;
 use Illuminate\View\Factory;
-use Carbon\Carbon;
+
 class Calendar
 {
 
@@ -48,19 +48,7 @@ class Calendar
      *
      * @var array
      */
-
-    protected $callbacks = [
-    'eventClick' => "
-        function(Event,jsEvent,view){
-        var title = Event.id;
-        var start = Event.start;
-
-        var title = document.getElementById('job-title').innerHTML = ''+title;
-        var start = document.getElementById('start_date').innerHTML = ''+start;
-        $('#myModal').modal();
-        }
-        "
-    ];
+    protected $callbacks = [];
 
     /**
      * @param Factory         $view
@@ -83,10 +71,9 @@ class Calendar
      * @param array           $options
      * @return SimpleEvent
      */
-
-    public static function event($id = null,$user,$category,$skill,$description,$lat,$long,$start, $end,$paytype,$salary,$isAllDay,$slot,$date_posted,$options = [])
+    public static function event($title, $isAllDay, $start, $end, $id = null, $options = [])
     {
-        return new SimpleEvent($id,$user,$category,$skill,$description,$lat,$long,$start,$end,$paytype,$salary,$isAllDay,$slot,$date_posted,$options);
+        return new SimpleEvent($title, $isAllDay, $start, $end, $id, $options);
     }
 
     /**
@@ -104,10 +91,10 @@ class Calendar
      *
      * @return \Illuminate\View\View
      */
-
     public function script()
     {
         $options = $this->getOptionsJson();
+
         return $this->view->make('fullcalendar::script', [
             'id' => $this->getId(),
             'options' => $options,
@@ -120,10 +107,10 @@ class Calendar
      * @param string $id
      * @return $this
      */
-
     public function setId($id)
     {
         $this->id = $id;
+
         return $this;
     }
 
@@ -138,6 +125,7 @@ class Calendar
         if ( ! empty($this->id)) {
             return $this->id;
         }
+
         $this->id = str_random(8);
 
         return $this->id;
@@ -164,7 +152,6 @@ class Calendar
      * @param array $customAttributes
      * @return $this
      */
-    
     public function addEvents($events, array $customAttributes = [])
     {
         foreach ($events as $event) {
@@ -203,9 +190,6 @@ class Calendar
      * @param array $callbacks
      * @return $this
      */
-
-
-
     public function setCallbacks(array $callbacks)
     {
         $this->callbacks = $callbacks;
@@ -234,7 +218,10 @@ class Calendar
         $placeholders = $this->getCallbackPlaceholders();
         $parameters   = array_merge($options, $placeholders);
 
-        $parameters['events'] = $this->eventCollection->toArray();
+        // Allow the user to override the events list with a url
+        if (!isset($parameters['events'])) {
+            $parameters['events'] = $this->eventCollection->toArray();
+        }
 
         $json = json_encode($parameters);
 
@@ -243,6 +230,7 @@ class Calendar
         }
 
         return $json;
+
     }
 
     /**
@@ -278,6 +266,7 @@ class Calendar
             $search[]  = '"' . $placeholder . '"';
             $replace[] = $this->getCallbacks()[$name];
         }
+
         return str_replace($search, $replace, $json);
     }
 
