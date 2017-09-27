@@ -292,7 +292,7 @@ class ChikkaSmsController extends Controller
     public function sendMultiple($jobs){
         $i = 0;
         $this->flag = true;
-        if(sizeof($result) >= 1){
+        if(sizeof($jobs) >= 1){
             dispatch(new SendChikka($this->receiveData,$jobs));
         }
     }
