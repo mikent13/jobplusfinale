@@ -173,15 +173,46 @@ class ChikkaSmsController extends Controller
                     $this->message = 'Format for Checking Job Posted: posted, location';
                 }
                 break;
+            case 'end_job':
+                 # code...
+                if(sizeof($message) == 3){
+                    $data = array(
+                        "action"    => $message[0],
+                        "job_id"    => $message[1], 
+                        "reason"    => $message[2],
+                        "mobile_number" => $contactNumber
+                    );   
+                    $this->endJob($data,$userId);
+                }
+                else{
+                    $this->message = 'To end job : end_job, jobid, reason';
+                }
+                break;
+            case 'confirmation':
+                 # code...
+                if(sizeof($message) == 3){
+                    $data = array(
+                        "action"    => $message[0],
+                        "job_id"    => $message[1],
+                        "parameter"    => $message[2],
+                        "mobile_number" => $contactNumber
+                    );   
+                    $this->confirmation($data,$userId);
+                }
+                else{
+                    $this->message = 'To confirm job : confirmation, jobid';
+                }
+                break;
             default:
                 $this->message = 'Format for Checking Job Posted: posted, location';
-            break;
+                break;
         }
     }
 
     public function cancel($data, $userId){
         $result = $this->deleteWork($data['job_id'], $userId);
         $response = '';
+        $flag = false;
         if($result == '1'){
             $cJob = new CJOB();
             $cJob->job_id = $data['job_id'];
@@ -189,12 +220,50 @@ class ChikkaSmsController extends Controller
             $cJob->reason = $data['reason'];
             $cJob->save();
             $response =  "Job ID:".$data['job_id']." with User ID: ".$userId." was successfully cancelled!";
-            $this->notifyEmployer($data['job_id'], $userId);
+            $flag = true;
+            $this->flag = true;
         }
         else{
             $response = "Job ID:".$data['job_id']." with User ID: ".$userId." was not found!";
         }
+
         $this->message = $response;
+        if($flag == true){
+            $this->reply($this->receiveData, $this->message);
+            $this->notifyEmployer($data['job_id'], $userId);
+        }
+    }
+
+    public function confirmation($data, $userId){
+        $works = new Works();
+        $workResult = $works->where('job_id', '=', $data['job_id'])->get();
+        if($data['parameter'] == '1' || intval($data['parameter'] == 1)){
+            $result = $this->deleteByConfirmation($data['job_id']);
+            $response = '';
+            $flag = false;
+            if($result == '1' || intval($result) == 1){
+                $response =  "Job ID:".$data['job_id']." was successfully ended!".PHP_EOL;
+                $flag = true;
+                $this->flag = true;
+            }
+            else{
+                $response = "Job ID:".$data['job_id']." was not found!".PHP_EOL;
+            }
+
+            $this->message = $response;
+            if($flag == true){
+                $this->reply($this->receiveData, $this->message);
+                $this->notifyEmployee($workResult);
+            }
+        }
+        else{
+            $this->flag == true;
+            $this->message = "No action was made.".PHP_EOL;
+            $this->reply($this->receiveData, $this->message);
+            $message = "Your request was not approved by your employer".PHP_EOL;
+            $this->notifyEmployee($workResult, $message);
+        }
+        
     }
     
     public function notifyEmployer($jobId, $userId){
@@ -208,7 +277,35 @@ class ChikkaSmsController extends Controller
             $this->send($employerNumber, $message);
         }
     }
+
+    public function notifyEmployee($result, $message = null){
+        if(sizeof($result) > 0){
+            $employeeNumber = $this->getProfileNumber($result[0]['user_id']);
+            $defaultMessage = "The Job ID: ".$result[0]['job_id']." was ended by your employer".PHP_EOL;
+            $newMessage = ($message == null) ? $defaultMessage : $message;
+            $this->send($employeeNumber, $newMessage);
+        }
+    }
     
+    public function endJob($data, $userId){
+        $result =  Jobs::select("*")->where('job_id', '=', $data['job_id'])->get();
+        if(sizeof($result) > 0){
+            $cJob = new CJOB();
+            $cJob->job_id = $data['job_id'];
+            $cJob->user_id = $userId;
+            $cJob->reason = $data['reason'];
+            $cJob->save();
+            $employerNumber = $this->getProfileNumber($result[0]['user_id']);
+            $message =  $this->getUserCompleteName($userId).' requested to end Job ID: '.$data['job_id'].' with reason: '.$data['reason'].' to confirm text: confirmation, jobid, 1 -yes 0-no'.PHP_EOL;
+            $this->message="Wait for your employers confirmation".PHP_EOL;
+            $this->reply($this->receiveData, $this->message);
+            $this->send($employerNumber, $message);
+            $this->flag = true;
+        }
+        else{
+            $this->message="Job not found".PHP_EOL;
+        }
+    }
     public function getProfileNumber($userId){
         $profile = new Profiles();
         $result = $profile->where('user_id', $userId)->get();
@@ -241,6 +338,13 @@ class ChikkaSmsController extends Controller
         $this->message = $status;
     }
 
+    public function deleteByConfirmation($jobId){
+        $work = new Works();
+        $result = $work
+        ->where("job_id","=",$jobId)
+        ->delete();
+        return $result;
+    }
     public function deleteWork($jobId, $userId){
         $work = new Works();
         $result = $work
