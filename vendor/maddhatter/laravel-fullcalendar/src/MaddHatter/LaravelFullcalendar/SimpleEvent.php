@@ -9,99 +9,114 @@ use DateTime;
  *
  * @package MaddHatter\LaravelFullcalendar
  */
-
 class SimpleEvent implements IdentifiableEvent
 {
-    public $job_id;
-    public $skill_id;
-    public $is_all_day;
-    public $start_date;
-    public $end_date;
-    public $user_id;
-    public $category_id;
-    public $description;
-    public $lat;
-    public $long;
-    public $paytype;
-    public $salary;
+
+    /**
+     * @var string|int|null
+     */
+    public $id;
+
+    /**
+     * @var string
+     */
+    public $title;
+
+    /**
+     * @var bool
+     */
+    public $isAllDay;
+
+    /**
+     * @var DateTime
+     */
+    public $start;
+
+    /**
+     * @var DateTime
+     */
+    public $end;
+
+    /**
+     * @var array
+     */
     private $options;
-    public $slot;
-    public $date_posted;
 
-    public function __construct($id = null,$user,$category,$skill,$description,$lat,$long,$start, $end,$paytype,$salary,$isAllDay,$slot,$date_posted,$options = [])
+    /**
+     * @param string          $title
+     * @param bool            $isAllDay
+     * @param string|DateTime $start If string, must be valid datetime format: http://bit.ly/1z7QWbg
+     * @param string|DateTime $end   If string, must be valid datetime format: http://bit.ly/1z7QWbg
+     * @param int|string|null $id
+     * @param array           $options
+     */
+    public function __construct($title, $isAllDay, $start, $end, $id = null, $options = [])
     {
-        $this->job_id       = $id;
-        $this->user_id = $user;
-        $this->category_id = $category;
-        $this->skill_id    = $skill;
-        $this->description = $description;
-        $this->lat = $lat;
-        $this->long = $long;
-        $this->start_date    = $start instanceof DateTime ? $start : new DateTime($start);
-        $this->end_date     = $end instanceof DateTime ? $end : new DateTime($end);
-        $this->paytype = $paytype;
-        $this->salary = $salary;
-        $this->is_all_day = $isAllDay;
+        $this->title    = $title;
+        $this->isAllDay = $isAllDay;
+        $this->start    = $start instanceof DateTime ? $start : new DateTime($start);
+        $this->end      = $start instanceof DateTime ? $end : new DateTime($end);
+        $this->id       = $id;
         $this->options  = $options;
-        $this->slot = $slot;
-        $this->date_posted = $date_posted;
     }
 
-     public function getId()
+    /**
+     * Get the event's id number
+     *
+     * @return int
+     */
+    public function getId()
     {
-        return $this->job_id;
+        return $this->id;
     }
-    public function getUser(){
-        return $this->user_id;
-    }
-    
-    public function getCategory(){
-        return $this->category_id;
-    }
-     
+
+    /**
+     * Get the event's title
+     *
+     * @return string
+     */
     public function getTitle()
     {
-        return $this->skill_id;
+        return $this->title;
     }
 
-    public function getDescription(){
-        return $this->description;
-    }
-    public function getLat(){
-        return $this->lat;
-    }
-    public function getLong(){
-        return $this->long;
-    }
-      public function getStart()
-    {
-        return $this->start_date;
-    }
-    public function getEnd()
-    {
-        return $this->end_date;
-    }
-    public function getPaytype(){
-        return $this->paytype;
-    }
-    public function getSalary(){
-        return $this->salary;
-    }
-  
+    /**
+     * Is it an all day event?
+     *
+     * @return bool
+     */
     public function isAllDay()
     {
-        return $this->is_all_day;
+        return $this->isAllDay;
     }
-  
-  public function getEventOptions()
+
+    /**
+     * Get the start time
+     *
+     * @return DateTime
+     */
+    public function getStart()
+    {
+        return $this->start;
+    }
+
+    /**
+     * Get the end time
+     *
+     * @return DateTime
+     */
+    public function getEnd()
+    {
+        return $this->end;
+    }
+
+    /**
+     * Get the optional event options
+     *
+     * @return array
+     */
+    public function getEventOptions()
     {
         return $this->options;
     }
-    public function getSlot(){
-        return $this->slot;
-    }
-    public function getDatePosted(){
-        return $this->date_posted;
-    }
-
 }

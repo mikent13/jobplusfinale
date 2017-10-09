@@ -11,6 +11,7 @@ class Jobs extends Model
     protected $dates = ['start', 'end'];
     public $timestamps = false;  
     protected $primaryKey =  'job_id';
+    protected $fillable = ['job_type_id', 'category_id', 'title', 'description', 'address_id', 'start_date', 'end_date', 'slot',  'salary', 'paytype', 'is_all_day'];
 
     public function skills()
     {

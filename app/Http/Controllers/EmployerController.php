@@ -152,6 +152,10 @@ public function getProfile(){
   return view('users.emp-profile');
 }
 
+public function getJobWallet(){
+    return view('employer.jobwallet');
+}
+
 public function getApplications(){
   return view('employer.application');
 }

@@ -14,12 +14,12 @@ class ComposerStaticInit0e1cc808a8f0ef1aa4befbaae6f501a7
         '2c102faa651ef8ea5874edb585946bce' => __DIR__ . '/..' . '/swiftmailer/swiftmailer/lib/swift_required.php',
         'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
         'c964ee0ededf28c96ebd9db5099ef910' => __DIR__ . '/..' . '/guzzlehttp/promises/src/functions_include.php',
+        '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
         'e7223560d890eab89cda23685e711e2c' => __DIR__ . '/..' . '/psy/psysh/src/Psy/functions.php',
         '5255c38a0faeba867671b61dfda6d864' => __DIR__ . '/..' . '/paragonie/random_compat/lib/random.php',
-        '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
-        'f18cc91337d49233e5754e93f3ed9ec3' => __DIR__ . '/..' . '/laravelcollective/html/src/helpers.php',
         'f0906e6318348a765ffb6eb24e0d0938' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Foundation/helpers.php',
         '58571171fd5812e6e447dce228f52f4d' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Support/helpers.php',
+        'f18cc91337d49233e5754e93f3ed9ec3' => __DIR__ . '/..' . '/laravelcollective/html/src/helpers.php',
         '1d5d1218959948b643380e3f162c57ce' => __DIR__ . '/..' . '/skagarwal/google-places-api/src/helpers.php',
     );
 
@@ -55,6 +55,7 @@ class ComposerStaticInit0e1cc808a8f0ef1aa4befbaae6f501a7
             'Symfony\\Component\\CssSelector\\' => 30,
             'Symfony\\Component\\Console\\' => 26,
             'SuperClosure\\' => 13,
+            'Srmklive\\PayPal\\' => 16,
             'SKAgarwal\\GoogleApi\\' => 20,
         ),
         'P' => 
@@ -97,6 +98,7 @@ class ComposerStaticInit0e1cc808a8f0ef1aa4befbaae6f501a7
         ),
         'C' => 
         array (
+            'Cron\\' => 5,
             'Collective\\Html\\' => 16,
             'ClassPreloader\\' => 15,
             'Carbon\\' => 7,
@@ -194,6 +196,10 @@ class ComposerStaticInit0e1cc808a8f0ef1aa4befbaae6f501a7
         array (
             0 => __DIR__ . '/..' . '/jeremeamia/SuperClosure/src',
         ),
+        'Srmklive\\PayPal\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/srmklive/paypal/src',
+        ),
         'SKAgarwal\\GoogleApi\\' => 
         array (
             0 => __DIR__ . '/..' . '/skagarwal/google-places-api/src',
@@ -254,6 +260,10 @@ class ComposerStaticInit0e1cc808a8f0ef1aa4befbaae6f501a7
         array (
             0 => __DIR__ . '/..' . '/doctrine/instantiator/src/Doctrine/Instantiator',
         ),
+        'Cron\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/mtdowling/cron-expression/src/Cron',
+        ),
         'Collective\\Html\\' => 
         array (
             0 => __DIR__ . '/..' . '/laravelcollective/html/src',
@@ -277,11 +287,22 @@ class ComposerStaticInit0e1cc808a8f0ef1aa4befbaae6f501a7
     );
 
     public static $prefixesPsr0 = array (
+        'a' => 
+        array (
+            'angelleye\\PayPal' => 
+            array (
+                0 => __DIR__ . '/..' . '/angelleye/paypal-php-library/src',
+            ),
+        ),
         'P' => 
         array (
             'Prophecy\\' => 
             array (
                 0 => __DIR__ . '/..' . '/phpspec/prophecy/src',
+            ),
+            'PayPal' => 
+            array (
+                0 => __DIR__ . '/..' . '/paypal/rest-api-sdk-php/lib',
             ),
         ),
         'M' => 
@@ -317,13 +338,6 @@ class ComposerStaticInit0e1cc808a8f0ef1aa4befbaae6f501a7
                 0 => __DIR__ . '/..' . '/doctrine/inflector/lib',
             ),
         ),
-        'C' => 
-        array (
-            'Cron' => 
-            array (
-                0 => __DIR__ . '/..' . '/mtdowling/cron-expression/src',
-            ),
-        ),
     );
 
     public static $classMap = array (
@@ -339,6 +353,7 @@ class ComposerStaticInit0e1cc808a8f0ef1aa4befbaae6f501a7
         'CreateExperiencesTable' => __DIR__ . '/../..' . '/database/migrations/2016_09_13_095558_create_experiences_table.php',
         'CreateJobCancelledTable' => __DIR__ . '/../..' . '/database/migrations/2017_08_07_201210_create_job_cancelled_table.php',
         'CreateJobsTable' => __DIR__ . '/../..' . '/database/migrations/2016_09_12_031805_create_jobs_table.php',
+        'CreateJobwalletTable' => __DIR__ . '/../..' . '/database/migrations/2017_09_27_211707_create_jobwallet_table.php',
         'CreatePasswordResetsTable' => __DIR__ . '/../..' . '/database/migrations/2014_10_12_100000_create_password_resets_table.php',
         'CreatePaytypesTable' => __DIR__ . '/../..' . '/database/migrations/2016_09_13_095517_create_paytypes_table.php',
         'CreateProfEducationsTable' => __DIR__ . '/../..' . '/database/migrations/2016_09_14_090116_create_prof_educations_table.php',
@@ -349,6 +364,7 @@ class ComposerStaticInit0e1cc808a8f0ef1aa4befbaae6f501a7
         'CreateSchedulesTable' => __DIR__ . '/../..' . '/database/migrations/2016_09_13_095439_create_schedules_table.php',
         'CreateSkillsTable' => __DIR__ . '/../..' . '/database/migrations/2016_09_13_095422_create_skills_table.php',
         'CreateStatusesTable' => __DIR__ . '/../..' . '/database/migrations/2016_10_02_222038_create_statuses_table.php',
+        'CreateTransactionsTable' => __DIR__ . '/../..' . '/database/migrations/2017_09_27_212440_create_transactions_table.php',
         'CreateUsersTable' => __DIR__ . '/../..' . '/database/migrations/2014_10_12_000000_create_users_table.php',
         'CreateWorksTable' => __DIR__ . '/../..' . '/database/migrations/2017_08_07_183714_create_works_table.php',
         'DatabaseSeeder' => __DIR__ . '/../..' . '/database/seeds/DatabaseSeeder.php',
@@ -426,6 +442,13 @@ class ComposerStaticInit0e1cc808a8f0ef1aa4befbaae6f501a7
         'Hamcrest\\Xml\\HasXPath' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Xml/HasXPath.php',
         'IlluminateQueueClosure' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Queue/IlluminateQueueClosure.php',
         'JobsTableSeeder' => __DIR__ . '/../..' . '/database/seeds/JobsTableSeeder.php',
+        'PHPUnit\\Framework\\Assert' => __DIR__ . '/..' . '/phpunit/phpunit/src/ForwardCompatibility/Assert.php',
+        'PHPUnit\\Framework\\AssertionFailedError' => __DIR__ . '/..' . '/phpunit/phpunit/src/ForwardCompatibility/AssertionFailedError.php',
+        'PHPUnit\\Framework\\BaseTestListener' => __DIR__ . '/..' . '/phpunit/phpunit/src/ForwardCompatibility/BaseTestListener.php',
+        'PHPUnit\\Framework\\Test' => __DIR__ . '/..' . '/phpunit/phpunit/src/ForwardCompatibility/Test.php',
+        'PHPUnit\\Framework\\TestCase' => __DIR__ . '/..' . '/phpunit/phpunit/src/ForwardCompatibility/TestCase.php',
+        'PHPUnit\\Framework\\TestListener' => __DIR__ . '/..' . '/phpunit/phpunit/src/ForwardCompatibility/TestListener.php',
+        'PHPUnit\\Framework\\TestSuite' => __DIR__ . '/..' . '/phpunit/phpunit/src/ForwardCompatibility/TestSuite.php',
         'PHPUnit_Exception' => __DIR__ . '/..' . '/phpunit/phpunit/src/Exception.php',
         'PHPUnit_Extensions_GroupTestSuite' => __DIR__ . '/..' . '/phpunit/phpunit/src/Extensions/GroupTestSuite.php',
         'PHPUnit_Extensions_PhptTestCase' => __DIR__ . '/..' . '/phpunit/phpunit/src/Extensions/PhptTestCase.php',
@@ -753,6 +776,7 @@ class ComposerStaticInit0e1cc808a8f0ef1aa4befbaae6f501a7
         'PHP_Token_NEW' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
         'PHP_Token_NS_C' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
         'PHP_Token_NS_SEPARATOR' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_NULLSAFE_OBJECT_OPERATOR' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
         'PHP_Token_NUM_STRING' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
         'PHP_Token_OBJECT_CAST' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
         'PHP_Token_OBJECT_OPERATOR' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',

@@ -4,19 +4,32 @@ use DateTime;
 
 interface Event
 {
-    public function getId();
-    public function getUser();
-    public function getCategory();
+    /**
+     * Get the event's title
+     *
+     * @return string
+     */
     public function getTitle();
-    public function getDescription();
-    public function getLat();
-    public function getLong();
-    public function getStart();
-    public function getEnd();
-    public function getPaytype();
-    public function getSalary();
-    public function isAllDay();
-    public function getSlot();
-    public function getDatePosted();
-}
 
+    /**
+     * Is it an all day event?
+     *
+     * @return bool
+     */
+    public function isAllDay();
+
+    /**
+     * Get the start time
+     *
+     * @return DateTime
+     */
+    public function getStart();
+
+    /**
+     * Get the end time
+     *
+     * @return DateTime
+     */
+    public function getEnd();
+
+}

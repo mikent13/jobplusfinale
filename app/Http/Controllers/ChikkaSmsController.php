@@ -128,6 +128,8 @@ class ChikkaSmsController extends Controller
         */
         $data = array();
         switch (strtolower($message[0])) {
+            //Reschedule
+            //Ratings
             case 'cancel':
                 # code...
                 if(sizeof($message) == 3){
@@ -187,11 +189,35 @@ class ChikkaSmsController extends Controller
             $cJob->reason = $data['reason'];
             $cJob->save();
             $response =  "Job ID:".$data['job_id']." with User ID: ".$userId." was successfully cancelled!";
+            $this->notifyEmployer($data['job_id'], $userId);
         }
         else{
             $response = "Job ID:".$data['job_id']." with User ID: ".$userId." was not found!";
         }
         $this->message = $response;
+    }
+    
+    public function notifyEmployer($jobId, $userId){
+        $cJob = new CJOB();
+        
+        $result = $cJob->where('job_id', '=', $jobId)->get();
+        
+        if(sizeof($result) > 0){
+            $employerNumber = $this->getProfileNumber($result[0]['user_id']);
+            $message =  "The Job ID: ".$jobId." was cancelled by ".$this->getUserCompleteName($userId).'.'.PHP_EOL;
+            $this->send($employerNumber, $message);
+        }
+    }
+    
+    public function getProfileNumber($userId){
+        $profile = new Profiles();
+        $result = $profile->where('user_id', $userId)->get();
+
+        if(sizeof($result) > 0){
+            return $result[0]['mobile'];
+        }
+        else
+            return null;
     }
 
     public function status($data, $userId){
@@ -234,13 +260,29 @@ class ChikkaSmsController extends Controller
         else
             return null;
     }
+    
+    public function getUserCompleteName($userId){
+        $profile = new Profiles();
+        $result = $profile->where('user_id', $userId)->get();
+
+        if(sizeof($result) > 0){
+            return $result[0]['lname'].', '.$result[0]['fname'];
+        }
+        else
+            return null;
+    }
 
     public function search($data){
         $result = JADDRESS::where('locality', 'like', '%'.$data['location'].'%')->limit(1)->get();
         
         if(sizeof($result) > 0){
-            $jobs = Jobs::where('address_id', '=',$result[0]['id'])->orderBy('date_posted',"asc")->limit(10)->get();
+            $jobs = Jobs::select('title','description','start_date','end_date','salary')
+            ->where('address_id', '=',$result[0]['id'])
+            ->orderBy('date_posted',"asc")
+            ->limit(10)
+            ->get();
             $this->sendMultiple($jobs);
+            
         }
         else{
             $this->message = "No Jobs found in this location.".PHP_EOL;

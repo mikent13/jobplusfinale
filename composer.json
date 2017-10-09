@@ -10,8 +10,12 @@
         "laravelcollective/html": "5.2.*",
         "maddhatter/laravel-fullcalendar": "~1.0",
         "skagarwal/google-places-api": "^1.0",
-         "ronaldborla/chikka": "@dev",
-        "mpociot/botman": "^1.4"
+        "ronaldborla/chikka": "@dev",
+        "mpociot/botman": "^1.4",
+        "paypal/rest-api-sdk-php": "*",
+        "guzzlehttp/guzzle": "~6.0",
+        "ext-curl": "*",
+        "srmklive/paypal": "~1.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

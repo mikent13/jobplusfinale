@@ -1,3 +1,9 @@
+[![Latest Stable Version](https://poser.pugx.org/skagarwal/google-places-api/v/stable?format=flat-square)](https://packagist.org/packages/skagarwal/google-places-api)
+[![Latest Unstable Version](https://poser.pugx.org/skagarwal/google-places-api/v/unstable?format=flat-square)](https://packagist.org/packages/skagarwal/google-places-api)
+[![Total Downloads](https://poser.pugx.org/skagarwal/google-places-api/downloads?format=flat-square)](https://packagist.org/packages/skagarwal/google-places-api)
+[![License](https://poser.pugx.org/skagarwal/google-places-api/license?format=flat-square)](https://packagist.org/packages/skagarwal/google-places-api)
+
+
 # Google Places APi.
 
 This is a PHP wrapper for **Google Places Api Web Service**. And is [Laravel Framework](https://laravel.com/docs/5.2) friendly.
@@ -6,10 +12,11 @@ This is a PHP wrapper for **Google Places Api Web Service**. And is [Laravel Fra
 With just 2 lines of code you can request to any google places api feature. No need to manually perform any curl requests.
 
 ### The following place requests are available:
-* [Place Search](#place-search) return a list of places based on a user's location or search string.
-* [Place Details](#place-details) requests return more detailed information about a specific Place, including user reviews.
-* [Place Autocomplete](#place-autocomplete) can be used to automatically fill in the name and/or address of a place as you type.
-* [Query Autocomplete](#query-autocomplete) can be used to provide a query prediction service for text-based geographic searches, by returning suggested queries as you type.
+* [Place Search](#place-search) This service gives a list of places based on a user's location or search string.
+* [Place Details](#place-details) This service gives more detailed information about a specific Place, including user reviews.
+* [Place Autocomplete](#place-autocomplete) This service is Used to automatically fill in the name and/or address of a place as you type.
+* [Query Autocomplete](#query-autocomplete) This service is Used to provide a query prediction service for text-based geographic searches, by returning suggested queries as you type.
+* [Place Add](#place-add) This service Used to Add/Delete a place to Google's Place database
 
 # Installation
 Install it with composer
@@ -33,7 +40,7 @@ use SKAgarwal\GoogleApi\PlacesApi;
 $googlePlaces = new PlacesApi('API KEY');
 ```
 
-**Note:** You can also set the **API KEY** after initaiting the class using `setKey('KEY')` method. You can chain this with method with anyother methods.
+**Note:** You can also set the **API KEY** after initiating the class using `setKey('KEY')` method. You can chain this with method with any other methods.
 
 ## Step 3 - Start Using the Api.
 Example:
@@ -99,7 +106,7 @@ $response = GooglePlaces::placeAutocomplete('some city');
 The response returned is a [Laravel's Collection](https://laravel.com/docs/5.2/collections) so that you can perform any of the available collection methods on it.
 
 <blockquote>
-If you are not familiar with <em>Laravel's Collecton</em> you can either reference the docs <a href="https://laravel.com/docs/5.2/collections">here</a> or you can use <strong>response</strong> as simple array.
+If you are not familiar with <em>Laravel's Collection</em> you can either reference the docs <a href="https://laravel.com/docs/5.2/collections">here</a> or you can use <strong>response</strong> as simple array.
 </blockquote>
 
 ---
@@ -109,19 +116,20 @@ If you are not familiar with <em>Laravel's Collecton</em> you can either referen
 <a name=place-search></a>
 ## Place Search
 ### nearbySearch($location, $radius = null, $params = [])
-* `location` — The latitude/longitude around which to retrieve place information. This must be specified as latitude,longitude.
+* `location` — The latitude/longitude around which to retrieve place information. This must be specified as latitude, longitude.
 * 'radius' — Defines the distance (in meters) within which to return place results. The maximum allowed radius is 50 000 meters. Note that `radius` must not be included if `rankby=distance` (described under **Optional parameters** below) is specified.
 * If `rankby=distance` (described under **Optional parameters** below) is specified, then one or more of `keyword`, `name`, or `types` is required.
-* `params` - **Optionan Parameters** You can refer all the avaiable optional parameters on the [Google's Official Webpage](https://developers.google.com/places/web-service/search)
+* `params` - **Optional Parameters** You can refer all the available optional parameters on the [Google's Official Webpage](https://developers.google.com/places/web-service/search)
 
 ### textSearch($query, $params = [])
 * `query` — The text string on which to search, for example: "restaurant". The Google Places service will return candidate matches based on this string and order the results based on their perceived relevance.
-* `params` - **Optionan Parameters** You can refer all the avaiable optional parameters on the [Google's Official Webpage](https://developers.google.com/places/web-service/search)
+* `params` - **Optional Parameters** You can refer all the available optional parameters on the [Google's Official Webpage](https://developers.google.com/places/web-service/search)
 
-### radarSearch($location, $radius, array $params)
-* `location` — The latitude/longitude around which to retrieve place information. This must be specified as latitude,longitude.
+### radarSearch($location, $radius, array $params) 
+_**(This method is depricated, and will be removed when google removes it from the api)**_
+* `location` — The latitude/longitude around which to retrieve place information. This must be specified as latitude, longitude.
 * `radius` — Defines the distance (in meters) within which to return place results. The maximum allowed radius is 50 000 meters.
-* `params` - **Optionan Parameters** You can refer all the avaiable optional parameters on the [Google's Official Webpage](https://developers.google.com/places/web-service/search)
+* `params` - **Optional Parameters** You can refer all the available optional parameters on the [Google's Official Webpage](https://developers.google.com/places/web-service/search)
 
 **Note:** A Radar Search request must include at least one of `keyword`, `name`, or `types`.
 
@@ -131,7 +139,7 @@ If you are not familiar with <em>Laravel's Collecton</em> you can either referen
 # Place Details
 ### placeDetails($placeId, $params = [])
 * `placeId` — A textual identifier that uniquely identifies a place, returned from a Place Search.
-* `params` - **Optionan Parameters** You can refer all the avaiable optional parameters on the [Google's Official Webpage](https://developers.google.com/places/web-service/details)
+* `params` - **Optional Parameters** You can refer all the available optional parameters on the [Google's Official Webpage](https://developers.google.com/places/web-service/details)
 
 ---
 
@@ -139,7 +147,7 @@ If you are not familiar with <em>Laravel's Collecton</em> you can either referen
 # Place Autocomplete
 ### placeAutocomplete($input, $params = [])
 * `input` — The text string on which to search. The Place Autocomplete service will return candidate matches based on this string and order results based on their perceived relevance.
-* `params` - **Optionan Parameters** You can refer all the avaiable optional parameters on the [Google's Official Webpage](https://developers.google.com/places/web-service/autocomplete)
+* `params` - **Optional Parameters** You can refer all the available optional parameters on the [Google's Official Webpage](https://developers.google.com/places/web-service/autocomplete)
 
 ---
 
@@ -147,11 +155,21 @@ If you are not familiar with <em>Laravel's Collecton</em> you can either referen
 # Query Autocomplete
 ### queryAutocomplete($input, $params = [])
 * `input` — The text string on which to search. The Places service will return candidate matches based on this string and order results based on their perceived relevance.
-* `params` - **Optionan Parameters** You can refer all the avaiable optional parameters on the [Google's Official Webpage](https://developers.google.com/places/web-service/query)
+* `params` - **Optional Parameters** You can refer all the available optional parameters on the [Google's Official Webpage](https://developers.google.com/places/web-service/query)
+
+<a name=place-add></a>
+# Place Add
+### addPlace($params)
+_**(This method is depricated, and will be removed when google removes it from the api)**_
+* `params` - The set of key-value parameters necessary to add a place to Google. You can refer to the fields on [Google's Official Webpage regarding Place Add](https://developers.google.com/places/web-service/add-place)
+
+### deletePlace($palceId)
+_**(This method is depricated, and will be removed when google removes it from the api)**_
+* `placeId` - The Place Id you want to delete.
 
 # Additional Methods
 ### getStatus()
-This will return the status of the response send by google api. Use it after making any reqquest.
+This will return the status of the response send by google api. Use it after making any request.
 
 ### getKey()
 This will return the `API KEY` been used with the requests.
@@ -166,4 +184,3 @@ If you find this document can be improved in any way, please feel free to open a
 # License
 
 The Google Places Api is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
-

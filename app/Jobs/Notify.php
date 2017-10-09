@@ -59,7 +59,7 @@ class Notify extends Job implements ShouldQueue
         $schedule = new Schedules();
         $result = $schedule
         ->where("schedule_id","=",$scheduleId)
-        ->update(['deleted_at' => Carbon::now()]);
+        ->update(['notify' => '1']);
         return $result;
     }
 

@@ -24,7 +24,7 @@
                 <div class="col-lg-5 foot ">
                     <h1> JobPlus </h1>
                     <ul>
-                        <li> <a href="#"><h1>#<b>Road To Graduation March 2017</b></h1></a> </li>
+                        <li> <a href="#"><h1>#<b>Where opportunity meets people</b></h1></a> </li>
                     </ul>
                 </div>
                 <div class="col-lg-2  col-md-2 col-sm-4 col-xs-6 foot ">
